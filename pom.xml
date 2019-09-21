@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>vavi</groupId>
+  <artifactId>vavi-speech2</artifactId>
+  <version>0.0.1</version>
+
+  <description></description>
+  <url>https//github.com/umjammer/vavi-speech2</url>
+  <scm>
+    <url>https//github.com/umjammer/vavi-speech2</url>
+  </scm>
+  <issueManagement>
+    <system>https//github.com/umjammer/vavi-speech2/issues</system>
+  </issueManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+    <repository>
+      <id>seasar</id>
+      <url>https://www.seasar.org/maven/maven2/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.umjammer.jsapi</groupId>
+      <artifactId>javax.speech</artifactId>
+      <version>0.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.umjammer.jsapi</groupId>
+      <artifactId>org.jvoicexml.jsapi2</artifactId>
+      <version>0.6.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.umjammer</groupId>
+      <artifactId>vavi-speech</artifactId>
+      <version>0.1.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.speech</groupId>
+          <artifactId>speech</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-speech</artifactId>
+      <version>0.80.0-beta</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
