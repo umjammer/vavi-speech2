@@ -8,9 +8,16 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
 
-  <description></description>
+  <name>vavi-speech2</name>
+  <description>0.0.2
+
+    add open jtalk
+
+0.0.1
+
+    initial version</description>
   <url>https//github.com/umjammer/vavi-speech2</url>
   <scm>
     <url>https//github.com/umjammer/vavi-speech2</url>
