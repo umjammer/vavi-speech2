@@ -167,7 +167,7 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
             delegate.waitForSpeechDone(10000, true);
             byte[] wav = Files.readAllBytes(path);
             ByteArrayInputStream bais = new ByteArrayInputStream(wav);
-            // you should pass bytes to BaseAudioSegment as AudioInputStream nor causes crackling!
+            // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
             AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
             Files.delete(path);
             return ais;

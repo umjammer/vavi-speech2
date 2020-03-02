@@ -126,7 +126,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     public AudioSegment handleSpeak(final int id, final String item) {
         final AudioManager manager = getAudioManager();
         final String locator = manager.getMediaLocator();
-        // you should pass bytes to BaseAudioSegment as AudioInputStream nor causes crackling!
+        // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
         final InputStream in = synthe(item);
         final AudioSegment segment;
         if (locator == null) {
@@ -146,7 +146,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
             openJTalk.speakToFile(text, path.toString());
             byte[] wav = Files.readAllBytes(path);
             ByteArrayInputStream bais = new ByteArrayInputStream(wav);
-            // you should pass bytes to BaseAudioSegment as AudioInputStream nor causes crackling!
+            // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
             AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
             Files.delete(path);
             return ais;

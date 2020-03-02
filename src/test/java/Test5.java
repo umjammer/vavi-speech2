@@ -39,8 +39,8 @@ public final class Test5 {
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-//        String text = args[0];
-        String text = "ゆっくりしていってね";
+        String text = args[0];
+//        String text = "ゆっくりしていってね";
 
         EngineManager.registerEngineListFactory(OpenJTalkEngineListFactory.class.getName());
 
@@ -52,9 +52,9 @@ public final class Test5 {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
         synthesizer.getSynthesizerProperties().setVolume(20);
-//Arrays.asList(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).stream().forEach(System.err::println);
+//Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
         String voiceName = "mei_happy";
-        Voice voice = Arrays.asList(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).stream().filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
         for (String line : text.split("。")) {

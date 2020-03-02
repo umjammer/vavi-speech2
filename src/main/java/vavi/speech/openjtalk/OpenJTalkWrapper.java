@@ -233,7 +233,7 @@ public class OpenJTalkWrapper {
 
     /**
      * jtalk.dllをJNAを使ってアクセスするクラスのコンストラクタ（3引数）
-     * 
+     *
      * @param voicePath 音響モデルファイルのパスもしくは名前
      * @param dicPath 辞書ディレクトリのパス
      * @param voiceDirPath 音響モデルディレクトリ
@@ -262,7 +262,7 @@ public class OpenJTalkWrapper {
 
     /**
      * jtalk.dllをJNAを使ってアクセスするクラスのコンストラクタ（2引数）
-     * 
+     *
      * @param voicePath 音響モデルファイルのパスもしくは名前
      * @param dicPath 辞書ディレクトリのパス
      */
@@ -272,7 +272,7 @@ public class OpenJTalkWrapper {
 
     /**
      * jtalk.dllをJNAを使ってアクセスするクラスのコンストラクタ（1引数）
-     * 
+     *
      * @param voicePath 音響モデルファイルのパスもしくは名前
      */
     public OpenJTalkWrapper(String voicePath) {
@@ -288,45 +288,46 @@ public class OpenJTalkWrapper {
 
     /**
      * オブジェクトポインタがNULLであれば例外を発生させる
-     * 
-     * @throws IllegalStateException オブジェクトポインタがNULLの例外
+     *
+     * @throws IllegalStateException オブジェクトポインタがnullの例外
      */
     private void checkOpenjtalkObject() {
         if (handle == null) {
-            throw new IllegalStateException("Internal Error: OpenJTalk pointer is NULL");
+            throw new IllegalStateException("Internal Error: OpenJTalk pointer is null");
         }
     }
 
-    // // ubuntu 17.04 64bit JRE version: OpenJDK Runtime Environment (8.0_144-b01)では異常終了してしまうので不使用
-    // // <summary>
-    // // <para>音響モデルファイルデータのリストを生成する。</para>
-    // // <para>使用後はdelete_voice_listを使って解放する。</para>
-    // // </summary>
-    // private void generateVoiceList() throws Exception {
-    // 	checkOpenjtalkObject();
-    // 	if (voices!=null) {
-    // 		voices.clear();
-    // 	} else {
-    // 		voices = new ArrayList<VoiceFileInfo>();
-    // 	}
-    // 	HTSVoiceList ptr = null;
-    // 	if (this.fShiftJis) {
-    // 		ptr = API.INSTANCE.openjtalk_getHTSVoiceListSjis(handle);
-    // 	} else {
-    // 		ptr = API.INSTANCE.openjtalk_getHTSVoiceList(handle);
-    // 	}
-    // 	if (ptr!=null) {
-    // 		HTSVoiceList top = ptr;
-    // 		do {
-    // 			String path = new String(ptr.path);
-    // 			String name = new String(ptr.name);
-    // 			voices.add(new VoiceFileInfo(path,name));
-    // 			ptr = ptr.succ;
-    // 		} while (ptr!=null);
-    // 		top.clear();
-    // 		API.INSTANCE.openjtalk_clearHTSVoiceList(handle,top);
-    // 	}
-    // }
+    // ubuntu 17.04 64bit JRE version: OpenJDK Runtime Environment (8.0_144-b01)では異常終了してしまうので不使用
+
+    /**
+     * 音響モデルファイルデータのリストを生成する。
+     * 使用後はdelete_voice_listを使って解放する。
+     */
+//    private void generateVoiceList() {
+//        checkOpenjtalkObject();
+//        if (voices != null) {
+//            voices.clear();
+//        } else {
+//            voices = new ArrayList<>();
+//        }
+//        HTSVoiceList ptr = null;
+//        if (this.fShiftJis) {
+//            ptr = API.INSTANCE.openjtalk_getHTSVoiceListSjis(handle);
+//        } else {
+//            ptr = API.INSTANCE.openjtalk_getHTSVoiceList(handle);
+//        }
+//        if (ptr != null) {
+//            HTSVoiceList top = ptr;
+//            do {
+//                String path = ptr.path;
+//                String name = ptr.name;
+//                voices.add(new VoiceFileInfo(path, name));
+//                ptr = ptr.succ;
+//            } while (ptr != null);
+//            top.clear();
+//            API.INSTANCE.openjtalk_clearHTSVoiceList(handle, top);
+//        }
+//    }
 
     private int fileCounter = 0;
     private final int MAXFILENUM = 200;
@@ -379,7 +380,7 @@ public class OpenJTalkWrapper {
 
     /**
      * パス文字列から名前部分を取得する
-     * 
+     *
      * @param path パス文字列
      * @return ファイルの名前部分
      */
@@ -527,9 +528,9 @@ public class OpenJTalkWrapper {
      * ポストフィルター係数(Beta)を設定する
      *
      * @param f ポストフィルター係数(Beta)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setBeta(double f) throws Exception {
+    public void setBeta(double f) {
         checkOpenjtalkObject();
         if (f < 0.0 || f > 1.0) {
             throw new IllegalArgumentException("postfiltering coefficient の範囲は0と1の間の浮動小数点数です。");
@@ -539,7 +540,7 @@ public class OpenJTalkWrapper {
 
     /**
      * ポストフィルター係数(Beta)を取得する
-     * 
+     *
      * @return ポストフィルター係数(Beta)（浮動小数点数）
      */
     public double getBeta() {
@@ -548,17 +549,17 @@ public class OpenJTalkWrapper {
 
     /**
      * ポストフィルター係数(Beta)を設定する
-     * 
+     *
      * @param f ポストフィルター係数(Beta)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがNULLなどの例外
      */
-    public void setB(double f) throws Exception {
+    public void setB(double f) {
         setBeta(f);
     }
 
     /**
      * ポストフィルター係数(Beta)を取得する
-     * 
+     *
      * @return ポストフィルター係数(Beta)（浮動小数点数）
      */
     public double getB() {
@@ -567,11 +568,11 @@ public class OpenJTalkWrapper {
 
     /**
      * スピーチ速度(R)を設定する
-     * 
+     *
      * @param f スピーチ速度(R)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがNULLなどの例外
      */
-    public void setSpeed(double f) throws Exception {
+    public void setSpeed(double f) {
         checkOpenjtalkObject();
         if (f < 0.0) {
             throw new IllegalArgumentException("speech speed rate の範囲は0以上の浮動小数点数です。");
@@ -590,17 +591,17 @@ public class OpenJTalkWrapper {
 
     /**
      * スピーチ速度(R)を設定する
-     * 
+     *
      * @param f スピーチ速度(R)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがNULLなどの例外
      */
-    public void setR(double f) throws Exception {
+    public void setR(double f) {
         setSpeed(f);
     }
 
     /**
      * スピーチ速度(R)を取得する
-     * 
+     *
      * @return スピーチ速度(R)（浮動小数点数）
      */
     public double getR() {
@@ -611,16 +612,16 @@ public class OpenJTalkWrapper {
      * 追加ハーフトーン(Fm)を設定する
      * 
      * @param f 追加ハーフトーン(Fm)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setAdditionalHalfTone(double f) throws Exception {
+    public void setAdditionalHalfTone(double f) {
         checkOpenjtalkObject();
         API.INSTANCE.openjtalk_setAdditionalHalfTone(handle, f);
     }
 
     /**
      * 追加ハーフトーン(Fm)を取得する
-     * 
+     *
      * @return 追加ハーフトーン(Fm)（浮動小数点数）
      */
     public double getAdditionalHalfTone() {
@@ -629,17 +630,17 @@ public class OpenJTalkWrapper {
 
     /**
      * 追加ハーフトーン(Fm)を設定する
-     * 
+     *
      * @param f 追加ハーフトーン(Fm)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setFm(double f) throws Exception {
+    public void setFm(double f) {
         setAdditionalHalfTone(f);
     }
 
     /**
      * 追加ハーフトーン(Fm)を取得する
-     * 
+     *
      * @return 追加ハーフトーン(Fm)（浮動小数点数）
      */
     public double getFm() {
@@ -648,11 +649,11 @@ public class OpenJTalkWrapper {
 
     /**
      * 有声 / 無声境界値(U)を設定する
-     * 
+     *
      * @param f 有声 / 無声境界値(U)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setMsdThreshold(double f) throws Exception {
+    public void setMsdThreshold(double f) {
         checkOpenjtalkObject();
         if (f < 0.0 || f > 1.0) {
             throw new IllegalArgumentException("voiced/unvoiced threshold の範囲は0と1の間の浮動小数点数です。");
@@ -662,7 +663,7 @@ public class OpenJTalkWrapper {
 
     /**
      * 有声 / 無声境界値(U)を取得する
-     * 
+     *
      * @return 有声 / 無声境界値(U)（浮動小数点数）
      */
     public double getMsdThreshold() {
@@ -671,17 +672,17 @@ public class OpenJTalkWrapper {
 
     /**
      * 有声 / 無声境界値(U)を設定する
-     * 
+     *
      * @param f 有声 / 無声境界値(U)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setU(double f) throws Exception {
+    public void setU(double f) {
         setMsdThreshold(f);
     }
 
     /**
      * 有声 / 無声境界値(U)を取得する
-     * 
+     *
      * @return 有声 / 無声境界値(U)（浮動小数点数）
      */
     public double getU() {
@@ -690,18 +691,18 @@ public class OpenJTalkWrapper {
 
     /**
      * スペクトラム系列内変動の重み(Jm)を設定する
-     * 
+     *
      * @param f スペクトラム系列内変動の重み(Jm)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setGvWeightForSpectrum(double f) throws Exception {
+    public void setGvWeightForSpectrum(double f) {
         checkOpenjtalkObject();
         API.INSTANCE.openjtalk_setGvWeightForSpectrum(handle, f);
     }
 
     /**
      * スペクトラム系列内変動の重み(Jm)を取得する
-     * 
+     *
      * @return スペクトラム系列内変動の重み(Jm)（浮動小数点数）
      */
     public double getGvWeightForSpectrum() {
@@ -710,17 +711,17 @@ public class OpenJTalkWrapper {
 
     /**
      * スペクトラム系列内変動の重み(Jm)を設定する
-     * 
+     *
      * @param f スペクトラム系列内変動の重み(Jm)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setJm(double f) throws Exception {
+    public void setJm(double f) {
         setGvWeightForSpectrum(f);
     }
 
     /**
      * スペクトラム系列内変動の重み(Jm)を取得する
-     * 
+     *
      * @return スペクトラム系列内変動の重み(Jm)（浮動小数点数）
      */
     public double getJm() {
@@ -729,11 +730,11 @@ public class OpenJTalkWrapper {
 
     /**
      * F0系列内変動重み(Jf)を設定する
-     * 
+     *
      * @param f F0系列内変動重み(Jf)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setGvWeightForLogF0(double f) throws Exception {
+    public void setGvWeightForLogF0(double f) {
         checkOpenjtalkObject();
         if (f < 0.0) {
             throw new IllegalArgumentException("weight of GV for spectrum の範囲は0以上の浮動小数点数です。");
@@ -743,48 +744,48 @@ public class OpenJTalkWrapper {
 
     /**
      * F0系列内変動重み(Jf)を取得する
-     * 
+     *
      * @return F0系列内変動重み(Jf)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public double getGvWeightForLogF0() throws Exception {
+    public double getGvWeightForLogF0() {
         return API.INSTANCE.openjtalk_getGvWeightForLogF0(handle);
     }
 
     /**
      * F0系列内変動重み(Jf)を設定する
-     * 
+     *
      * @param f F0系列内変動重み(Jf)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setJf(double f) throws Exception {
+    public void setJf(double f) {
         setGvWeightForLogF0(f);
     }
 
     /**
      * F0系列内変動重み(Jf)を取得する
-     * 
+     *
      * @return F0系列内変動重み(Jf)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public double getJf() throws Exception {
+    public double getJf() {
         return getGvWeightForLogF0();
     }
 
     /**
      * ボリューム(G)を設定する
-     * 
+     *
      * @param f ボリューム(G)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setVolume(double f) throws Exception {
+    public void setVolume(double f) {
         checkOpenjtalkObject();
         API.INSTANCE.openjtalk_setVolume(handle, f);
     }
 
     /**
      * ボリューム(G)を取得する
-     * 
+     *
      * @return ボリューム(G)（浮動小数点数）
      */
     public double getVolume() {
@@ -793,17 +794,17 @@ public class OpenJTalkWrapper {
 
     /**
      * ボリューム(G)を設定する
-     * 
+     *
      * @param f ボリューム(G)（浮動小数点数）
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void setG(double f) throws Exception {
+    public void setG(double f) {
         setVolume(f);
     }
 
     /**
      * ボリューム(G)を取得する
-     * 
+     *
      * @return ボリューム(G)（浮動小数点数）
      */
     public double getG() {
@@ -976,11 +977,11 @@ public class OpenJTalkWrapper {
 
     /**
      * 現在の音響モデル名を取得する
-     * 
+     *
      * @return 音響モデル名
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public String getVoiceName() throws Exception {
+    public String getVoiceName() {
         try {
             String name = "";
             byte[] buff = new byte[MAXPATH];
@@ -1123,9 +1124,9 @@ public class OpenJTalkWrapper {
     /**
      * 非同期発声の一時停止を再開する
      * 
-     * @throws Exception オブジェクトポインタがNULLなどの例外
+     * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
-    public void resume() throws Exception {
+    public void resume() {
         checkOpenjtalkObject();
         API.INSTANCE.openjtalk_resume(handle);
     }

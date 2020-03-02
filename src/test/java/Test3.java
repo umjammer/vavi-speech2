@@ -41,7 +41,7 @@ public final class Test3 {
 
         synthesizer.getSynthesizerProperties().setVolume(20);
         String voiceName = "Kyoko";
-        Voice voice = Arrays.asList(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).stream().filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
 //System.err.println(voice);
         // to specify exact age doesn't work.
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));

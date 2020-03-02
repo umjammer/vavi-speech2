@@ -73,7 +73,7 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
                 voice = voices[0];
             }
         }
-        LOGGER.fine("default voice: " + voice.getName());
+LOGGER.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
         try {
@@ -139,7 +139,7 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
             final byte[] bytes = synthe(item);
             final AudioManager manager = getAudioManager();
             final String locator = manager.getMediaLocator();
-            // you should pass bytes to BaseAudioSegment as AudioInputStream nor causes crackling!
+            // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
             final InputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(bytes));
             final AudioSegment segment;
             if (locator == null) {

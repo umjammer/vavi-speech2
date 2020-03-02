@@ -41,7 +41,7 @@ public final class Test2 {
 
         synthesizer.getSynthesizerProperties().setVolume(20);
         String voiceName = "ja-JP-Wavenet-B";
-        Voice voice = Arrays.asList(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).stream().filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
         for (String line : text.split("。")) {
