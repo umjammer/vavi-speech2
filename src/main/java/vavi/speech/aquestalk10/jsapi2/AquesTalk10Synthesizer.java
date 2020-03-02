@@ -26,10 +26,12 @@ import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 
+import vavi.beans.InstanciationBinder;
 import vavi.speech.Phonemer;
 import vavi.speech.aquestalk10.jna.AquesTalk10.AQTK_VOICE;
 import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
-import vavi.speech.phoneme.KuromojiJaPhonemer;
+import vavi.util.properties.annotation.Property;
+import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
@@ -38,14 +40,16 @@ import vavi.speech.phoneme.KuromojiJaPhonemer;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/20 umjammer initial version <br>
  */
+@PropsEntity(url = "classpath:aquestalk10.properties")
 public final class AquesTalk10Synthesizer extends BaseSynthesizer {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(AquesTalk10Synthesizer.class.getName());
 
     /** */
-    private Phonemer phonemer = new KuromojiJaPhonemer();
+    @Property(binder = InstanciationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
+    private Phonemer phonemer;
 
-    /** */
+    /** engine */
     private AquesTalk10Wrapper aquesTalk10;
 
     /**
@@ -55,6 +59,11 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
      */
     AquesTalk10Synthesizer(final AquesTalk10SynthesizerMode mode) {
         super(mode);
+        try {
+            PropsEntity.Util.bind(this);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /* */
@@ -72,7 +81,7 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
                 voice = voices[0];
             }
         }
-        LOGGER.fine("default voice: " + voice.getName());
+LOGGER.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
         aquesTalk10 = AquesTalk10Wrapper.getInstance();
@@ -131,7 +140,7 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
             final byte[] bytes = aquesTalk10.synthe(phonemer.phoneme(item));
             final AudioManager manager = getAudioManager();
             final String locator = manager.getMediaLocator();
-            // you should pass bytes to BaseAudioSegment as AudioInputStream nor causes crackling!
+            // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
             final InputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(bytes));
             final AudioSegment segment;
             if (locator == null) {

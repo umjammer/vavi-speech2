@@ -27,8 +27,8 @@ public final class Test1 {
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-//        String text = args[0];
-        String text = "ゆっくりしていってね";
+        String text = args[0];
+//        String text = "ゆっくりしていってね";
 
         EngineManager.registerEngineListFactory(AquesTalk10EngineListFactory.class.getName());
 
@@ -41,11 +41,14 @@ public final class Test1 {
 
         synthesizer.getSynthesizerProperties().setVolume(20);
         String voiceName = "F1";
-        Voice voice = Arrays.asList(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).stream().filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
-        System.out.println(text);
-        synthesizer.speak(text, System.err::println);
+        for (String line : text.split("。")) {
+            System.out.println(line);
+            synthesizer.speak(line + "。", System.err::println);
+        }
+
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
 

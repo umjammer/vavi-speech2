@@ -1,0 +1,17 @@
+{
+    "systemDict" : "sudachi-dictionary-20200127/system_full.dic",
+    "userDict" : [ ],
+    "characterDefinitionFile" : "char.def",
+    "inputTextPlugin" : [
+        { "class" : "com.worksap.nlp.sudachi.ProlongedSoundMarkInputTextPlugin",
+          "prolongedSoundMarks": ["ー", "〜", "〰"],
+          "replacementSymbol": "ー"}
+    ],
+    "oovProviderPlugin" : [
+        { "class" : "com.worksap.nlp.sudachi.SimpleOovProviderPlugin",
+          "oovPOS" : [ "名詞", "普通名詞", "一般", "*", "*", "*" ],
+          "leftId" : 8,
+          "rightId" : 8,
+          "cost" : 6000 }
+    ]
+}
