@@ -29,10 +29,6 @@ import org.rococoa.contrib.appkit.NSVoice;
  */
 public class RococoaEngineListFactory implements EngineListFactory {
 
-    static {
-        com.sun.jna.NativeLibrary.addSearchPath("rococoa", System.getProperty("java.library.path"));
-    }
-
     /* */
     @Override
     public EngineList createEngineList(final EngineMode require) {

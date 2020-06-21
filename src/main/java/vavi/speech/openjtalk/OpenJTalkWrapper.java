@@ -28,11 +28,6 @@ import javax.swing.event.EventListenerList;
  */
 public class OpenJTalkWrapper {
 
-    /* */
-    static {
-        com.sun.jna.NativeLibrary.addSearchPath("jtalk", System.getProperty("java.library.path"));
-    }
-
     private static final int MAXPATH = 260;
 
     /**
@@ -164,7 +159,7 @@ public class OpenJTalkWrapper {
      */
     interface API extends Library {
 
-        API INSTANCE = (API) Native.loadLibrary("jtalk", API.class);
+        API INSTANCE = Native.load("jtalk", API.class);
 
         void openjtalk_clearHTSVoiceList(Pointer handle, HTSVoiceList list);
         HTSVoiceList openjtalk_getHTSVoiceList(Pointer handle);
