@@ -12,6 +12,8 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.Test;
+
 import vavi.speech.rococoa.jsapi2.RococoaEngineListFactory;
 
 
@@ -27,9 +29,20 @@ public final class Test3 {
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
+        Test2 app = new Test2();
         String text = args[0];
-//        String text = "ゆっくりしていってね";
+        app.speak(text);
+        System.exit(0);
+    }
 
+    @Test
+    void test01() throws Exception {
+        String text = "ゆっくりしていってね";
+        speak(text);
+    }
+
+    /** */
+    void speak(String text) throws Exception {
         EngineManager.registerEngineListFactory(RococoaEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
@@ -53,7 +66,5 @@ public final class Test3 {
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
-
-        System.exit(0);
     }
 }

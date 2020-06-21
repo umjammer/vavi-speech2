@@ -12,6 +12,9 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+
 import vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory;
 
 
@@ -21,15 +24,27 @@ import vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-public final class Test1 {
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+class Test1 {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
+        Test1 app = new Test1();
         String text = args[0];
-//        String text = "ゆっくりしていってね";
+        app.speak(text);
+        System.exit(0);
+    }
 
+    @Test
+    void test01() throws Exception {
+        String text = "ゆっくりしていってね";
+        speak(text);
+    }
+
+    /** */
+    void speak(String text) throws Exception {
         EngineManager.registerEngineListFactory(AquesTalk10EngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
@@ -51,7 +66,5 @@ public final class Test1 {
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
-
-        System.exit(0);
     }
 }

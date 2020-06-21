@@ -22,7 +22,7 @@ import javax.speech.synthesis.Voice;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-public final class Test4 {
+class Test4 {
 
     /**
      * @param args command line arguments.

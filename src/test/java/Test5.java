@@ -12,6 +12,9 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+
 import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
 
 
@@ -33,15 +36,27 @@ import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/26 umjammer initial version <br>
  */
-public final class Test5 {
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+class Test5 {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
+        Test5 app = new Test5();
         String text = args[0];
-//        String text = "ゆっくりしていってね";
+        app.speak(text);
+        System.exit(0);
+    }
 
+    @Test
+    void test01() throws Exception {
+        String text = "ゆっくりしていってね";
+        speak(text);
+    }
+
+    /** */
+    void speak(String text) throws Exception {
         EngineManager.registerEngineListFactory(OpenJTalkEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
@@ -64,7 +79,5 @@ public final class Test5 {
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
-
-        System.exit(0);
     }
 }
