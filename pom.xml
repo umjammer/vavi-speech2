@@ -69,7 +69,6 @@
               </systemProperties>
               <environmentVariables>
                 <GOOGLE_APPLICATION_CREDENTIALS>${google.credential}</GOOGLE_APPLICATION_CREDENTIALS>
-                <GOOGLE_APPLICATION_CREDENTIALS>${google.credential}</GOOGLE_APPLICATION_CREDENTIALS>
                 <DOCOMO_GOO_HIRAGANA_API_KEY>${docomo.goo.hiragana.apiKey}</DOCOMO_GOO_HIRAGANA_API_KEY>
                 <YAHOOJAPAN_API_KEY>${yahoo.japan.apiKey}</YAHOOJAPAN_API_KEY>
               </environmentVariables>

@@ -1,4 +1,5 @@
-[![](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)
+[![Release](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)  [![Java CI with Maven](https://github.com/umjammer/vavi-speech2/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/umjammer/vavi-speech2/actions)
+
 
 # vavi-speech2
 
