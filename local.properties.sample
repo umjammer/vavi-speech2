@@ -2,15 +2,13 @@
 #
 #
 
-jvm=${env.JAVA_HOME}/bin/java
-javac.source=src/main/java
-javac.source.test=src/test/java
-javac.resource=src/main/resources
-javac.resource.test=src/test/resources
-javac.dest=target/classes
-javac.dest.test=target/test-classes
-
-sen.home=${user.home}/src/sen-1.2.2.1
+sen.home=/usr/local/src/sen-1.2.2.1
 
 aquesTalk10DevKey=XXXX-XXXX-XXXX-XXXX
 aqKanji2KoeDevKey=YYYY-YYYY-YYYY-YYYY
+
+google.credential=tmp/google-app-credentials.json
+
+docomo.goo.hiragana.apiKey=123456789
+
+yahoo.japan.apiKey=abc123
