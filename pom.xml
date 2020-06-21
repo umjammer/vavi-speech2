@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
 
   <name>vavi-speech2</name>
   <description>0.0.2
@@ -26,6 +26,84 @@
     <system>https//github.com/umjammer/vavi-speech2/issues</system>
   </issueManagement>
 
+  <profiles>
+    <profile>
+      <id>local (not on CI)</id>
+      <activation>
+        <file>
+          <exists>${basedir}/local.properties</exists>
+        </file>
+        <property>
+          <name>env.JITPACK</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>read-properties</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>read-project-properties</goal>
+                </goals>
+                <configuration>
+                  <files>
+                    <file>${basedir}/local.properties</file>
+                  </files>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M4</version>
+            <configuration>
+              <forkMode>always</forkMode>
+              <trimStackTrace>false</trimStackTrace>
+              <systemProperties>
+                <sen.home>${sen.home}</sen.home>
+              </systemProperties>
+              <environmentVariables>
+                <GOOGLE_APPLICATION_CREDENTIALS>${google.credential}</GOOGLE_APPLICATION_CREDENTIALS>
+                <GOOGLE_APPLICATION_CREDENTIALS>${google.credential}</GOOGLE_APPLICATION_CREDENTIALS>
+                <DOCOMO_GOO_HIRAGANA_API_KEY>${docomo.goo.hiragana.apiKey}</DOCOMO_GOO_HIRAGANA_API_KEY>
+                <YAHOOJAPAN_API_KEY>${yahoo.japan.apiKey}</YAHOOJAPAN_API_KEY>
+              </environmentVariables>
+              <argLine>
+                -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
+              </argLine>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>github workflow</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M4</version>
+            <configuration>
+              <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
+              <forkMode>always</forkMode>
+              <trimStackTrace>false</trimStackTrace>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
       <plugin>
@@ -36,10 +114,43 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.rococoa</groupId>
+                  <artifactId>rococoa-core</artifactId>
+                  <type>dylib</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                  <destFileName>librococoa.dylib</destFileName>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
   <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>bintray-umjammer-maven</id>
+      <name>bintray</name>
+      <url>https://dl.bintray.com/umjammer/maven</url>
+    </repository>
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
@@ -63,9 +174,15 @@
     </dependency>
 
     <dependency>
+      <groupId>org.rococoa</groupId>
+      <artifactId>rococoa-core</artifactId>
+      <version>0.8.3</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.2</version>
+      <version>0.1.3</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>

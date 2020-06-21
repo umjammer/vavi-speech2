@@ -6,7 +6,7 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 
 | **Type** | **Description** | **Sythesizer** | **Recognizer** | **Quality** | **Comment** |
 |:---------|:----------------|:---------:|:--------------:|:-----------:|:------------|
-| AquesTalk10 | JNA | ✅ |  - | 🙂 | |
+| AquesTalk10 | JNA | ✅ |  - | 😐 | |
 | Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries) | ✅ | 🚧 | 👑 | |
 | Rococoa | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA | ✅ | 🚫 | 😃 | |
 | Open JTalk | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA | ✅ | - | 💩 | |
@@ -15,10 +15,9 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 
 ### AquesTalk
 
- * copy `AquesTalk10.framework/Versions/Current/AquesTalk` as `libaquestalk10.dylib` into `lib` directory
-    * TODO it's better to locate the framework in `~/Library/Frameworks` ?
+ * place `AquesTalk10.framework` into `~/Library/Frameworks`
+ * create symbolic link `AquesTalk10.framework/AquesTalk` as `AquesTalk10.framework/AquesTalk10`
  * write `aquesTalk10DevKey` into `local.properties`
- * set jvmarg `"java.libraly.path"` `lib`
 
 ### Google Cloud Text To Speech
 
@@ -27,14 +26,13 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 
 ### Rococoa
 
- * locate `librococoa.dylib` into `lib` directory
- * set jvm argument `"java.libraly.path"` `lib`
+ * locate `librococoa.dylib` into one of class paths
+   * if you use maven it's already done, you can find at `target/test-classes`.
 
 ### Open JTalk
 
  * make `libjtalk.dylib` from `https://github.com/rosmarinus/jtalkdll`
- * locate `libjtalk.dylib` into `lib` directory
- * set jvm argument `"java.libraly.path"` `lib` (no need ???)
+ * locate `libjtalk.dylib` into `DYLD_LIBRARY_PATH`
 
 
 ## Reference
@@ -50,3 +48,4 @@ Text to Speech and Speech to Text (JSAPI2) for Java
  * [festival](https://github.com/festvox/festival)
  * amazon polly
  * microsoft cognitive services text to speech
+ * https://github.com/julius-speech/julius
