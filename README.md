@@ -14,7 +14,12 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 
 ## Install
 
-### AquesTalk
+### maven
+
+ * this project uses gitlab package registry. add a personal access token to `~/.m2/settings.xml`
+ * see https://docs.gitlab.com/ee/user/packages/maven_repository/index.html#authenticate-to-the-package-registry-with-maven
+
+### AquesTalk10
 
  * place `AquesTalk10.framework` into `~/Library/Frameworks`
  * create symbolic link `AquesTalk10.framework/AquesTalk` as `AquesTalk10.framework/AquesTalk10`
@@ -28,13 +33,12 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 ### Rococoa
 
  * locate `librococoa.dylib` into one of class paths
-   * if you use maven it's already done, you can find at `target/test-classes`.
+   * if you use maven it's already done, you can find it at `target/test-classes`.
 
 ### Open JTalk
 
  * make `libjtalk.dylib` from `https://github.com/rosmarinus/jtalkdll`
  * locate `libjtalk.dylib` into `DYLD_LIBRARY_PATH`
-
 
 ## Reference
 
