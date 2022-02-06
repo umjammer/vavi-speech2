@@ -1,5 +1,5 @@
 {
-    "systemDict" : "sudachi-dictionary-20200127/system_full.dic",
+    "systemDict" : "sudachi-dictionary-20210802/system_full.dic",
     "userDict" : [ ],
     "characterDefinitionFile" : "char.def",
     "inputTextPlugin" : [

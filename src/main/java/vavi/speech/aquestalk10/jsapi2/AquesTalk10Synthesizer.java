@@ -27,7 +27,7 @@ import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 
 import vavi.beans.InstanciationBinder;
-import vavi.speech.Phonemer;
+import vavi.speech.Phonemizer;
 import vavi.speech.aquestalk10.jna.AquesTalk10.AQTK_VOICE;
 import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
 import vavi.util.properties.annotation.Property;
@@ -47,7 +47,7 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
 
     /** */
     @Property(binder = InstanciationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
-    private Phonemer phonemer;
+    private Phonemizer phonemizer;
 
     /** engine */
     private AquesTalk10Wrapper aquesTalk10;
@@ -137,7 +137,7 @@ LOGGER.fine("default voice: " + voice.getName());
     public AudioSegment handleSpeak(final int id, final String item) {
         try {
             aquesTalk10.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
-            final byte[] bytes = aquesTalk10.synthe(phonemer.phoneme(item));
+            final byte[] bytes = aquesTalk10.synthe(phonemizer.phoneme(item));
             final AudioManager manager = getAudioManager();
             final String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
