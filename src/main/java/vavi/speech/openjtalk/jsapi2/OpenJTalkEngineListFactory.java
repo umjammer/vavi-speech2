@@ -29,7 +29,6 @@ import vavi.speech.openjtalk.OpenJTalkWrapper;
  */
 public class OpenJTalkEngineListFactory implements EngineListFactory {
 
-    /* */
     @Override
     public EngineList createEngineList(final EngineMode require) {
         if (require instanceof SynthesizerMode) {

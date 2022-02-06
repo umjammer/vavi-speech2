@@ -66,7 +66,6 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
         }
     }
 
-    /* */
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
         final Voice voice;
@@ -87,30 +86,28 @@ LOGGER.fine("default voice: " + voice.getName());
         aquesTalk10 = AquesTalk10Wrapper.getInstance();
     }
 
-    /** */
+    /**
+     * @param voice when null, returns default voice.
+     */
     private AQTK_VOICE toNativeVoice(Voice voice) {
         return AquesTalk10Wrapper.voices.get(voice == null ? "F1" : voice.getName());
     }
 
-    /* */
     @Override
     public boolean handleCancel() {
         return false;
     }
 
-    /* */
     @Override
     protected boolean handleCancel(final int id) {
         return false;
     }
 
-    /* */
     @Override
     protected boolean handleCancelAll() {
         return false;
     }
 
-    /* */
     @Override
     public void handleDeallocate() {
         // Leave some time to let all resources detach
@@ -121,18 +118,15 @@ LOGGER.fine("default voice: " + voice.getName());
         aquesTalk10 = null;
     }
 
-    /* */
     @Override
     public void handlePause() {
     }
 
-    /* */
     @Override
     public boolean handleResume() {
         return false;
     }
 
-    /* */
     @Override
     public AudioSegment handleSpeak(final int id, final String item) {
         try {
@@ -154,19 +148,16 @@ LOGGER.fine("default voice: " + voice.getName());
         }
     }
 
-    /* */
     @Override
     protected AudioSegment handleSpeak(final int id, final Speakable item) {
         throw new IllegalArgumentException("Synthesizer does not support" + " speech markup!");
     }
 
-    /* */
     @Override
     protected AudioFormat getEngineAudioFormat() {
         return new AudioFormat(16000.0f, 16, 1, true, false);
     }
 
-    /* */
     @Override
     protected void handlePropertyChangeRequest(final BaseEngineProperties properties,
                                                final String propName,

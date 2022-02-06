@@ -31,7 +31,6 @@ import com.google.cloud.texttospeech.v1.TextToSpeechClient;
  */
 public class GoogleCloudEngineListFactory implements EngineListFactory {
 
-    /* */
     @Override
     public EngineList createEngineList(final EngineMode require) {
         if (require instanceof SynthesizerMode) {

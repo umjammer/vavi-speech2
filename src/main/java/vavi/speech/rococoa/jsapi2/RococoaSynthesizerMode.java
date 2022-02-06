@@ -31,7 +31,7 @@ public final class RococoaSynthesizerMode extends SynthesizerMode implements Eng
 
     /**
      * Constructs a new object.
-     * 
+     *
      * @param locale the locale associated with this mode
      */
     public RococoaSynthesizerMode(final SpeechLocale locale) {

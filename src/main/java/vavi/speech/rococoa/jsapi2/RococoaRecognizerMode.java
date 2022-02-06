@@ -37,7 +37,6 @@ public final class RococoaRecognizerMode extends RecognizerMode implements Engin
         super(locale);
     }
 
-    /* */
     @Override
     public Engine createEngine() throws IllegalArgumentException, EngineException {
         return new RococoaRecognizer(this);

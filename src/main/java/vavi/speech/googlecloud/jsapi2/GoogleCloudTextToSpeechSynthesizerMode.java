@@ -31,7 +31,7 @@ public final class GoogleCloudTextToSpeechSynthesizerMode extends SynthesizerMod
 
     /**
      * Constructs a new object.
-     * 
+     *
      * @param locale the locale associated with this mode
      */
     public GoogleCloudTextToSpeechSynthesizerMode(final SpeechLocale locale) {
@@ -55,7 +55,6 @@ public final class GoogleCloudTextToSpeechSynthesizerMode extends SynthesizerMod
         super(engineName, modeName, running, supportsLetterToSound, false, voices);
     }
 
-    /* */
     @Override
     public Engine createEngine() throws IllegalArgumentException, EngineException {
         return new GoogleCloudTextToSpeechSynthesizer(this);

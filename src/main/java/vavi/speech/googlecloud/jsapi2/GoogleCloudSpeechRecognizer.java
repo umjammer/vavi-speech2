@@ -45,25 +45,18 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
 
     /**
      * Constructs a new object.
-     * 
-     * @param mode
-     *            the recognizer mode.
+     *
+     * @param mode the recognizer mode.
      */
     public GoogleCloudSpeechRecognizer(final GoogleCloudSpeechRecognizerMode mode) {
         super(mode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Collection<Grammar> getBuiltInGrammars() {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void handleAllocate() throws EngineStateException, EngineException,
             AudioException, SecurityException {
@@ -85,9 +78,6 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean handleResume(InputStream in) throws EngineStateException {
         final GrammarManager manager = getGrammarManager();
@@ -122,9 +112,6 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
     private native boolean macResume(long handle, String[] grammars)
             throws EngineStateException;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean setGrammars(
             Collection<GrammarDefinition> grammarDefinition) {
@@ -141,17 +128,15 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
 
     /**
      * Notification from the SAPI recognizer about a recognition result.
-     * 
-     * @param utterance
-     *            the detected utterance
+     *
+     * @param utterance the detected utterance
      */
     private void reportResult(final String utterance) {
 
         System.out.println("Java Code " + utterance);
 
-        final RuleGrammar grammar = currentGrammar; // current grammar is not
-                                                    // available
-        System.out.println(grammar);
+        final RuleGrammar grammar = currentGrammar; // current grammar is not available
+System.out.println(grammar);
 
         final BaseResult result;
         try {
@@ -192,13 +177,11 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
 
     }
 
-    /* */
     @Override
     protected AudioFormat getAudioFormat() {
         return new AudioFormat(16000, 2, 1, true, false);
     }
 
-    /* */
     @Override
     protected void handlePropertyChangeRequest(
             final BaseEngineProperties properties,

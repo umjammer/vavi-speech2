@@ -29,7 +29,6 @@ import org.rococoa.contrib.appkit.NSVoice;
  */
 public class RococoaEngineListFactory implements EngineListFactory {
 
-    /* */
     @Override
     public EngineList createEngineList(final EngineMode require) {
         if (require instanceof SynthesizerMode) {

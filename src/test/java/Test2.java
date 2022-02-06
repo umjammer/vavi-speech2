@@ -18,7 +18,7 @@ import vavi.speech.googlecloud.jsapi2.GoogleCloudEngineListFactory;
 
 
 /**
- * Test1. (jsapi2, google cloud)
+ * Test2. (jsapi2, google cloud)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>

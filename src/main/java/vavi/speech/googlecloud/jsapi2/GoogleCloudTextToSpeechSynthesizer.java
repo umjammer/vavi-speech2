@@ -58,7 +58,6 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
         super(mode);
     }
 
-    /* */
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
         final Voice voice;
@@ -92,25 +91,21 @@ LOGGER.fine("default voice: " + voice.getName());
         return result.isPresent() ? result.get() : null;
     }
 
-    /* */
     @Override
     public boolean handleCancel() {
         return false;
     }
 
-    /* */
     @Override
     protected boolean handleCancel(final int id) {
         return false;
     }
 
-    /* */
     @Override
     protected boolean handleCancelAll() {
         return false;
     }
 
-    /* */
     @Override
     public void handleDeallocate() {
         // Leave some time to let all resources detach
@@ -121,18 +116,15 @@ LOGGER.fine("default voice: " + voice.getName());
         client.close();
     }
 
-    /* */
     @Override
     public void handlePause() {
     }
 
-    /* */
     @Override
     public boolean handleResume() {
         return false;
     }
 
-    /* */
     @Override
     public AudioSegment handleSpeak(final int id, final String item) {
         try {
@@ -172,19 +164,16 @@ LOGGER.fine("default voice: " + voice.getName());
         return audioContents.toByteArray();
     }
 
-    /* */
     @Override
     protected AudioSegment handleSpeak(final int id, final Speakable item) {
         throw new IllegalArgumentException("Synthesizer does not support" + " speech markup!");
     }
 
-    /* */
     @Override
     protected AudioFormat getEngineAudioFormat() {
         return new AudioFormat(24000.0f, 16, 1, true, false);
     }
 
-    /* */
     @Override
     protected void handlePropertyChangeRequest(final BaseEngineProperties properties,
                                                final String propName,

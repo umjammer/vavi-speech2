@@ -29,7 +29,7 @@ public final class Test3 {
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-        Test2 app = new Test2();
+        Test3 app = new Test3();
         String text = args[0];
         app.speak(text);
         System.exit(0);
