@@ -19,19 +19,19 @@ import vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory;
 
 
 /**
- * Test1. (jsapi2, aquestalk10)
+ * Jsapi2Test_aquestalk10. (jsapi2, aquestalk10)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
-class Test1 {
+class Jsapi2Test_aquestalk10 {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-        Test1 app = new Test1();
+        Jsapi2Test_aquestalk10 app = new Jsapi2Test_aquestalk10();
         String text = args[0];
         app.speak(text);
         System.exit(0);
@@ -39,7 +39,9 @@ class Test1 {
 
     @Test
     void test01() throws Exception {
-        String text = "ゆっくりしていってね";
+        String text = "ゆっくりしていってね" +
+        "コ’ンカイわこのゲームをジッキョーした’いとオモイま’す。" +
+        "良い例　：コ’ンカイ+わ/この+ゲーム+を/ジッキョー+した’い+と/オモイ+ま’す。";
         speak(text);
     }
 
@@ -56,7 +58,7 @@ class Test1 {
 
         synthesizer.getSynthesizerProperties().setVolume(20);
         String voiceName = "F1";
-        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
         for (String line : text.split("。")) {

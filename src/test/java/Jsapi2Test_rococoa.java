@@ -18,18 +18,18 @@ import vavi.speech.rococoa.jsapi2.RococoaEngineListFactory;
 
 
 /**
- * Test3. (jsapi2, rococoa)
+ * Jsapi2Test_rococoa. (jsapi2, rococoa)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-public final class Test3 {
+public final class Jsapi2Test_rococoa {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-        Test3 app = new Test3();
+        Jsapi2Test_rococoa app = new Jsapi2Test_rococoa();
         String text = args[0];
         app.speak(text);
         System.exit(0);
@@ -54,7 +54,7 @@ public final class Test3 {
 
         synthesizer.getSynthesizerProperties().setVolume(20);
         String voiceName = "Kyoko";
-        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
 //System.err.println(voice);
         // to specify exact age doesn't work.
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));

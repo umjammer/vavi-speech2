@@ -17,12 +17,12 @@ import javax.speech.synthesis.Voice;
 
 
 /**
- * Test4. (jsapi2, rococoa)
+ * RococaTest. (jsapi2, rococoa)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-class Test4 {
+class RococaTest {
 
     /**
      * @param args command line arguments.
@@ -30,8 +30,7 @@ class Test4 {
     public static void main(final String[] args) throws Exception {
         Path file = Paths.get(args[0]);
 
-//      EngineManager.registerEngineListFactory(vavi.speech.rococoa.jsapi2.RococoaEngineListFactory.class.getName());
-        EngineManager.registerEngineListFactory(vavi.speech.googlecloud.jsapi2.GoogleCloudEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(vavi.speech.rococoa.jsapi2.RococoaEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -42,9 +41,8 @@ class Test4 {
 
         synthesizer.getSynthesizerProperties().setVolume(20);
 //Arrays.asList(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).stream().forEach(System.err::println);
-//        String voiceName = "Alex";
-        String voiceName = "en-US-Wavenet-A";
-        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        String voiceName = "Alex";
+        Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
 
         Files.lines(file).forEach(line -> {

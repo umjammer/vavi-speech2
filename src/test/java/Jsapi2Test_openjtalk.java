@@ -12,14 +12,14 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
 
 
 /**
- * Test5. (jsapi2, openjtalk)
+ * Jsapi2Test_openjtalk. (jsapi2, openjtalk)
  * <ul>
  * <li>"mei_angry"
  * <li>"mei_normal"
@@ -36,14 +36,15 @@ import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/26 umjammer initial version <br>
  */
-@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
-class Test5 {
+@Disabled("because installing jtalk is dull")
+//@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+class Jsapi2Test_openjtalk {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-        Test5 app = new Test5();
+        Jsapi2Test_openjtalk app = new Jsapi2Test_openjtalk();
         String text = args[0];
         app.speak(text);
         System.exit(0);
@@ -69,7 +70,7 @@ class Test5 {
         synthesizer.getSynthesizerProperties().setVolume(20);
 //Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
         String voiceName = "mei_happy";
-        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
         for (String line : text.split("。")) {

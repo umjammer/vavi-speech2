@@ -18,18 +18,18 @@ import vavi.speech.googlecloud.jsapi2.GoogleCloudEngineListFactory;
 
 
 /**
- * Test2. (jsapi2, google cloud)
+ * Jsapi2Test_google. (jsapi2, google cloud)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-class Test2 {
+class Jsapi2Test_google {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-        Test2 app = new Test2();
+        Jsapi2Test_google app = new Jsapi2Test_google();
         String text = args[0];
         app.speak(text);
         System.exit(0);
@@ -53,8 +53,9 @@ class Test2 {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
         synthesizer.getSynthesizerProperties().setVolume(20);
+//        String voiceName = "en-US-Wavenet-A";
         String voiceName = "ja-JP-Wavenet-B";
-        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
         for (String line : text.split("。")) {
