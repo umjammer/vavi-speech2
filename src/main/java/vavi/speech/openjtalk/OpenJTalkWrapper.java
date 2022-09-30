@@ -4,21 +4,20 @@
 
 package vavi.speech.openjtalk;
 
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
-import javax.swing.event.EventListenerList;
+
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 
 
 /**
@@ -55,7 +54,7 @@ public class OpenJTalkWrapper {
     /**
      * 音響モデル変化イベントリスナーのリスト
      */
-    protected EventListenerList listenerList = new EventListenerList();
+    protected List<VoiceListChangedListener> listeners = new ArrayList<>();
 
     /**
      * 音響モデルファイルの変化リスナーを追加する
@@ -63,7 +62,7 @@ public class OpenJTalkWrapper {
      * @param listener 音響モデルファイルの変化リスナー
      */
     public void addVoiceListChangedListener(VoiceListChangedListener listener) {
-        listenerList.add(VoiceListChangedListener.class, listener);
+        listeners.add(listener);
     }
 
     /**
@@ -72,7 +71,7 @@ public class OpenJTalkWrapper {
      * @param listener 音響モデルファイルの変化リスナー
      */
     public void removeVoiceListChangedListener(VoiceListChangedListener listener) {
-        listenerList.remove(VoiceListChangedListener.class, listener);
+        listeners.remove(listener);
     }
 
     /**
@@ -80,7 +79,7 @@ public class OpenJTalkWrapper {
      */
     public void fireVoiceListChanged() {
         VoiceListChangedEvent e = new VoiceListChangedEvent(this);
-        for (VoiceListChangedListener listener : listenerList.getListeners(VoiceListChangedListener.class)) {
+        for (VoiceListChangedListener listener : listeners) {
             listener.onVoiceListChanged(e);
         }
     }
@@ -769,12 +768,11 @@ public class OpenJTalkWrapper {
      * 辞書ディレクトリを取得する
      *
      * @return 辞書ディレクトリのパス
-     * @throws UnsupportedEncodingException 
      */
     public String getDic() {
         byte[] buff = new byte[MAXPATH];
         String res = API.INSTANCE.openjtalk_getDic(handle, buff);
-        String path = new String(buff, Charset.forName("UTF-8"));
+        String path = new String(buff, StandardCharsets.UTF_8);
         return res != null ? path.trim() : null;
     }
 
@@ -809,7 +807,7 @@ public class OpenJTalkWrapper {
     public String getVoiceDir() {
         byte[] buff = new byte[MAXPATH];
         String res = API.INSTANCE.openjtalk_getVoiceDir(handle, buff);
-        String path = new String(buff, Charset.forName("UTF-8"));
+        String path = new String(buff, StandardCharsets.UTF_8);
         return res != null ? path.trim() : null;
     }
 
@@ -837,7 +835,7 @@ public class OpenJTalkWrapper {
     public String getVoicePath() {
         byte[] buff = new byte[MAXPATH];
         API.INSTANCE.openjtalk_getVoicePath(handle, buff);
-        String path = new String(buff, Charset.forName("UTF-8"));
+        String path = new String(buff, StandardCharsets.UTF_8);
         return path.trim();
     }
 
@@ -866,7 +864,7 @@ public class OpenJTalkWrapper {
     public String getVoiceName() {
         byte[] buff = new byte[MAXPATH];
         API.INSTANCE.openjtalk_getVoiceName(handle, buff);
-        String name = new String(buff, Charset.forName("UTF-8"));
+        String name = new String(buff, StandardCharsets.UTF_8);
         return name.trim();
     }
 
@@ -915,9 +913,9 @@ public class OpenJTalkWrapper {
         byte[] buffPath = new byte[MAXPATH];
         byte[] buffName = new byte[MAXPATH];
         API.INSTANCE.openjtalk_getVoicePath(handle, buffPath);
-        String path = new String(buffPath, Charset.forName("UTF-8"));
+        String path = new String(buffPath, StandardCharsets.UTF_8);
         API.INSTANCE.openjtalk_getVoiceName(handle, buffName);
-        String name = new String(buffName, Charset.forName("UTF-8"));
+        String name = new String(buffName, StandardCharsets.UTF_8);
         VoiceFileInfo result = new VoiceFileInfo();
         result.path = path.trim();
         result.name = name.trim();
