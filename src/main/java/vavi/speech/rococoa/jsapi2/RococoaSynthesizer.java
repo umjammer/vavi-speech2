@@ -96,28 +96,24 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
         return result.isPresent() ? result.get() : null;
     }
 
-    /* */
     @Override
     public boolean handleCancel() {
 //        synthesizer.stopSpeaking();
         return false;
     }
 
-    /* */
     @Override
     protected boolean handleCancel(final int id) {
 //        synthesizer.stopSpeaking();
         return false;
     }
 
-    /* */
     @Override
     protected boolean handleCancelAll() {
 //        synthesizer.stopSpeaking();
         return false;
     }
 
-    /* */
     @Override
     public void handleDeallocate() {
         // Leave some time to let all resources detach
@@ -128,20 +124,17 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
         synthesizer.release();
     }
 
-    /* */
     @Override
     public void handlePause() {
 //        synthesizer.pauseSpeakingAtBoundary(NSSpeechBoundary.ImmediateBoundary);
     }
 
-    /* */
     @Override
     public boolean handleResume() {
 //        synthesizer.continueSpeaking();
         return false;
     }
 
-    /* */
     @Override
     public AudioSegment handleSpeak(final int id, final String item) {
         final AudioManager manager = getAudioManager();
@@ -176,19 +169,16 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
         }
     }
 
-    /* */
     @Override
     protected AudioSegment handleSpeak(final int id, final Speakable item) {
         throw new IllegalArgumentException("Synthesizer does not support" + " speech markup!");
     }
 
-    /* */
     @Override
     protected AudioFormat getEngineAudioFormat() {
         return new AudioFormat(22050.0f, 16, 1, true, false);
     }
 
-    /* */
     @Override
     protected void handlePropertyChangeRequest(final BaseEngineProperties properties,
                                                final String propName,

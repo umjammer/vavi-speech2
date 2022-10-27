@@ -12,26 +12,39 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
-import vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory;
+import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
 
 
 /**
- * Test1. (jsapi2, aquestalk10)
+ * Jsapi2Test_openjtalk. (jsapi2, openjtalk)
+ * <ul>
+ * <li>"mei_angry"
+ * <li>"mei_normal"
+ * <li>"mei_happy"
+ * <li>"mei_sad"
+ * <li>"mei_bashful"
+ * <li>"tohoku-f01-angry"
+ * <li>"tohoku-f01-neutral"
+ * <li>"tohoku-f01-sad"
+ * <li>"tohoku-f01-happy"
+ * <li>"nitech_jp_atr503_m001"
+ * </ul>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/09/21 umjammer initial version <br>
+ * @version 0.00 2019/09/26 umjammer initial version <br>
  */
-@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
-class Test1 {
+@Disabled("because installing jtalk is dull")
+//@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+class Jsapi2Test_openjtalk {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-        Test1 app = new Test1();
+        Jsapi2Test_openjtalk app = new Jsapi2Test_openjtalk();
         String text = args[0];
         app.speak(text);
         System.exit(0);
@@ -45,7 +58,7 @@ class Test1 {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(AquesTalk10EngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(OpenJTalkEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -55,13 +68,14 @@ class Test1 {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
         synthesizer.getSynthesizerProperties().setVolume(20);
-        String voiceName = "F1";
-        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+//Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
+        String voiceName = "mei_happy";
+        Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
         for (String line : text.split("。")) {
             System.out.println(line);
-            synthesizer.speak(line + "。", System.err::println);
+            synthesizer.speak(line, System.err::println);
         }
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);

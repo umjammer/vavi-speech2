@@ -31,7 +31,7 @@ public final class OpenJTalkSynthesizerMode extends SynthesizerMode implements E
 
     /**
      * Constructs a new object.
-     * 
+     *
      * @param locale the locale associated with this mode
      */
     public OpenJTalkSynthesizerMode(final SpeechLocale locale) {
@@ -55,7 +55,6 @@ public final class OpenJTalkSynthesizerMode extends SynthesizerMode implements E
         super(engineName, modeName, running, supportsLetterToSound, false, voices);
     }
 
-    /* */
     @Override
     public Engine createEngine() throws IllegalArgumentException, EngineException {
         return new OpenJTalkSynthesizer(this);

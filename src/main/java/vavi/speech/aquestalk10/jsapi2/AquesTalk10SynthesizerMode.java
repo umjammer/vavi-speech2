@@ -55,7 +55,6 @@ public final class AquesTalk10SynthesizerMode extends SynthesizerMode implements
         super(engineName, modeName, running, supportsLetterToSound, false, voices);
     }
 
-    /* */
     @Override
     public Engine createEngine() throws IllegalArgumentException, EngineException {
         return new AquesTalk10Synthesizer(this);

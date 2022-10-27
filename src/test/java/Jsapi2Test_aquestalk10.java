@@ -13,23 +13,25 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
-import vavi.speech.googlecloud.jsapi2.GoogleCloudEngineListFactory;
+import vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory;
 
 
 /**
- * Test1. (jsapi2, google cloud)
+ * Jsapi2Test_aquestalk10. (jsapi2, aquestalk10)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-class Test2 {
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+class Jsapi2Test_aquestalk10 {
 
     /**
      * @param args command line arguments.
      */
     public static void main(final String[] args) throws Exception {
-        Test2 app = new Test2();
+        Jsapi2Test_aquestalk10 app = new Jsapi2Test_aquestalk10();
         String text = args[0];
         app.speak(text);
         System.exit(0);
@@ -37,13 +39,15 @@ class Test2 {
 
     @Test
     void test01() throws Exception {
-        String text = "ゆっくりしていってね";
+        String text = "ゆっくりしていってね。" +
+        "コ’ンカイわこのゲームをジッキョーした’いとオモイま’す。";
+//        + "良い例　：コ’ンカイ+わ/この+ゲーム+を/ジッキョー+した’い+と/オモイ+ま’す。";
         speak(text);
     }
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(GoogleCloudEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(AquesTalk10EngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -53,13 +57,13 @@ class Test2 {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
         synthesizer.getSynthesizerProperties().setVolume(20);
-        String voiceName = "ja-JP-Wavenet-B";
-        Voice voice = Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        String voiceName = "F1";
+        Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 
         for (String line : text.split("。")) {
             System.out.println(line);
-            synthesizer.speak(line, System.err::println);
+            synthesizer.speak(line + "。", System.err::println);
         }
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);

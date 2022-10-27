@@ -4,20 +4,20 @@
 
 package vavi.speech.openjtalk;
 
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
-import javax.swing.event.EventListenerList;
+
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 
 
 /**
@@ -54,7 +54,7 @@ public class OpenJTalkWrapper {
     /**
      * 音響モデル変化イベントリスナーのリスト
      */
-    protected EventListenerList listenerList = new EventListenerList();
+    protected List<VoiceListChangedListener> listeners = new ArrayList<>();
 
     /**
      * 音響モデルファイルの変化リスナーを追加する
@@ -62,7 +62,7 @@ public class OpenJTalkWrapper {
      * @param listener 音響モデルファイルの変化リスナー
      */
     public void addVoiceListChangedListener(VoiceListChangedListener listener) {
-        listenerList.add(VoiceListChangedListener.class, listener);
+        listeners.add(listener);
     }
 
     /**
@@ -71,7 +71,7 @@ public class OpenJTalkWrapper {
      * @param listener 音響モデルファイルの変化リスナー
      */
     public void removeVoiceListChangedListener(VoiceListChangedListener listener) {
-        listenerList.remove(VoiceListChangedListener.class, listener);
+        listeners.remove(listener);
     }
 
     /**
@@ -79,7 +79,7 @@ public class OpenJTalkWrapper {
      */
     public void fireVoiceListChanged() {
         VoiceListChangedEvent e = new VoiceListChangedEvent(this);
-        for (VoiceListChangedListener listener : listenerList.getListeners(VoiceListChangedListener.class)) {
+        for (VoiceListChangedListener listener : listeners) {
             listener.onVoiceListChanged(e);
         }
     }
@@ -106,8 +106,8 @@ public class OpenJTalkWrapper {
          * @param name 音響モデルの名前
          */
         VoiceFileInfo(String path, String name) {
-            this.path = new String(path);
-            this.name = new String(name);
+            this.path = path;
+            this.name = name;
         }
 
         /**
@@ -142,16 +142,11 @@ public class OpenJTalkWrapper {
         }
 
         protected List<String> getFieldOrder() {
-            return Arrays.asList(new String[] {
-                "succ", "path", "name"
-            });
+            return Arrays.asList("succ", "path", "name");
         }
 
         public static class ByReference extends HTSVoiceList implements Structure.ByReference {
         }
-
-//        public static class ByValue extends HTSVoiceList implements Structure.ByValue {
-//        }
     }
 
     /**
@@ -163,9 +158,9 @@ public class OpenJTalkWrapper {
 
         void openjtalk_clearHTSVoiceList(Pointer handle, HTSVoiceList list);
         HTSVoiceList openjtalk_getHTSVoiceList(Pointer handle);
-        HTSVoiceList openjtalk_getHTSVoiceListSjis(Pointer handle);
+//        HTSVoiceList openjtalk_getHTSVoiceListSjis(Pointer handle);
         Pointer openjtalk_initialize(String voicePath, String dicPath, String voiceDirPath);
-        Pointer openjtalk_initializeSjis(String voicePath, String dicPath, String voiceDirPath);
+//        Pointer openjtalk_initializeSjis(String voicePath, String dicPath, String voiceDirPath);
         void openjtalk_clear(Pointer handle);
         void openjtalk_refresh(Pointer handle);
         void openjtalk_setSamplingFrequency(Pointer handle, int i);
@@ -189,27 +184,27 @@ public class OpenJTalkWrapper {
         void openjtalk_setVolume(Pointer handle, double f);
         double openjtalk_getVolume(Pointer handle);
         Boolean openjtalk_setDic(Pointer handle, String path);
-        Boolean openjtalk_setDicSjis(Pointer handle, String path);
+//        Boolean openjtalk_setDicSjis(Pointer handle, String path);
         String openjtalk_getDic(Pointer handle, byte[] path);
-        String openjtalk_getDicSjis(Pointer handle, byte[] path);
+//        String openjtalk_getDicSjis(Pointer handle, byte[] path);
         Boolean openjtalk_setVoiceDir(Pointer handle, String path);
-        Boolean openjtalk_setVoiceDirSjis(Pointer handle, String path);
+//        Boolean openjtalk_setVoiceDirSjis(Pointer handle, String path);
         String openjtalk_getVoiceDir(Pointer handle, byte[] path);
-        String openjtalk_getVoiceDirSjis(Pointer handle, byte[] path);
+//        String openjtalk_getVoiceDirSjis(Pointer handle, byte[] path);
         Boolean openjtalk_setVoice(Pointer handle, String path);
-        Boolean openjtalk_setVoiceSjis(Pointer handle, String path);
+//        Boolean openjtalk_setVoiceSjis(Pointer handle, String path);
         Boolean openjtalk_setVoicePath(Pointer handle, String path);
-        Boolean openjtalk_setVoicePathSjis(Pointer handle, String path);
+//        Boolean openjtalk_setVoicePathSjis(Pointer handle, String path);
         String openjtalk_getVoicePath(Pointer handle, byte[] path);
-        String openjtalk_getVoicePathSjis(Pointer handle, byte[] path);
+//        String openjtalk_getVoicePathSjis(Pointer handle, byte[] path);
         Boolean openjtalk_setVoiceName(Pointer handle, String path);
-        Boolean openjtalk_setVoiceNameSjis(Pointer handle, String path);
+//        Boolean openjtalk_setVoiceNameSjis(Pointer handle, String path);
         String openjtalk_getVoiceName(Pointer handle, byte[] path);
-        String openjtalk_getVoiceNameSjis(Pointer handle, byte[] path);
+//        String openjtalk_getVoiceNameSjis(Pointer handle, byte[] path);
         void openjtalk_speakSync(Pointer handle, String text);
-        void openjtalk_speakSyncSjis(Pointer handle, String text);
+//        void openjtalk_speakSyncSjis(Pointer handle, String text);
         void openjtalk_speakAsync(Pointer handle, String text);
-        void openjtalk_speakAsyncSjis(Pointer handle, String text);
+//        void openjtalk_speakAsyncSjis(Pointer handle, String text);
         void openjtalk_pause(Pointer handle);
         void openjtalk_resume(Pointer handle);
         void openjtalk_stop(Pointer handle);
@@ -223,8 +218,7 @@ public class OpenJTalkWrapper {
     }
 
     private Pointer handle = null;
-    private ArrayList<VoiceFileInfo> voices = new ArrayList<>();
-    private Boolean fShiftJis = false;
+    private List<VoiceFileInfo> voices = new ArrayList<>();
 
     /**
      * jtalk.dllをJNAを使ってアクセスするクラスのコンストラクタ（3引数）
@@ -234,24 +228,7 @@ public class OpenJTalkWrapper {
      * @param voiceDirPath 音響モデルディレクトリ
      */
     public OpenJTalkWrapper(String voicePath, String dicPath, String voiceDirPath) {
-
-        // "あ"の変換値により文字コードを判別し、Windowsかどうかを調べる
-        switch (API.INSTANCE.openjtalk_getCharCode("あ")) {
-        case 0x000082a0:
-            fShiftJis = true;
-            break;
-        case 0x00e38182:
-            fShiftJis = false;
-            break;
-        default:
-            new IllegalStateException("不明なエンコードです。");
-        }
-
-        if (fShiftJis) {
-            handle = API.INSTANCE.openjtalk_initializeSjis(voicePath, dicPath, voiceDirPath);
-        } else {
-            handle = API.INSTANCE.openjtalk_initialize(voicePath, dicPath, voiceDirPath);
-        }
+        handle = API.INSTANCE.openjtalk_initialize(voicePath, dicPath, voiceDirPath);
         generateVoiceList();
     }
 
@@ -292,41 +269,6 @@ public class OpenJTalkWrapper {
         }
     }
 
-    // ubuntu 17.04 64bit JRE version: OpenJDK Runtime Environment (8.0_144-b01)では異常終了してしまうので不使用
-
-    /**
-     * 音響モデルファイルデータのリストを生成する。
-     * 使用後はdelete_voice_listを使って解放する。
-     */
-//    private void generateVoiceList() {
-//        checkOpenjtalkObject();
-//        if (voices != null) {
-//            voices.clear();
-//        } else {
-//            voices = new ArrayList<>();
-//        }
-//        HTSVoiceList ptr = null;
-//        if (this.fShiftJis) {
-//            ptr = API.INSTANCE.openjtalk_getHTSVoiceListSjis(handle);
-//        } else {
-//            ptr = API.INSTANCE.openjtalk_getHTSVoiceList(handle);
-//        }
-//        if (ptr != null) {
-//            HTSVoiceList top = ptr;
-//            do {
-//                String path = ptr.path;
-//                String name = ptr.name;
-//                voices.add(new VoiceFileInfo(path, name));
-//                ptr = ptr.succ;
-//            } while (ptr != null);
-//            top.clear();
-//            API.INSTANCE.openjtalk_clearHTSVoiceList(handle, top);
-//        }
-//    }
-
-    private int fileCounter = 0;
-    private final int MAXFILENUM = 200;
-
     /**
      * 再帰的に音響モデルファイルを登録する
      *
@@ -343,10 +285,6 @@ public class OpenJTalkWrapper {
             } else if (file.isDirectory()) {
                 setVoiceFile(file);
             } else if (file.isFile()) {
-                fileCounter++;
-                if (fileCounter > MAXFILENUM) {
-                    throw new IllegalStateException(String.format("音響モデルファイル探索フォルダ'%s'にファイルが多すぎます。", getVoiceDir()));
-                }
                 String fileName = file.getName();
                 int index = fileName.lastIndexOf(".htsvoice");
                 if (index > 0) {
@@ -369,7 +307,6 @@ public class OpenJTalkWrapper {
         } else {
             voices = new ArrayList<>();
         }
-        fileCounter = 0;
         setVoiceFile(new File(dir));
     }
 
@@ -395,7 +332,7 @@ public class OpenJTalkWrapper {
      *
      * @return 全ての音響モデルファイルのリスト
      */
-    public ArrayList<VoiceFileInfo> getVoices() {
+    public List<VoiceFileInfo> getVoices() {
         return voices;
     }
 
@@ -814,20 +751,14 @@ public class OpenJTalkWrapper {
      */
     public void setDic(String path) throws IOException {
         checkOpenjtalkObject();
-        if (path == "") {
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("辞書フォルダを示す文字列が空です。");
         }
         File file = new File(path);
         if (!file.exists()) {
             throw new FileNotFoundException("辞書フォルダが見つかりません。");
         }
-        Boolean res;
-        if (this.fShiftJis) {
-            res = API.INSTANCE.openjtalk_setDicSjis(handle, path);
-        } else {
-            res = API.INSTANCE.openjtalk_setDic(handle, path);
-        }
-
+        boolean res = API.INSTANCE.openjtalk_setDic(handle, path);
         if (!res) {
             throw new IllegalStateException("辞書フォルダを設定できません。UTF-8向けの辞書ではないかもしれません。");
         }
@@ -837,20 +768,12 @@ public class OpenJTalkWrapper {
      * 辞書ディレクトリを取得する
      *
      * @return 辞書ディレクトリのパス
-     * @throws UnsupportedEncodingException 
      */
-    public String getDic() throws IOException {
-        String path = "";
+    public String getDic() {
         byte[] buff = new byte[MAXPATH];
-        String res;
-        if (this.fShiftJis) {
-            res = API.INSTANCE.openjtalk_getDicSjis(handle, buff);
-            path = new String(buff, "Shift-JIS");
-        } else {
-            res = API.INSTANCE.openjtalk_getDic(handle, buff);
-            path = new String(buff, "UTF-8");
-        }
-        return res != null ? new String(path.trim()) : null;
+        String res = API.INSTANCE.openjtalk_getDic(handle, buff);
+        String path = new String(buff, StandardCharsets.UTF_8);
+        return res != null ? path.trim() : null;
     }
 
     /**
@@ -861,19 +784,14 @@ public class OpenJTalkWrapper {
      */
     public void setVoiceDir(String path) throws IOException {
         checkOpenjtalkObject();
-        if (path == "") {
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("音響モデルフォルダを示す文字列が空です。");
         }
         File file = new File(path);
         if (!file.exists()) {
             throw new FileNotFoundException("音響モデルフォルダが見つかりません。");
         }
-        Boolean res;
-        if (this.fShiftJis) {
-            res = API.INSTANCE.openjtalk_setVoiceDirSjis(handle, path);
-        } else {
-            res = API.INSTANCE.openjtalk_setVoiceDir(handle, path);
-        }
+        boolean res = API.INSTANCE.openjtalk_setVoiceDir(handle, path);
         if (!res) {
             throw new IllegalStateException("音響モデルフォルダを設定できません。");
         }
@@ -887,21 +805,10 @@ public class OpenJTalkWrapper {
      * @return 音響モデルディレクトリのパス
      */
     public String getVoiceDir() {
-        try {
-            String path = "";
-            byte[] buff = new byte[MAXPATH];
-            String res;
-            if (fShiftJis) {
-                res = API.INSTANCE.openjtalk_getVoiceDirSjis(handle, buff);
-                path = new String(buff, "Shift-JIS");
-            } else {
-                res = API.INSTANCE.openjtalk_getVoiceDir(handle, buff);
-                path = new String(buff, "UTF-8");
-            }
-            return res != null ? new String(path.trim()) : null;
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
-        }
+        byte[] buff = new byte[MAXPATH];
+        String res = API.INSTANCE.openjtalk_getVoiceDir(handle, buff);
+        String path = new String(buff, StandardCharsets.UTF_8);
+        return res != null ? path.trim() : null;
     }
 
     /**
@@ -911,15 +818,10 @@ public class OpenJTalkWrapper {
      */
     public void setVoicePath(String path) {
         checkOpenjtalkObject();
-        if (path == "") {
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("音響モデルを示す文字列が空です。");
         }
-        Boolean res;
-        if (this.fShiftJis) {
-            res = API.INSTANCE.openjtalk_setVoicePathSjis(handle, path);
-        } else {
-            res = API.INSTANCE.openjtalk_setVoicePath(handle, path);
-        }
+        boolean res = API.INSTANCE.openjtalk_setVoicePath(handle, path);
         if (!res) {
             throw new IllegalStateException("音響モデルを設定できません。");
         }
@@ -931,22 +833,10 @@ public class OpenJTalkWrapper {
      * @return 音響モデルのパス
      */
     public String getVoicePath() {
-        try {
-            String path = "";
-            byte[] buff = new byte[MAXPATH];
-            @SuppressWarnings("unused")
-            String res = null;
-            if (this.fShiftJis) {
-                res = API.INSTANCE.openjtalk_getVoicePathSjis(handle, buff);
-                path = new String(buff, "Shift-JIS");
-            } else {
-                res = API.INSTANCE.openjtalk_getVoicePath(handle, buff);
-                path = new String(buff, "UTF-8");
-            }
-            return path.trim();
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
-        }
+        byte[] buff = new byte[MAXPATH];
+        API.INSTANCE.openjtalk_getVoicePath(handle, buff);
+        String path = new String(buff, StandardCharsets.UTF_8);
+        return path.trim();
     }
 
     /**
@@ -956,15 +846,10 @@ public class OpenJTalkWrapper {
      */
     public void setVoiceName(String name) {
         checkOpenjtalkObject();
-        if (name == "") {
+        if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("音響モデルを示す文字列が空です。");
         }
-        Boolean res;
-        if (this.fShiftJis) {
-            res = API.INSTANCE.openjtalk_setVoiceNameSjis(handle, name);
-        } else {
-            res = API.INSTANCE.openjtalk_setVoiceName(handle, name);
-        }
+        boolean res = API.INSTANCE.openjtalk_setVoiceName(handle, name);
         if (!res) {
             throw new IllegalStateException("音響モデルを設定できません。");
         }
@@ -977,22 +862,10 @@ public class OpenJTalkWrapper {
      * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
     public String getVoiceName() {
-        try {
-            String name = "";
-            byte[] buff = new byte[MAXPATH];
-            @SuppressWarnings("unused")
-            String res = null;
-            if (this.fShiftJis) {
-                res = API.INSTANCE.openjtalk_getVoiceNameSjis(handle, buff);
-                name = new String(buff, "Shift-JIS");
-            } else {
-                res = API.INSTANCE.openjtalk_getVoiceName(handle, buff);
-                name = new String(buff, "UTF-8");
-            }
-            return name.trim();
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
-        }
+        byte[] buff = new byte[MAXPATH];
+        API.INSTANCE.openjtalk_getVoiceName(handle, buff);
+        String name = new String(buff, StandardCharsets.UTF_8);
+        return name.trim();
     }
 
     /**
@@ -1002,15 +875,10 @@ public class OpenJTalkWrapper {
      */
     public void setVoice(String path) {
         checkOpenjtalkObject();
-        if (path == "") {
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("音響モデルを示す文字列が空です。");
         }
-        Boolean res;
-        if (this.fShiftJis) {
-            res = API.INSTANCE.openjtalk_setVoiceSjis(handle, path);
-        } else {
-            res = API.INSTANCE.openjtalk_setVoice(handle, path);
-        }
+        boolean res = API.INSTANCE.openjtalk_setVoice(handle, path);
         if (!res) {
             throw new IllegalStateException("音響モデルを設定できません。");
         }
@@ -1026,16 +894,11 @@ public class OpenJTalkWrapper {
         if (arg == null) {
             throw new IllegalArgumentException("音響モデルの指定がNULLです。");
         }
-        String path = new String(arg.path);
-        if (path == "") {
+        String path = arg.path;
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("音響モデルを示す文字列が空です。");
         }
-        Boolean res;
-        if (this.fShiftJis) {
-            res = API.INSTANCE.openjtalk_setVoiceSjis(handle, path);
-        } else {
-            res = API.INSTANCE.openjtalk_setVoice(handle, path);
-        }
+        boolean res = API.INSTANCE.openjtalk_setVoice(handle, path);
         if (!res) {
             throw new IllegalStateException("音響モデルを設定できません。");
         }
@@ -1047,31 +910,16 @@ public class OpenJTalkWrapper {
      * @return 音響モデル情報オブジェクト
      */
     public VoiceFileInfo getVoice() {
-        try {
-            String path = "";
-            String name = "";
-            byte[] buffPath = new byte[MAXPATH];
-            byte[] buffName = new byte[MAXPATH];
-            @SuppressWarnings("unused")
-            String res = null;
-            if (this.fShiftJis) {
-                res = API.INSTANCE.openjtalk_getVoicePathSjis(handle, buffPath);
-                path = new String(buffPath, "Shift-JIS");
-                res = API.INSTANCE.openjtalk_getVoiceNameSjis(handle, buffName);
-                name = new String(buffName, "Shift-JIS");
-            } else {
-                res = API.INSTANCE.openjtalk_getVoicePath(handle, buffPath);
-                path = new String(buffPath, "UTF-8");
-                res = API.INSTANCE.openjtalk_getVoiceName(handle, buffName);
-                name = new String(buffName, "UTF-8");
-            }
-            VoiceFileInfo result = new VoiceFileInfo();
-            result.path = path.trim();
-            result.name = name.trim();
-            return result;
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
-        }
+        byte[] buffPath = new byte[MAXPATH];
+        byte[] buffName = new byte[MAXPATH];
+        API.INSTANCE.openjtalk_getVoicePath(handle, buffPath);
+        String path = new String(buffPath, StandardCharsets.UTF_8);
+        API.INSTANCE.openjtalk_getVoiceName(handle, buffName);
+        String name = new String(buffName, StandardCharsets.UTF_8);
+        VoiceFileInfo result = new VoiceFileInfo();
+        result.path = path.trim();
+        result.name = name.trim();
+        return result;
     }
 
     /**
@@ -1081,14 +929,10 @@ public class OpenJTalkWrapper {
      */
     public void speakSync(String text) {
         checkOpenjtalkObject();
-        if (text == "") {
+        if (text == null || text.isEmpty()) {
             return;
         }
-        if (this.fShiftJis) {
-            API.INSTANCE.openjtalk_speakSyncSjis(handle, text);
-        } else {
-            API.INSTANCE.openjtalk_speakSync(handle, text);
-        }
+        API.INSTANCE.openjtalk_speakSync(handle, text);
     }
 
     /**
@@ -1098,14 +942,10 @@ public class OpenJTalkWrapper {
      */
     public void speakAsync(String text) {
         checkOpenjtalkObject();
-        if (text == "") {
+        if (text == null || text.isEmpty()) {
             return;
         }
-        if (this.fShiftJis) {
-            API.INSTANCE.openjtalk_speakAsyncSjis(handle, text);
-        } else {
-            API.INSTANCE.openjtalk_speakAsync(handle, text);
-        }
+        API.INSTANCE.openjtalk_speakAsync(handle, text);
     }
 
     /**
@@ -1118,7 +958,7 @@ public class OpenJTalkWrapper {
 
     /**
      * 非同期発声の一時停止を再開する
-     * 
+     *
      * @throws IllegalStateException オブジェクトポインタがnullなどの例外
      */
     public void resume() {
@@ -1194,10 +1034,10 @@ public class OpenJTalkWrapper {
      */
     public void speakToFile(String text, String file) {
         checkOpenjtalkObject();
-        if (text == "") {
+        if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException("読み上げ文字列が空です。");
         }
-        if (file == "") {
+        if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("ファイル名文字列が空です。");
         }
         if (!API.INSTANCE.openjtalk_speakToFile(handle, text, file)) {

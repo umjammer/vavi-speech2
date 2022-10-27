@@ -1,3 +1,4 @@
 tmp/
 lib/
 local.properties
+src/test/resources/nicotalk/

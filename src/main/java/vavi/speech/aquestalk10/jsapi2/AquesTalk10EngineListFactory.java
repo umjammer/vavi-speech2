@@ -31,7 +31,6 @@ import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
  */
 public class AquesTalk10EngineListFactory implements EngineListFactory {
 
-    /* */
     @Override
     public EngineList createEngineList(final EngineMode require) {
         if (require instanceof SynthesizerMode) {

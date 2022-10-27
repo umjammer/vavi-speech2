@@ -1,5 +1,7 @@
-[![Release](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)  [![Java CI with Maven](https://github.com/umjammer/vavi-speech2/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/umjammer/vavi-speech2/actions)
-
+[![Release](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)
+[![Java CI with Maven](https://github.com/umjammer/vavi-speech2/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/umjammer/vavi-speech2/actions)
+[![CodeQL](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml)
+![Java](https://img.shields.io/badge/Java-8-b07219)
 
 # vavi-speech2
 
@@ -54,3 +56,5 @@ Text to Speech and Speech to Text (JSAPI2) for Java
  * amazon polly
  * microsoft cognitive services text to speech
  * https://github.com/julius-speech/julius
+ * VoiceVox
+ * NicoTalk character

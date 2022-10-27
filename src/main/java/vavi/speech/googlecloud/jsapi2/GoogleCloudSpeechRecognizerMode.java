@@ -37,7 +37,6 @@ public final class GoogleCloudSpeechRecognizerMode extends RecognizerMode implem
         super(locale);
     }
 
-    /* */
     @Override
     public Engine createEngine() throws IllegalArgumentException, EngineException {
         return new GoogleCloudSpeechRecognizer(this);
