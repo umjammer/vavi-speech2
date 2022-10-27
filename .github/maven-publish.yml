@@ -1,13 +1,8 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Java CI with Maven
+name: GitHub Packages
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -22,14 +17,22 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
         cache: maven
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+
     - name: Build with Maven
       env:
         DOCOMO_GOO_HIRAGANA_API_KEY : ${{ secrets.DOCOMO_GOO_HIRAGANA_API_KEY }}
         YAHOOJAPAN_API_KEY : ${{ secrets.YAHOOJAPAN_API_KEY }}
-        GOOGLE_APPLICATION_CREDENTIALS : tmp/google.json
+        GOOGLE_APPLICATION_CREDENTIALS : 'tmp/google.json'
         GOOGLE : ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         GITHUB_TOKEN: ${{ github.token }}
       run: |
         mkdir tmp
         echo "$GOOGLE" > tmp/google.json
         mvn -B package --file pom.xml -s $GITHUB_WORKSPACE/settings.xml
+
+    - name: Publish to GitHub Packages Apache Maven
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -Dmaven.test.skip=true
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
