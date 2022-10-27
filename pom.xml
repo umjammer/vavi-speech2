@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.5</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -19,6 +19,13 @@
   <issueManagement>
     <system>https//github.com/umjammer/vavi-speech2/issues</system>
   </issueManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/umjammer/vavi-speech2</url>
+    </repository>
+  </distributionManagement>
 
   <profiles>
     <profile>
@@ -54,6 +61,7 @@
             </executions>
           </plugin>
           <plugin>
+            <!-- don't touch: this works well on github actions -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0-M7</version>
@@ -71,6 +79,9 @@
               <argLine>
                 -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
               </argLine>
+              <includes>
+                <include>**/*Test_*.java</include>
+              </includes>
             </configuration>
           </plugin>
         </plugins>
@@ -86,6 +97,7 @@
       <build>
         <plugins>
           <plugin>
+            <!-- don't touch: this works well on github actions -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0-M7</version>
@@ -93,6 +105,9 @@
               <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <forkMode>always</forkMode>
               <trimStackTrace>false</trimStackTrace>
+              <includes>
+                <include>**/*Test_*.java</include>
+              </includes>
             </configuration>
           </plugin>
         </plugins>
@@ -191,9 +206,9 @@
     </dependency>
 
     <dependency>
-      <groupId>vavi</groupId> <!-- com.github.umjammer -->
+      <groupId>vavi</groupId>
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.4-SNAPSHOT</version>
+      <version>0.1.4</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>
