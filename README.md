@@ -1,5 +1,5 @@
-[![Release](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)
-[![Java CI with Maven](https://github.com/umjammer/vavi-speech2/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/umjammer/vavi-speech2/actions)
+[![GitHub Packages](https://github.com/umjammer/vavi-speech2/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/umjammer?tab=packages&repo_name=vavi-speech)
+[![Java CI with Maven](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions)
 [![CodeQL](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml)
 ![Java](https://img.shields.io/badge/Java-8-b07219)
 
@@ -18,6 +18,7 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 
 ### maven
 
+ * https://github.com/umjammer/vavi-speech2/packages/1691523
  * this project uses gitlab package registry. add a personal access token to `~/.m2/settings.xml`
  * see https://docs.gitlab.com/ee/user/packages/maven_repository/index.html#authenticate-to-the-package-registry-with-maven
 
