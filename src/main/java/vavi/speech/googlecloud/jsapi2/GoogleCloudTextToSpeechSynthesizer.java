@@ -54,18 +54,18 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
      *
      * @param mode the synthesizer mode
      */
-    GoogleCloudTextToSpeechSynthesizer(final GoogleCloudTextToSpeechSynthesizerMode mode) {
+    GoogleCloudTextToSpeechSynthesizer(GoogleCloudTextToSpeechSynthesizerMode mode) {
         super(mode);
     }
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        final Voice voice;
-        final GoogleCloudTextToSpeechSynthesizerMode mode = (GoogleCloudTextToSpeechSynthesizerMode) getEngineMode();
+        Voice voice;
+        GoogleCloudTextToSpeechSynthesizerMode mode = (GoogleCloudTextToSpeechSynthesizerMode) getEngineMode();
         if (mode == null) {
             voice = null;
         } else {
-            final Voice[] voices = mode.getVoices();
+            Voice[] voices = mode.getVoices();
             if (voices == null) {
                 voice = null;
             } else {
@@ -88,7 +88,7 @@ LOGGER.fine("default voice: " + voice.getName());
             return null;
         }
         Optional<com.google.cloud.texttospeech.v1.Voice> result = GoogleCloudEngineListFactory.listAllSupportedVoices().stream().filter(v -> v.getName().equals(voice.getName())).findFirst();
-        return result.isPresent() ? result.get() : null;
+        return result.orElse(null);
     }
 
     @Override
@@ -97,7 +97,7 @@ LOGGER.fine("default voice: " + voice.getName());
     }
 
     @Override
-    protected boolean handleCancel(final int id) {
+    protected boolean handleCancel(int id) {
         return false;
     }
 
@@ -126,14 +126,14 @@ LOGGER.fine("default voice: " + voice.getName());
     }
 
     @Override
-    public AudioSegment handleSpeak(final int id, final String item) {
+    public AudioSegment handleSpeak(int id, String item) {
         try {
-            final byte[] bytes = synthe(item);
-            final AudioManager manager = getAudioManager();
-            final String locator = manager.getMediaLocator();
+            byte[] bytes = synthe(item);
+            AudioManager manager = getAudioManager();
+            String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-            final InputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(bytes));
-            final AudioSegment segment;
+            InputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(bytes));
+            AudioSegment segment;
             if (locator == null) {
                 segment = new BaseAudioSegment(item, in);
             } else {
@@ -165,7 +165,7 @@ LOGGER.fine("default voice: " + voice.getName());
     }
 
     @Override
-    protected AudioSegment handleSpeak(final int id, final Speakable item) {
+    protected AudioSegment handleSpeak(int id, Speakable item) {
         throw new IllegalArgumentException("Synthesizer does not support" + " speech markup!");
     }
 
@@ -175,10 +175,10 @@ LOGGER.fine("default voice: " + voice.getName());
     }
 
     @Override
-    protected void handlePropertyChangeRequest(final BaseEngineProperties properties,
-                                               final String propName,
-                                               final Object oldValue,
-                                               final Object newValue) {
+    protected void handlePropertyChangeRequest(BaseEngineProperties properties,
+                                               String propName,
+                                               Object oldValue,
+                                               Object newValue) {
         properties.commitPropertyChange(propName, oldValue, newValue);
     }
 }

@@ -28,7 +28,7 @@ class Jsapi2Test_google {
     /**
      * @param args command line arguments.
      */
-    public static void main(final String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Jsapi2Test_google app = new Jsapi2Test_google();
         String text = args[0];
         app.speak(text);

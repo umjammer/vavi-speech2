@@ -48,7 +48,7 @@ public final class RococoaRecognizer extends BaseRecognizer {
      *
      * @param mode the recognizer mode.
      */
-    public RococoaRecognizer(final RococoaRecognizerMode mode) {
+    public RococoaRecognizer(RococoaRecognizerMode mode) {
         super(mode);
     }
 
@@ -80,15 +80,15 @@ public final class RococoaRecognizer extends BaseRecognizer {
 
     @Override
     protected boolean handleResume(InputStream in) throws EngineStateException {
-        final GrammarManager manager = getGrammarManager();
-        final Grammar[] grammars = manager.listGrammars();
-        final String[] grammarSources = new String[grammars.length];
+        GrammarManager manager = getGrammarManager();
+        Grammar[] grammars = manager.listGrammars();
+        String[] grammarSources = new String[grammars.length];
         int i = 0;
         for (Grammar grammar : grammars) {
             try {
-                final File file = File.createTempFile("sapi", "xml");
+                File file = File.createTempFile("sapi", "xml");
                 file.deleteOnExit();
-                final FileOutputStream out = new FileOutputStream(file);
+                FileOutputStream out = new FileOutputStream(file);
 
                 StringBuffer xml = new StringBuffer();
                 xml.append(grammar.toString());
@@ -120,7 +120,7 @@ public final class RococoaRecognizer extends BaseRecognizer {
     }
 
     /** */
-    public boolean setGrammar(final String grammarPath) {
+    public boolean setGrammar(String grammarPath) {
         throw new UnsupportedOperationException();
     }
 
@@ -134,14 +134,14 @@ public final class RococoaRecognizer extends BaseRecognizer {
      *
      * @param utterance the detected utterance
      */
-    private void reportResult(final String utterance) {
+    private void reportResult(String utterance) {
 
         System.out.println("Java Code " + utterance);
 
-        final RuleGrammar grammar = currentGrammar; // current grammar is not available
+        RuleGrammar grammar = currentGrammar; // current grammar is not available
 System.out.println(grammar);
 
-        final BaseResult result;
+        BaseResult result;
         try {
             result = new BaseResult(grammar, utterance);
         } catch (GrammarException e) {
@@ -149,20 +149,20 @@ System.out.println(grammar);
             return;
         }
 
-        final ResultEvent created = new ResultEvent(result,
+        ResultEvent created = new ResultEvent(result,
                 ResultEvent.RESULT_CREATED, false, false);
         postResultEvent(created);
 
-        final ResultEvent grammarFinalized = new ResultEvent(result,
+        ResultEvent grammarFinalized = new ResultEvent(result,
                 ResultEvent.GRAMMAR_FINALIZED);
         postResultEvent(grammarFinalized);
 
         if (result.getResultState() == Result.REJECTED) {
-            final ResultEvent rejected = new ResultEvent(result,
+            ResultEvent rejected = new ResultEvent(result,
                     ResultEvent.RESULT_REJECTED, false, false);
             postResultEvent(rejected);
         } else {
-            final ResultEvent accepted = new ResultEvent(result,
+            ResultEvent accepted = new ResultEvent(result,
                     ResultEvent.RESULT_ACCEPTED, false, false);
             postResultEvent(accepted);
         }
@@ -187,9 +187,9 @@ System.out.println(grammar);
 
     @Override
     protected void handlePropertyChangeRequest(
-            final BaseEngineProperties properties,
-            final String propName, final Object oldValue,
-            final Object newValue) {
+            BaseEngineProperties properties,
+            String propName, Object oldValue,
+            Object newValue) {
         LOGGER.warning("changing property '" + propName
                 + "' to '" + newValue + "' ignored");
     }

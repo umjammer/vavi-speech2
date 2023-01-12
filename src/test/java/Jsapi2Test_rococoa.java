@@ -28,7 +28,7 @@ public final class Jsapi2Test_rococoa {
     /**
      * @param args command line arguments.
      */
-    public static void main(final String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Jsapi2Test_rococoa app = new Jsapi2Test_rococoa();
         String text = args[0];
         app.speak(text);

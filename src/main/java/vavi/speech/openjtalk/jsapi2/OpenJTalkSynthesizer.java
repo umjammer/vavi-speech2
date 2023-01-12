@@ -52,18 +52,18 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
      *
      * @param mode the synthesizer mode
      */
-    OpenJTalkSynthesizer(final OpenJTalkSynthesizerMode mode) {
+    OpenJTalkSynthesizer(OpenJTalkSynthesizerMode mode) {
         super(mode);
     }
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        final Voice voice;
-        final OpenJTalkSynthesizerMode mode = (OpenJTalkSynthesizerMode) getEngineMode();
+        Voice voice;
+        OpenJTalkSynthesizerMode mode = (OpenJTalkSynthesizerMode) getEngineMode();
         if (mode == null) {
             voice = null;
         } else {
-            final Voice[] voices = mode.getVoices();
+            Voice[] voices = mode.getVoices();
             if (voices == null || voices.length < 1) {
                 voice = null;
             } else {
@@ -77,7 +77,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     /** */
     private VoiceFileInfo toNativeVoice(Voice voice) {
         Optional<VoiceFileInfo> result = openJTalk.getVoices().stream().filter(v -> v.name.equals(voice != null ? voice.getName() : null)).findFirst();
-        return result.isPresent() ? result.get() : null;
+        return result.orElse(null);
     }
 
     @Override
@@ -86,7 +86,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    protected boolean handleCancel(final int id) {
+    protected boolean handleCancel(int id) {
         return false;
     }
 
@@ -115,12 +115,12 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    public AudioSegment handleSpeak(final int id, final String item) {
-        final AudioManager manager = getAudioManager();
-        final String locator = manager.getMediaLocator();
+    public AudioSegment handleSpeak(int id, String item) {
+        AudioManager manager = getAudioManager();
+        String locator = manager.getMediaLocator();
         // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-        final InputStream in = synthe(item);
-        final AudioSegment segment;
+        InputStream in = synthe(item);
+        AudioSegment segment;
         if (locator == null) {
             segment = new BaseAudioSegment(item, in);
         } else {
@@ -148,7 +148,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    protected AudioSegment handleSpeak(final int id, final Speakable item) {
+    protected AudioSegment handleSpeak(int id, Speakable item) {
         throw new IllegalArgumentException("Synthesizer does not support" + " speech markup!");
     }
 
@@ -158,10 +158,10 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    protected void handlePropertyChangeRequest(final BaseEngineProperties properties,
-                                               final String propName,
-                                               final Object oldValue,
-                                               final Object newValue) {
+    protected void handlePropertyChangeRequest(BaseEngineProperties properties,
+                                               String propName,
+                                               Object oldValue,
+                                               Object newValue) {
         properties.commitPropertyChange(propName, oldValue, newValue);
     }
 }

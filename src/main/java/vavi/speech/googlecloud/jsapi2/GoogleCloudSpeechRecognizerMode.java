@@ -33,7 +33,7 @@ public final class GoogleCloudSpeechRecognizerMode extends RecognizerMode implem
      *
      * @param locale the locale associated with this mode
      */
-    public GoogleCloudSpeechRecognizerMode(final SpeechLocale locale) {
+    public GoogleCloudSpeechRecognizerMode(SpeechLocale locale) {
         super(locale);
     }
 

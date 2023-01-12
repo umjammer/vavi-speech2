@@ -32,10 +32,10 @@ import com.google.cloud.texttospeech.v1.TextToSpeechClient;
 public class GoogleCloudEngineListFactory implements EngineListFactory {
 
     @Override
-    public EngineList createEngineList(final EngineMode require) {
+    public EngineList createEngineList(EngineMode require) {
         if (require instanceof SynthesizerMode) {
-            final SynthesizerMode mode = (SynthesizerMode) require;
-            final List<Voice> allVoices = getVoices();
+            SynthesizerMode mode = (SynthesizerMode) require;
+            List<Voice> allVoices = getVoices();
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
                 voices.addAll(allVoices);
@@ -48,7 +48,7 @@ public class GoogleCloudEngineListFactory implements EngineListFactory {
                     }
                 }
             }
-            final SynthesizerMode[] features = new SynthesizerMode[] {
+            SynthesizerMode[] features = new SynthesizerMode[] {
                 new GoogleCloudTextToSpeechSynthesizerMode(null,
                                        mode.getEngineName(),
                                        mode.getRunning(),

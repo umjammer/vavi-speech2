@@ -34,7 +34,7 @@ public final class RococoaSynthesizerMode extends SynthesizerMode implements Eng
      *
      * @param locale the locale associated with this mode
      */
-    public RococoaSynthesizerMode(final SpeechLocale locale) {
+    public RococoaSynthesizerMode(SpeechLocale locale) {
         super(locale);
     }
 
@@ -46,12 +46,12 @@ public final class RococoaSynthesizerMode extends SynthesizerMode implements Eng
      * @param engineName the name of the engine
      * @param modeName the name of the mode
      */
-    public RococoaSynthesizerMode(final String engineName,
-            final String modeName,
-            final Boolean running,
-            final Boolean supportsLetterToSound,
-            final Boolean supportsMarkup,
-            final Voice[] voices) {
+    public RococoaSynthesizerMode(String engineName,
+                                  String modeName,
+                                  Boolean running,
+                                  Boolean supportsLetterToSound,
+                                  Boolean supportsMarkup,
+                                  Voice[] voices) {
         super(engineName, modeName, running, supportsLetterToSound, false, voices);
     }
 

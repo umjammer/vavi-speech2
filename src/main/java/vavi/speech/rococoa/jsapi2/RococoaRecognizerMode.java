@@ -33,7 +33,7 @@ public final class RococoaRecognizerMode extends RecognizerMode implements Engin
      *
      * @param locale the locale associated with this mode
      */
-    public RococoaRecognizerMode(final SpeechLocale locale) {
+    public RococoaRecognizerMode(SpeechLocale locale) {
         super(locale);
     }
 

@@ -34,13 +34,13 @@ public class OpenJTalkWrapper {
      * 音響モデルファイルのリストの変化リスナーインターフェイス
      */
     public interface VoiceListChangedListener extends EventListener {
-        public void onVoiceListChanged(VoiceListChangedEvent e);
+        void onVoiceListChanged(VoiceListChangedEvent e);
     }
 
     /**
      * 音響モデルファイルのリストの変化イベントクラス
      */
-    public class VoiceListChangedEvent extends EventObject {
+    public static class VoiceListChangedEvent extends EventObject {
         /**
          * 音響モデルファイルの変化イベントコンストラクタ
          *

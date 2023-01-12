@@ -34,7 +34,7 @@ public final class AquesTalk10SynthesizerMode extends SynthesizerMode implements
      * 
      * @param locale the locale associated with this mode
      */
-    public AquesTalk10SynthesizerMode(final SpeechLocale locale) {
+    public AquesTalk10SynthesizerMode(SpeechLocale locale) {
         super(locale);
     }
 
@@ -46,12 +46,12 @@ public final class AquesTalk10SynthesizerMode extends SynthesizerMode implements
      * @param engineName the name of the engine
      * @param modeName the name of the mode
      */
-    public AquesTalk10SynthesizerMode(final String engineName,
-            final String modeName,
-            final Boolean running,
-            final Boolean supportsLetterToSound,
-            final Boolean supportsMarkup,
-            final Voice[] voices) {
+    public AquesTalk10SynthesizerMode(String engineName,
+                                      String modeName,
+                                      Boolean running,
+                                      Boolean supportsLetterToSound,
+                                      Boolean supportsMarkup,
+                                      Voice[] voices) {
         super(engineName, modeName, running, supportsLetterToSound, false, voices);
     }
 
