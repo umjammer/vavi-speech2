@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2019 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.speech.rococoa.jsapi2;
+package vavi.speech.voicevox.jsapi2;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.speech.EngineList;
 import javax.speech.EngineMode;
 import javax.speech.SpeechLocale;
@@ -17,23 +19,22 @@ import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.rococoa.contrib.appkit.NSSpeechSynthesizer;
-import org.rococoa.contrib.appkit.NSVoice;
+import vavi.speech.voicevox.VoiceVox;
 
 
 /**
- * Factory for the Mac Speech engine.
+ * Factory for the VoiceVox engine.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/09/20 umjammer initial version <br>
+ * @version 0.00 2023/01/12 umjammer initial version <br>
  */
-public class RococoaEngineListFactory implements EngineListFactory {
+public class VoiceVoxEngineListFactory implements EngineListFactory {
 
     @Override
     public EngineList createEngineList(EngineMode require) {
         if (require instanceof SynthesizerMode) {
             SynthesizerMode mode = (SynthesizerMode) require;
-            List<Voice> allVoices = getVoices();
+            List<Voice> allVoices = Arrays.asList(new VoiceVox().getAllVoices());
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
                 voices.addAll(allVoices);
@@ -46,9 +47,8 @@ public class RococoaEngineListFactory implements EngineListFactory {
                     }
                 }
             }
-//voices.forEach(System.err::println);
             SynthesizerMode[] features = new SynthesizerMode[] {
-                new RococoaSynthesizerMode(null,
+                new VoiceVoxSynthesizerMode(null,
                                        mode.getEngineName(),
                                        mode.getRunning(),
                                        mode.getSupportsLetterToSound(),
@@ -59,33 +59,5 @@ public class RococoaEngineListFactory implements EngineListFactory {
         }
 
         return null;
-    }
-
-    /**
-     * Retrieves all voices.
-     *
-     * @return all voices
-     */
-    private List<Voice> getVoices() {
-        List<Voice> voiceList = new LinkedList<>();
-        for (NSVoice nativeVoice : NSSpeechSynthesizer.availableVoices()) {
-            Voice voice = new Voice(new SpeechLocale(nativeVoice.getLocaleIdentifier()),
-                                    nativeVoice.getName(),
-                                    toGenger(nativeVoice.getGender()),
-                                    nativeVoice.getAge(),
-                                    Voice.VARIANT_DONT_CARE);
-            voiceList.add(voice);
-        }
-        return voiceList;
-    }
-
-    /** */
-    private static int toGenger(NSVoice.VoiceGender gender) {
-        switch (gender) {
-        case Female: return Voice.GENDER_FEMALE;
-        case Male: return Voice.GENDER_MALE;
-        case Neuter: return Voice.GENDER_NEUTRAL;
-        default: return Voice.GENDER_DONT_CARE;
-        }
     }
 }

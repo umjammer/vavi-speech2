@@ -57,25 +57,25 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
      *
      * @param mode the synthesizer mode
      */
-    RococoaSynthesizer(final RococoaSynthesizerMode mode) {
+    RococoaSynthesizer(RococoaSynthesizerMode mode) {
         super(mode);
     }
 
     /* */
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        final Voice voice;
-        final RococoaSynthesizerMode mode = (RococoaSynthesizerMode) getEngineMode();
+        Voice voice;
+        RococoaSynthesizerMode mode = (RococoaSynthesizerMode) getEngineMode();
         if (mode == null) {
             voice = null;
         } else {
-            final Voice[] voices = mode.getVoices();
+            Voice[] voices = mode.getVoices();
             if (voices == null) {
                 voice = null;
             } else {
-                Optional<Voice> result = Arrays.asList(voices).stream().filter(v -> v.getName().equals(NSSpeechSynthesizer.defaultVoice().getName())).findFirst();
+                Optional<Voice> result = Arrays.stream(voices).filter(v -> v.getName().equals(NSSpeechSynthesizer.defaultVoice().getName())).findFirst();
 //System.err.println("default voice1: " + result.get().getName());
-                voice = result.isPresent() ? result.get() : null;
+                voice = result.orElse(null);
             }
         }
         LOGGER.fine("default voice: " + voice.getName());
@@ -93,7 +93,7 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
             return null;
         }
         Optional<NSVoice> result = NSSpeechSynthesizer.availableVoices().stream().filter(v -> v.getName().equals(voice.getName())).findFirst();
-        return result.isPresent() ? result.get() : null;
+        return result.orElse(null);
     }
 
     @Override
@@ -103,7 +103,7 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    protected boolean handleCancel(final int id) {
+    protected boolean handleCancel(int id) {
 //        synthesizer.stopSpeaking();
         return false;
     }
@@ -136,11 +136,11 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    public AudioSegment handleSpeak(final int id, final String item) {
-        final AudioManager manager = getAudioManager();
-        final String locator = manager.getMediaLocator();
-        final InputStream in = synthe(item);
-        final AudioSegment segment;
+    public AudioSegment handleSpeak(int id, String item) {
+        AudioManager manager = getAudioManager();
+        String locator = manager.getMediaLocator();
+        InputStream in = synthe(item);
+        AudioSegment segment;
         if (locator == null) {
             segment = new BaseAudioSegment(item, in);
         } else {
@@ -170,7 +170,7 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    protected AudioSegment handleSpeak(final int id, final Speakable item) {
+    protected AudioSegment handleSpeak(int id, Speakable item) {
         throw new IllegalArgumentException("Synthesizer does not support" + " speech markup!");
     }
 
@@ -180,10 +180,10 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
     }
 
     @Override
-    protected void handlePropertyChangeRequest(final BaseEngineProperties properties,
-                                               final String propName,
-                                               final Object oldValue,
-                                               final Object newValue) {
+    protected void handlePropertyChangeRequest(BaseEngineProperties properties,
+                                               String propName,
+                                               Object oldValue,
+                                               Object newValue) {
         properties.commitPropertyChange(propName, oldValue, newValue);
     }
 }

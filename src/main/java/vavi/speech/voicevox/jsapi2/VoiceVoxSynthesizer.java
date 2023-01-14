@@ -1,16 +1,15 @@
 /*
- * Copyright (c) 2019 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.speech.aquestalk10.jsapi2;
+package vavi.speech.voicevox.jsapi2;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -25,51 +24,36 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-
-import vavi.beans.InstanciationBinder;
-import vavi.speech.Phonemizer;
-import vavi.speech.aquestalk10.jna.AquesTalk10.AQTK_VOICE;
-import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
+import vavi.speech.voicevox.VoiceVox;
 
 
 /**
- * A AquesTalk10 compliant {@link javax.speech.synthesis.Synthesizer}.
+ * A VoiceVox {@link javax.speech.synthesis.Synthesizer}.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/09/20 umjammer initial version <br>
+ * @version 0.00 2023/01/12 umjammer initial version <br>
  */
-@PropsEntity(url = "classpath:aquestalk10.properties")
-public final class AquesTalk10Synthesizer extends BaseSynthesizer {
+public final class VoiceVoxSynthesizer extends BaseSynthesizer {
+
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(AquesTalk10Synthesizer.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(VoiceVoxSynthesizer.class.getName());
 
     /** */
-    @Property(binder = InstanciationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
-    private Phonemizer phonemizer;
-
-    /** engine */
-    private AquesTalk10Wrapper aquesTalk10;
+    private VoiceVox client;
 
     /**
      * Constructs a new synthesizer object.
      *
      * @param mode the synthesizer mode
      */
-    AquesTalk10Synthesizer(AquesTalk10SynthesizerMode mode) {
+    VoiceVoxSynthesizer(VoiceVoxSynthesizerMode mode) {
         super(mode);
-        try {
-            PropsEntity.Util.bind(this);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
         Voice voice;
-        AquesTalk10SynthesizerMode mode = (AquesTalk10SynthesizerMode) getEngineMode();
+        VoiceVoxSynthesizerMode mode = (VoiceVoxSynthesizerMode) getEngineMode();
         if (mode == null) {
             voice = null;
         } else {
@@ -77,20 +61,18 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
             if (voices == null) {
                 voice = null;
             } else {
-                voice = voices[0];
+                voice = voices[6];
             }
         }
 LOGGER.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
-        aquesTalk10 = AquesTalk10Wrapper.getInstance();
-    }
-
-    /**
-     * @param voice when null, returns default voice.
-     */
-    private AQTK_VOICE toNativeVoice(Voice voice) {
-        return AquesTalk10Wrapper.voices.get(voice == null ? "F1" : voice.getName());
+        try {
+            this.client = new VoiceVox();
+            this.client.getAllVoices();
+        } catch (IllegalStateException e) {
+            throw (EngineException) new EngineException().initCause(e.getCause());
+        }
     }
 
     @Override
@@ -110,12 +92,6 @@ LOGGER.fine("default voice: " + voice.getName());
 
     @Override
     public void handleDeallocate() {
-        // Leave some time to let all resources detach
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-        }
-        aquesTalk10 = null;
     }
 
     @Override
@@ -130,12 +106,13 @@ LOGGER.fine("default voice: " + voice.getName());
     @Override
     public AudioSegment handleSpeak(int id, String item) {
         try {
-            aquesTalk10.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
-            byte[] bytes = aquesTalk10.synthe(phonemizer.phoneme(item));
+            int voiceId = client.getId(getSynthesizerProperties().getVoice());
+            VoiceVox.AudioQuery audioFormat = client.getQuery(item, voiceId);
+            InputStream wave = client.synthesis(audioFormat, voiceId);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-            InputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(bytes));
+            InputStream in = AudioSystem.getAudioInputStream(new BufferedInputStream(wave));
             AudioSegment segment;
             if (locator == null) {
                 segment = new BaseAudioSegment(item, in);
@@ -155,7 +132,7 @@ LOGGER.fine("default voice: " + voice.getName());
 
     @Override
     protected AudioFormat getEngineAudioFormat() {
-        return new AudioFormat(16000.0f, 16, 1, true, false);
+        return new AudioFormat(24000.0f, 16, 1, true, false);
     }
 
     @Override

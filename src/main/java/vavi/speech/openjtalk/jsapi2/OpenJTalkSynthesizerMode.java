@@ -34,7 +34,7 @@ public final class OpenJTalkSynthesizerMode extends SynthesizerMode implements E
      *
      * @param locale the locale associated with this mode
      */
-    public OpenJTalkSynthesizerMode(final SpeechLocale locale) {
+    public OpenJTalkSynthesizerMode(SpeechLocale locale) {
         super(locale);
     }
 
@@ -46,12 +46,12 @@ public final class OpenJTalkSynthesizerMode extends SynthesizerMode implements E
      * @param engineName the name of the engine
      * @param modeName the name of the mode
      */
-    public OpenJTalkSynthesizerMode(final String engineName,
-            final String modeName,
-            final Boolean running,
-            final Boolean supportsLetterToSound,
-            final Boolean supportsMarkup,
-            final Voice[] voices) {
+    public OpenJTalkSynthesizerMode(String engineName,
+                                    String modeName,
+                                    Boolean running,
+                                    Boolean supportsLetterToSound,
+                                    Boolean supportsMarkup,
+                                    Voice[] voices) {
         super(engineName, modeName, running, supportsLetterToSound, false, voices);
     }
 

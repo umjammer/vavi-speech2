@@ -32,10 +32,10 @@ import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
 public class AquesTalk10EngineListFactory implements EngineListFactory {
 
     @Override
-    public EngineList createEngineList(final EngineMode require) {
+    public EngineList createEngineList(EngineMode require) {
         if (require instanceof SynthesizerMode) {
-            final SynthesizerMode mode = (SynthesizerMode) require;
-            final List<Voice> allVoices = getVoices();
+            SynthesizerMode mode = (SynthesizerMode) require;
+            List<Voice> allVoices = getVoices();
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
                 voices.addAll(allVoices);
@@ -48,7 +48,7 @@ public class AquesTalk10EngineListFactory implements EngineListFactory {
                     }
                 }
             }
-            final SynthesizerMode[] features = new SynthesizerMode[] {
+            SynthesizerMode[] features = new SynthesizerMode[] {
                 new AquesTalk10SynthesizerMode(null,
                                        mode.getEngineName(),
                                        mode.getRunning(),

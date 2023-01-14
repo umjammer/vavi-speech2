@@ -30,10 +30,10 @@ import vavi.speech.openjtalk.OpenJTalkWrapper;
 public class OpenJTalkEngineListFactory implements EngineListFactory {
 
     @Override
-    public EngineList createEngineList(final EngineMode require) {
+    public EngineList createEngineList(EngineMode require) {
         if (require instanceof SynthesizerMode) {
-            final SynthesizerMode mode = (SynthesizerMode) require;
-            final List<Voice> allVoices = getVoices();
+            SynthesizerMode mode = (SynthesizerMode) require;
+            List<Voice> allVoices = getVoices();
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
                 voices.addAll(allVoices);
@@ -46,7 +46,7 @@ public class OpenJTalkEngineListFactory implements EngineListFactory {
                     }
                 }
             }
-            final SynthesizerMode[] features = new SynthesizerMode[] {
+            SynthesizerMode[] features = new SynthesizerMode[] {
                 new OpenJTalkSynthesizerMode(null,
                                        mode.getEngineName(),
                                        mode.getRunning(),

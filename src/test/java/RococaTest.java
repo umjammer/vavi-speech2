@@ -27,7 +27,7 @@ class RococaTest {
     /**
      * @param args command line arguments.
      */
-    public static void main(final String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Path file = Paths.get(args[0]);
 
         EngineManager.registerEngineListFactory(vavi.speech.rococoa.jsapi2.RococoaEngineListFactory.class.getName());
