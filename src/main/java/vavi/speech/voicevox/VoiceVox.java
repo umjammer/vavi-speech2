@@ -1,0 +1,259 @@
+/*
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
+ *
+ * Programmed by Naohide Sano
+ */
+
+package vavi.speech.voicevox;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Level;
+import javax.speech.SpeechLocale;
+import javax.speech.synthesis.Voice;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import vavi.util.Debug;
+
+
+/**
+ * VoiceVox.
+ *
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
+ * @version 0.00 2023-01-14 nsano initial version <br>
+ */
+public class VoiceVox {
+
+    /** VoiceVox application web api */
+    private static String url = "http://localhost:50021/";
+
+    /** */
+    private static Gson gson = new GsonBuilder().create();
+
+    /* */
+    static {
+        String url = System.getProperty("vavi.speech.voicevox.url");
+        if (url != null) {
+            VoiceVox.url = url;
+        }
+    }
+
+    /** */
+    private WebTarget target;
+
+    /** */
+    private Speaker[] speakers;
+
+    /** */
+    public VoiceVox() {
+        try {
+            Client client = ClientBuilder.newClient();
+            target = client.target(url);
+
+            String version = target.path("version")
+                    .request().get(String.class);
+Debug.println(Level.FINE, "version: " + version);
+        } catch (Exception e) {
+            throw new IllegalStateException("VoiceVox is not available at " + url, e);
+        }
+    }
+
+    /** */
+    public static class AudioQuery {
+        public static class AccentPhrase {
+            public static class Mora{
+                String text;
+                String consonant;
+                float consonant_length;
+                String vowel;
+                float vowel_length;
+                float pitch;
+                @Override public String toString() {
+                    return "Mora{" +
+                            "text='" + text + '\'' +
+                            ", consonant='" + consonant + '\'' +
+                            ", consonant_length=" + consonant_length +
+                            ", vowel='" + vowel + '\'' +
+                            ", vowel_length=" + vowel_length +
+                            ", pitch=" + pitch +
+                            '}';
+                }
+            }
+            Mora[] moras;
+            int accent;
+            Mora pause_mora;
+            boolean is_interrogative;
+            @Override public String toString() {
+                return "AccentPhrase{" +
+                        "moras=" + Arrays.toString(moras) +
+                        ", accent=" + accent +
+                        ", pause_mora=" + pause_mora +
+                        ", is_interrogative=" + is_interrogative +
+                        '}';
+            }
+        }
+        AccentPhrase[] accent_phrases;
+        float speedScale;
+        float pitchScale;
+        float intonationScale;
+        float volumeScale;
+        float prePhonemeLength;
+        float postPhonemeLength;
+        int outputSamplingRate;
+        boolean outputStereo;
+        String kana;
+        @Override public String toString() {
+            return "AudioQuery{" +
+                    "accent_phrases=" + Arrays.toString(accent_phrases) +
+                    ", speedScale=" + speedScale +
+                    ", pitchScale=" + pitchScale +
+                    ", intonationScale=" + intonationScale +
+                    ", volumeScale=" + volumeScale +
+                    ", prePhonemeLength=" + prePhonemeLength +
+                    ", postPhonemeLength=" + postPhonemeLength +
+                    ", outputSamplingRate=" + outputSamplingRate +
+                    ", outputStereo=" + outputStereo +
+                    ", kana='" + kana + '\'' +
+                    '}';
+        }
+        /** @param speed 1: default */
+        public void setSpeed(float speed) {
+            speedScale = speed;
+        }
+        /** @param volume 1: default */
+        public void setVolume(float volume) {
+            volumeScale = volume;
+        }
+    }
+
+    /** */
+    public AudioQuery getQuery(String text, int speakerId) {
+        String query = target.path("audio_query")
+                .queryParam("text", text)
+                .queryParam("speaker", speakerId)
+                .request().post(null, String.class);
+
+        return gson.fromJson(query, AudioQuery.class);
+    }
+
+    /** */
+    public InputStream synthesis(AudioQuery audioQuery, int speakerId) {
+        Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
+        return target.path("synthesis")
+                .queryParam("speaker", speakerId)
+                .request().post(entity, InputStream.class);
+    }
+
+    /** */
+    public static class Speaker {
+        String name;
+        String speaker_uuid;
+        public static class Style {
+            int id;
+            String name;
+            @Override public String toString() {
+                return "Style{" +
+                        "id=" + id +
+                        ", name='" + name + '\'' +
+                        '}';
+            }
+        }
+        Style[] styles;
+        String version;
+        @Override public String toString() {
+            return "Speaker{" +
+                    "name='" + name + '\'' +
+                    ", speaker_uuid='" + speaker_uuid + '\'' +
+                    ", styles=" + Arrays.toString(styles) +
+                    ", version=" + version +
+                    '}';
+        }
+    }
+
+    /** */
+    public static class SpeakerInfo {
+        String policy;
+        String portrait;
+        public static class StyleInfo {
+            int id;
+            String icon;
+            String[] voice_samples;
+            @Override public String toString() {
+                return "StyleInfo{" +
+                        "id=" + id +
+//                        ", icon='" + icon + '\'' +
+//                        ", voice_samples=" + Arrays.toString(voice_samples) +
+                        '}';
+            }
+        }
+        StyleInfo[] style_infos;
+        @Override public String toString() {
+            return "SpeakerInfo{" +
+                    "policy='" + policy + '\'' +
+//                    ", portrait='" + portrait + '\'' +
+                    ", style_infos=" + Arrays.toString(style_infos) +
+                    '}';
+        }
+    }
+
+    /** */
+    public Voice[] getAllVoices() {
+        //
+        if (speakers == null) {
+            String speakersJson = target
+                    .path("speakers")
+                    .request()
+                    .get(String.class);
+
+            speakers = gson.fromJson(speakersJson, Speaker[].class);
+        }
+        SpeechLocale japan = new SpeechLocale(Locale.JAPANESE.toString());
+        return Arrays.stream(speakers).flatMap(speaker -> Arrays.stream(speaker.styles).map(style -> {
+            int[] vd = voiceData.get(speaker.name);
+            return new Voice(japan, speaker.name + "(" + style.name + ")", vd[0], vd[1], Voice.VARIANT_DONT_CARE);
+        })).toArray(Voice[]::new);
+    }
+
+    /** */
+    public int getId(Voice voice) {
+        String name = voice.getName().replaceFirst("\\(.+\\)", "");
+        Speaker speaker = Arrays.stream(speakers).filter(s -> s.name.equals(name)).findFirst().get();
+        String style = voice.getName().substring(voice.getName().indexOf("(") + 1, voice.getName().length() - 1);
+        return Arrays.stream(speaker.styles).filter(s -> s.name.equals(style)).findFirst().get().id;
+    }
+
+    /** to complement lack information of voicevox for jsapi voice */
+    private static Map<String, int[]> voiceData = new HashMap<>();
+
+    static {
+        // TODO outsource like properties
+        voiceData.put("四国めたん", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
+        voiceData.put("ずんだもん", new int[] {Voice.GENDER_FEMALE, Voice.AGE_CHILD});
+        voiceData.put("春日部つむぎ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
+        voiceData.put("雨晴はう", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
+        voiceData.put("波音リツ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_YOUNGER_ADULT});
+        voiceData.put("玄野武宏", new int[] {Voice.GENDER_MALE, Voice.AGE_TEENAGER});
+        voiceData.put("白上虎太郎", new int[] {Voice.GENDER_MALE, Voice.AGE_CHILD});
+        voiceData.put("青山龍星", new int[] {Voice.GENDER_MALE, Voice.AGE_YOUNGER_ADULT});
+        voiceData.put("冥鳴ひまり", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
+        voiceData.put("九州そら", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
+        voiceData.put("もち子さん", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
+        voiceData.put("剣崎雌雄", new int[] {Voice.GENDER_MALE, Voice.AGE_MIDDLE_ADULT});
+        voiceData.put("WhiteCUL", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
+        voiceData.put("後鬼", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
+        voiceData.put("No.7", new int[] {Voice.GENDER_FEMALE, Voice.AGE_YOUNGER_ADULT});
+        voiceData.put("ちび式じい", new int[] {Voice.GENDER_MALE, Voice.AGE_OLDER_ADULT});
+        voiceData.put("櫻歌ミコ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_CHILD});
+        voiceData.put("小夜/SAYO", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
+        voiceData.put("ナースロボ＿タイプＴ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_YOUNGER_ADULT});
+    }
+}

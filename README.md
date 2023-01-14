@@ -13,6 +13,7 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 | Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries) | ✅ | 🚧 | 👑 | |
 | Rococoa | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA | ✅ | 🚫 | 😃 | |
 | Open JTalk | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA | ✅ | - | 💩 | |
+| VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  | ✅ | - | 😃 | ずんだもん       |
 
 ## Install
 
@@ -42,6 +43,11 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 
  * make `libjtalk.dylib` from `https://github.com/rosmarinus/jtalkdll`
  * locate `libjtalk.dylib` into `DYLD_LIBRARY_PATH`
+
+### VOICEVOX
+
+ * [download](https://voicevox.hiroshiba.jp/) the application
+ * run the application before using this library
 
 ## Reference
 
