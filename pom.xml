@@ -70,6 +70,7 @@
               <trimStackTrace>false</trimStackTrace>
               <systemProperties>
                 <sen.home>${sen.home}</sen.home>
+                <vavi.speech.voicevox.url>${voicevox.url}</vavi.speech.voicevox.url>
                 <htsvoice.dir>${htsvoice.dir}</htsvoice.dir>
               </systemProperties>
               <environmentVariables>
@@ -189,15 +190,16 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- jspai2 -->
     <dependency>
-      <groupId>com.github.umjammer.jsapi</groupId>
+      <groupId>org.jvoicexml</groupId> <!-- com.github.umjammer.jsapi -->
       <artifactId>javax.speech</artifactId>
-      <version>0.6.1</version>
+      <version>0.6.3-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.github.umjammer.jsapi</groupId>
+      <groupId>org.jvoicexml</groupId>
       <artifactId>org.jvoicexml.jsapi2</artifactId>
-      <version>0.6.1</version>
+      <version>0.6.3-SNAPSHOT</version>
     </dependency>
 
     <dependency>

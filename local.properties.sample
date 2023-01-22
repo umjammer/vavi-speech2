@@ -1,10 +1,15 @@
 sen.home=/usr/local/src/sen
 
 aquesTalk10DevKey=XXXX-XXXX-XXXX-XXXX
+aquesTalk2DevKey=ZZZZ-ZZZZ-ZZZZ-ZZZZ
 aqKanji2KoeDevKey=YYYY-YYYY-YYYY-YYYY
 
 google.credential=tmp/google-app-credentials.json
 
 docomo.goo.hiragana.apiKey=123456789
 
+recruit.proofreading.apiKey=AABBCC456
+
 yahoo.japan.apiKey=abc123
+
+voicevox.url=http://localhost:50021/

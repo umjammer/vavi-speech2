@@ -10,9 +10,9 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 | **Type**                    | **Description**                                                                                                                                                                                   | **Sythesizer** | **Recognizer** | **Quality** | **Comment** |
 |:----------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|:--------------:|:-----------:|:------------|
 | AquesTalk10                 | [AquesTalk](https://www.a-quest.com/products/aquestalk.html), JNA                                                                                                                                 | ✅ |  - | 😐 | ゆっくり        |
-| Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries)                                                                                           | ✅ | 🚧 | 👑 |             |
-| Rococoa                     | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA | ✅ | 🚫 | 😃 |             |
-| Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                                                                           | ✅ | - | 💩 |             |
+| Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries), Library                                                                  | ✅ | 🚧 | 👑 |             |
+| Cocoa                       | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA | ✅ | 🚫 | 😃 |             |
+| Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                          | ✅ | - | 💩 |             |
 | VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  | ✅ | - | 😃 | ずんだもん       |
 | Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                          | ✅ | - | 💩 |             |
 
@@ -53,7 +53,7 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 ## Reference
 
  * [jsr113](https://github.com/JVoiceXML/jsapi)
-   * [vavi patched](https://github.com/umjammer/jsapi)
+   * [vavi patched](https://github.com/umjammer/jsapi) (volume enabled)
 
 ## TODO
 
@@ -63,6 +63,6 @@ Text to Speech and Speech to Text (JSAPI2) for Java
  * [festival](https://github.com/festvox/festival)
  * amazon polly
  * microsoft cognitive services text to speech
- * https://github.com/julius-speech/julius
- * VoiceVox
+ * ~~https://github.com/julius-speech/julius~~ -> Gyutan
+ * ~~VoiceVox~~
  * NicoTalk character
