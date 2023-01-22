@@ -14,6 +14,7 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 | Rococoa                     | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA | ✅ | 🚫 | 😃 |             |
 | Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                                                                           | ✅ | - | 💩 |             |
 | VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  | ✅ | - | 😃 | ずんだもん       |
+| Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                          | ✅ | - | 💩 |             |
 
 ## Install
 
@@ -57,8 +58,8 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 ## TODO
 
  * [watson](https://www.ibm.com/watson/jp-ja/developercloud/text-to-speech.html)
- * [open jtalk](http://open-jtalk.sourceforge.net/)
-   * https://github.com/icn-lab/Gyutan
+ * ~~[open jtalk](http://open-jtalk.sourceforge.net/)~~
+   * ~~https://github.com/icn-lab/Gyutan~~ (wip)
  * [festival](https://github.com/festvox/festival)
  * amazon polly
  * microsoft cognitive services text to speech
