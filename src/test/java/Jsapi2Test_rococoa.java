@@ -14,6 +14,9 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import vavi.speech.rococoa.jsapi2.RococoaEngineListFactory;
 
 
@@ -23,7 +26,8 @@ import vavi.speech.rococoa.jsapi2.RococoaEngineListFactory;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-public final class Jsapi2Test_rococoa {
+@EnabledOnOs(OS.MAC)
+class Jsapi2Test_rococoa {
 
     /**
      * @param args command line arguments.
