@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Voice;
@@ -238,25 +239,13 @@ Debug.println(Level.FINE, "version: " + version);
     private static Map<String, int[]> voiceData = new HashMap<>();
 
     static {
-        // TODO outsource like properties
-        voiceData.put("四国めたん", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
-        voiceData.put("ずんだもん", new int[] {Voice.GENDER_FEMALE, Voice.AGE_CHILD});
-        voiceData.put("春日部つむぎ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
-        voiceData.put("雨晴はう", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
-        voiceData.put("波音リツ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_YOUNGER_ADULT});
-        voiceData.put("玄野武宏", new int[] {Voice.GENDER_MALE, Voice.AGE_TEENAGER});
-        voiceData.put("白上虎太郎", new int[] {Voice.GENDER_MALE, Voice.AGE_CHILD});
-        voiceData.put("青山龍星", new int[] {Voice.GENDER_MALE, Voice.AGE_YOUNGER_ADULT});
-        voiceData.put("冥鳴ひまり", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
-        voiceData.put("九州そら", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
-        voiceData.put("もち子さん", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
-        voiceData.put("剣崎雌雄", new int[] {Voice.GENDER_MALE, Voice.AGE_MIDDLE_ADULT});
-        voiceData.put("WhiteCUL", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
-        voiceData.put("後鬼", new int[] {Voice.GENDER_FEMALE, Voice.AGE_MIDDLE_ADULT});
-        voiceData.put("No.7", new int[] {Voice.GENDER_FEMALE, Voice.AGE_YOUNGER_ADULT});
-        voiceData.put("ちび式じい", new int[] {Voice.GENDER_MALE, Voice.AGE_OLDER_ADULT});
-        voiceData.put("櫻歌ミコ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_CHILD});
-        voiceData.put("小夜/SAYO", new int[] {Voice.GENDER_FEMALE, Voice.AGE_TEENAGER});
-        voiceData.put("ナースロボ＿タイプＴ", new int[] {Voice.GENDER_FEMALE, Voice.AGE_YOUNGER_ADULT});
+        Scanner scanner = new Scanner(VoiceVox.class.getResourceAsStream("voicevox.csv"));
+        while (scanner.hasNextLine()) {
+            String[] parts = scanner.nextLine().split(",");
+            String name = parts[0];
+            int gender = Integer.parseInt(parts[1]);
+            int age = Integer.parseInt(parts[2]);
+            voiceData.put(name, new int[] {gender, age});
+        }
     }
 }
