@@ -84,6 +84,11 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
 //System.err.println("default voice2: " + NSSpeechSynthesizer.defaultVoice().getName());
         synthesizer = NSSpeechSynthesizer.synthesizerWithVoice(null);
         delegate = new SynthesizerDelegate(synthesizer);
+
+        //
+        long newState = ALLOCATED | RESUMED;
+        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
+        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     /** */
@@ -122,6 +127,11 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
         } catch (InterruptedException e) {
         }
         synthesizer.release();
+
+        //
+        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
+        getQueueManager().cancelAllItems();
+        getQueueManager().terminate();
     }
 
     @Override

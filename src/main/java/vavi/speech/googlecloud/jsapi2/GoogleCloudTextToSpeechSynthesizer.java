@@ -80,6 +80,11 @@ LOGGER.fine("default voice: " + voice.getName());
         } catch (IOException e) {
             throw (EngineException) new EngineException().initCause(e);
         }
+
+        //
+        long newState = ALLOCATED | RESUMED;
+        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
+        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     /** */
@@ -114,6 +119,11 @@ LOGGER.fine("default voice: " + voice.getName());
         } catch (InterruptedException e) {
         }
         client.close();
+
+        //
+        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
+        getQueueManager().cancelAllItems();
+        getQueueManager().terminate();
     }
 
     @Override

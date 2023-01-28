@@ -41,13 +41,12 @@ import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
 class Jsapi2Test_openjtalk {
 
     /**
-     * @param args command line arguments.
+     * @param args 0: text
      */
     public static void main(String[] args) throws Exception {
         Jsapi2Test_openjtalk app = new Jsapi2Test_openjtalk();
         String text = args[0];
         app.speak(text);
-        System.exit(0);
     }
 
     @Test

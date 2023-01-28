@@ -72,6 +72,11 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
         }
         LOGGER.fine("default voice: " + (voice != null ? voice.getName() : ""));
         getSynthesizerProperties().setVoice(voice);
+
+        //
+        long newState = ALLOCATED | RESUMED;
+        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
+        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     /** */
@@ -112,6 +117,11 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
             Thread.sleep(500);
         } catch (InterruptedException e) {
         }
+
+        //
+        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
+        getQueueManager().cancelAllItems();
+        getQueueManager().terminate();
     }
 
     @Override

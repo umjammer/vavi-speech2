@@ -34,6 +34,15 @@ import vavi.util.Debug;
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*") // cause needs sen.home
 class Jsapi2Test_gyutan {
 
+    /**
+     * @param args 0: text
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_gyutan app = new Jsapi2Test_gyutan();
+        String text = args[0];
+        app.speak(text);
+    }
+
     @Test
     void test01() throws Exception {
         String text = "すもももももももものうち";

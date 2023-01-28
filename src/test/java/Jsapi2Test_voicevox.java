@@ -45,8 +45,6 @@ Debug.println(Level.WARNING, e.getMessage());
         Jsapi2Test_voicevox app = new Jsapi2Test_voicevox();
         String text = args[0];
         app.speak(text);
-Thread.getAllStackTraces().keySet().forEach(System.err::println);
-//        System.exit(0);
     }
 
     @Test

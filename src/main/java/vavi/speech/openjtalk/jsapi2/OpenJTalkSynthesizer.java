@@ -72,6 +72,11 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
         }
         LOGGER.fine("default voice: " + (voice != null ? voice.getName() : ""));
         getSynthesizerProperties().setVoice(voice);
+
+        //
+        long newState = ALLOCATED | RESUMED;
+        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
+        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     /** */
@@ -103,6 +108,11 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
         } catch (InterruptedException e) {
         }
         openJTalk = null;
+
+        //
+        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
+        getQueueManager().cancelAllItems();
+        getQueueManager().terminate();
     }
 
     @Override

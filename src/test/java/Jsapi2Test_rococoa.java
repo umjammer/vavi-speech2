@@ -30,13 +30,12 @@ import vavi.speech.rococoa.jsapi2.RococoaEngineListFactory;
 class Jsapi2Test_rococoa {
 
     /**
-     * @param args command line arguments.
+     * @param args 0: text
      */
     public static void main(String[] args) throws Exception {
         Jsapi2Test_rococoa app = new Jsapi2Test_rococoa();
         String text = args[0];
         app.speak(text);
-        System.exit(0);
     }
 
     @Test
