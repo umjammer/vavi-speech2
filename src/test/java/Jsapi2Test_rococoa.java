@@ -19,6 +19,7 @@ import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import vavi.speech.rococoa.jsapi2.RococoaEngineListFactory;
+import vavi.util.Debug;
 
 
 /**
@@ -59,7 +60,7 @@ class Jsapi2Test_rococoa {
         synthesizer.getSynthesizerProperties().setVolume(2); // 0 ~ 100
         String voiceName = "Kyoko";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
-//System.err.println(voice);
+Debug.println(voice.getName());
         // to specify exact age doesn't work.
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
 

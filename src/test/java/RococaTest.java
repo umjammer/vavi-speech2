@@ -15,6 +15,8 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.Test;
+
 
 /**
  * RococaTest. (jsapi2, rococoa)
@@ -23,6 +25,11 @@ import javax.speech.synthesis.Voice;
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
 class RococaTest {
+
+    @Test
+    void test1() throws Exception {
+        main(new String[] {"src/test/resources/speech.txt"});
+    }
 
     /**
      * @param args command line arguments.
@@ -39,9 +46,9 @@ class RococaTest {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(20);
-//Arrays.asList(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).stream().forEach(System.err::println);
-        String voiceName = "Alex";
+        synthesizer.getSynthesizerProperties().setVolume(1);
+Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
+        String voiceName = "Kyoko";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
 
@@ -52,7 +59,5 @@ class RococaTest {
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
-
-        System.exit(0);
     }
 }
