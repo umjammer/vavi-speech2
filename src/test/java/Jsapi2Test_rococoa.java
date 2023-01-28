@@ -10,6 +10,7 @@ import javax.speech.Engine;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
+import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,7 @@ class Jsapi2Test_rococoa {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(20);
+        synthesizer.getSynthesizerProperties().setVolume(2); // 0 ~ 100
         String voiceName = "Kyoko";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
 //System.err.println(voice);

@@ -66,7 +66,7 @@ class Jsapi2Test_openjtalk {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(20);
+        synthesizer.getSynthesizerProperties().setVolume(3);
 //Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
         String voiceName = "mei_happy";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();

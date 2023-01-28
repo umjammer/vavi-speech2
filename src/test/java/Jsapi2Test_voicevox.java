@@ -64,7 +64,7 @@ Debug.println(Level.WARNING, e.getMessage());
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(20);
+        synthesizer.getSynthesizerProperties().setVolume(3);
         String voiceName = "ずんだもん(ノーマル)";
 //        String voiceName = "四国めたん(ツンツン)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();

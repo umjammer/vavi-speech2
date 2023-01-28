@@ -54,7 +54,7 @@ class Jsapi2Test_google {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(20);
+        synthesizer.getSynthesizerProperties().setVolume(3);
 //        String voiceName = "en-US-Wavenet-A";
         String voiceName = "ja-JP-Wavenet-B";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();

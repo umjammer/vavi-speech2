@@ -67,7 +67,7 @@ class Jsapi2Test_gyutan {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(10);
+        synthesizer.getSynthesizerProperties().setVolume(3);
         String voiceName = "tohoku(neutral)";
 //        String voiceName = "tohoku(happy)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
