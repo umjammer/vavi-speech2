@@ -30,8 +30,8 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-import org.rococoa.contrib.appkit.NSSpeechSynthesizer;
-import org.rococoa.contrib.appkit.NSVoice;
+import org.rococoa.cocoa.appkit.NSSpeechSynthesizer;
+import org.rococoa.cocoa.appkit.NSVoice;
 
 import vavi.speech.rococoa.SynthesizerDelegate;
 

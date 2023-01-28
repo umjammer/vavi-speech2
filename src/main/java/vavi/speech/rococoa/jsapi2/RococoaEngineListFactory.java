@@ -17,8 +17,8 @@ import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.rococoa.contrib.appkit.NSSpeechSynthesizer;
-import org.rococoa.contrib.appkit.NSVoice;
+import org.rococoa.cocoa.appkit.NSSpeechSynthesizer;
+import org.rococoa.cocoa.appkit.NSVoice;
 
 
 /**
