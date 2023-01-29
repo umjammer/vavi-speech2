@@ -211,7 +211,7 @@
     <dependency>
       <groupId>vavi</groupId>
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.4</version>
+      <version>0.1.5</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>
@@ -270,5 +270,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
 </project>

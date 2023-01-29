@@ -57,9 +57,10 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 
 ## TODO
 
+ * speech.properties
  * [watson](https://www.ibm.com/watson/jp-ja/developercloud/text-to-speech.html)
  * ~~[open jtalk](http://open-jtalk.sourceforge.net/)~~
-   * ~~https://github.com/icn-lab/Gyutan~~ (wip)
+   * ~~https://github.com/icn-lab/Gyutan~~ (done)
  * [festival](https://github.com/festvox/festival)
  * amazon polly
  * microsoft cognitive services text to speech
