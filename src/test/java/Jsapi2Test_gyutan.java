@@ -1,63 +1,64 @@
 /*
- * Copyright (c) 2019 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
-
+import java.util.logging.Level;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
+import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import vavi.speech.gyutan.jsapi2.GyutanEngineListFactory;
+import vavi.speech.voicevox.VoiceVox;
+import vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory;
+import vavi.util.Debug;
 
 
 /**
- * Jsapi2Test_openjtalk. (jsapi2, openjtalk)
- * <ul>
- * <li>"mei_angry"
- * <li>"mei_normal"
- * <li>"mei_happy"
- * <li>"mei_sad"
- * <li>"mei_bashful"
- * <li>"tohoku-f01-angry"
- * <li>"tohoku-f01-neutral"
- * <li>"tohoku-f01-sad"
- * <li>"tohoku-f01-happy"
- * <li>"nitech_jp_atr503_m001"
- * </ul>
+ * Jsapi2Test_gyutan. (jsapi2, gyutan)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/09/26 umjammer initial version <br>
+ * @version 0.00 2023/01/14 umjammer initial version <br>
  */
-@Disabled("because installing jtalk is dull")
-//@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
-class Jsapi2Test_openjtalk {
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*") // cause needs sen.home
+class Jsapi2Test_gyutan {
 
     /**
      * @param args 0: text
      */
     public static void main(String[] args) throws Exception {
-        Jsapi2Test_openjtalk app = new Jsapi2Test_openjtalk();
+        Jsapi2Test_gyutan app = new Jsapi2Test_gyutan();
         String text = args[0];
         app.speak(text);
     }
 
     @Test
     void test01() throws Exception {
-        String text = "ゆっくりしていってね";
+        String text = "すもももももももものうち";
+        speak(text);
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "vavi.test", matches = "ide")
+    void test02() throws Exception {
+        String text = new String(Files.readAllBytes(Paths.get("src/test/resources/speech.txt")));
         speak(text);
     }
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(OpenJTalkEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(GyutanEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -67,8 +68,8 @@ class Jsapi2Test_openjtalk {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
         synthesizer.getSynthesizerProperties().setVolume(3);
-//Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
-        String voiceName = "mei_happy";
+        String voiceName = "tohoku(neutral)";
+//        String voiceName = "tohoku(happy)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
 

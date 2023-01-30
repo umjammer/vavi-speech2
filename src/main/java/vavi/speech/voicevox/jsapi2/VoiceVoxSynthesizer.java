@@ -36,7 +36,7 @@ import vavi.speech.voicevox.VoiceVox;
 public final class VoiceVoxSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(VoiceVoxSynthesizer.class.getName());
+    private static final Logger logger = Logger.getLogger(VoiceVoxSynthesizer.class.getName());
 
     /** */
     private VoiceVox client;
@@ -64,7 +64,7 @@ public final class VoiceVoxSynthesizer extends BaseSynthesizer {
                 voice = voices[6];
             }
         }
-LOGGER.fine("default voice: " + voice.getName());
+logger.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
         try {
@@ -73,6 +73,11 @@ LOGGER.fine("default voice: " + voice.getName());
         } catch (IllegalStateException e) {
             throw (EngineException) new EngineException().initCause(e.getCause());
         }
+
+        //
+        long newState = ALLOCATED | RESUMED;
+        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
+        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     @Override
@@ -92,6 +97,9 @@ LOGGER.fine("default voice: " + voice.getName());
 
     @Override
     public void handleDeallocate() {
+        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
+        getQueueManager().cancelAllItems();
+        getQueueManager().terminate();
     }
 
     @Override

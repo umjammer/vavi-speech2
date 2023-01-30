@@ -30,8 +30,8 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-import org.rococoa.contrib.appkit.NSSpeechSynthesizer;
-import org.rococoa.contrib.appkit.NSVoice;
+import org.rococoa.cocoa.appkit.NSSpeechSynthesizer;
+import org.rococoa.cocoa.appkit.NSVoice;
 
 import vavi.speech.rococoa.SynthesizerDelegate;
 
@@ -43,8 +43,9 @@ import vavi.speech.rococoa.SynthesizerDelegate;
  * @version 0.00 2019/09/20 umjammer initial version <br>
  */
 public final class RococoaSynthesizer extends BaseSynthesizer {
+
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(RococoaSynthesizer.class.getName());
+    private static final Logger logger = Logger.getLogger(RococoaSynthesizer.class.getName());
 
     /** */
     private NSSpeechSynthesizer synthesizer;
@@ -74,21 +75,26 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
                 voice = null;
             } else {
                 Optional<Voice> result = Arrays.stream(voices).filter(v -> v.getName().equals(NSSpeechSynthesizer.defaultVoice().getName())).findFirst();
-//System.err.println("default voice1: " + result.get().getName());
+//Debug.println(Level.FINER, "default voice1: " + result.get().getName());
                 voice = result.orElse(null);
             }
         }
-        LOGGER.fine("default voice: " + voice.getName());
+        logger.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
-//System.err.println("default voice2: " + NSSpeechSynthesizer.defaultVoice().getName());
+//Debug.println(Level.FINER, "default voice2: " + NSSpeechSynthesizer.defaultVoice().getName());
         synthesizer = NSSpeechSynthesizer.synthesizerWithVoice(null);
-        delegate = new SynthesizerDelegate(synthesizer);
+        delegate = new SynthesizerDelegate(synthesizer); // delegate is implemented in vavi-speech
+
+        //
+        long newState = ALLOCATED | RESUMED;
+        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
+        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     /** */
     private NSVoice toNativeVoice(Voice voice) {
-//System.err.println("vioce2: " + getSynthesizerProperties().getVoice());
+//Debug.println(Level.FINER, "vioce2: " + getSynthesizerProperties().getVoice());
         if (voice == null) {
             return null;
         }
@@ -122,6 +128,11 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
         } catch (InterruptedException e) {
         }
         synthesizer.release();
+
+        //
+        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
+        getQueueManager().cancelAllItems();
+        getQueueManager().terminate();
     }
 
     @Override
@@ -152,7 +163,7 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
     /** */
     private AudioInputStream synthe(String text) {
         try {
-//System.err.println("vioce: " + getSynthesizerProperties().getVoice());
+//Debug.println(Level.FINER, "vioce: " + getSynthesizerProperties().getVoice());
             synthesizer.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
             Path path = Files.createTempFile(getClass().getName(), ".aiff");
             synthesizer.startSpeakingStringToURL(text, path.toUri());

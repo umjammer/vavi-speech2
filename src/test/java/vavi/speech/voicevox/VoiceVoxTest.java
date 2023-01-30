@@ -60,10 +60,10 @@ class VoiceVoxTest {
                 .queryParam("speaker", 1)
                 .request()
                 .post(null, String.class);
-        Debug.println("audio_query:\n" + query);
+Debug.println("audio_query:\n" + query);
 
         AudioQuery audioQuery = gson.fromJson(query, AudioQuery.class);
-        Debug.println("audioQuery: " + audioQuery);
+Debug.println("audioQuery: " + audioQuery);
         audioQuery.speedScale = 1.2f;
 
         Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);

@@ -28,13 +28,12 @@ import vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory;
 class Jsapi2Test_aquestalk10 {
 
     /**
-     * @param args command line arguments.
+     * @param args 0: text
      */
     public static void main(String[] args) throws Exception {
         Jsapi2Test_aquestalk10 app = new Jsapi2Test_aquestalk10();
         String text = args[0];
         app.speak(text);
-        System.exit(0);
     }
 
     @Test
@@ -56,7 +55,7 @@ class Jsapi2Test_aquestalk10 {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(20);
+        synthesizer.getSynthesizerProperties().setVolume(2);
         String voiceName = "F1";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);

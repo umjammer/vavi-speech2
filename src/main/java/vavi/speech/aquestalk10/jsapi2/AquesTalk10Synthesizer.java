@@ -42,6 +42,7 @@ import vavi.util.properties.annotation.PropsEntity;
  */
 @PropsEntity(url = "classpath:aquestalk10.properties")
 public final class AquesTalk10Synthesizer extends BaseSynthesizer {
+
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(AquesTalk10Synthesizer.class.getName());
 
@@ -84,6 +85,11 @@ LOGGER.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
         aquesTalk10 = AquesTalk10Wrapper.getInstance();
+
+        //
+        long newState = ALLOCATED | RESUMED;
+        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
+        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     /**
@@ -116,6 +122,11 @@ LOGGER.fine("default voice: " + voice.getName());
         } catch (InterruptedException e) {
         }
         aquesTalk10 = null;
+
+        //
+        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
+        getQueueManager().cancelAllItems();
+        getQueueManager().terminate();
     }
 
     @Override

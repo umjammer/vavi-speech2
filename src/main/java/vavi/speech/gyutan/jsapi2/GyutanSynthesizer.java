@@ -1,19 +1,20 @@
 /*
- * Copyright (c) 2019 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.speech.openjtalk.jsapi2;
+package vavi.speech.gyutan.jsapi2;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
+import java.nio.file.Paths;
+import java.util.Scanner;
 import java.util.logging.Logger;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -26,40 +27,39 @@ import javax.speech.EngineStateException;
 import javax.speech.synthesis.Speakable;
 import javax.speech.synthesis.Voice;
 
+import org.icn.gyutan.Gyutan;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 
-import vavi.speech.openjtalk.OpenJTalkWrapper;
-import vavi.speech.openjtalk.OpenJTalkWrapper.VoiceFileInfo;
-
 
 /**
- * A OpenJTalk compliant {@link javax.speech.synthesis.Synthesizer}.
+ * A Gyutan compliant {@link javax.speech.synthesis.Synthesizer}.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/09/26 umjammer initial version <br>
+ * @version 0.00 2023/01/20 umjammer initial version <br>
  */
-public final class OpenJTalkSynthesizer extends BaseSynthesizer {
+public final class GyutanSynthesizer extends BaseSynthesizer {
+
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(OpenJTalkSynthesizer.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(GyutanSynthesizer.class.getName());
 
     /** */
-    private OpenJTalkWrapper openJTalk = new OpenJTalkWrapper();
+    private Gyutan gyutan = new Gyutan();
 
     /**
      * Constructs a new synthesizer object.
      *
      * @param mode the synthesizer mode
      */
-    OpenJTalkSynthesizer(OpenJTalkSynthesizerMode mode) {
+    GyutanSynthesizer(GyutanSynthesizerMode mode) {
         super(mode);
     }
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
         Voice voice;
-        OpenJTalkSynthesizerMode mode = (OpenJTalkSynthesizerMode) getEngineMode();
+        GyutanSynthesizerMode mode = (GyutanSynthesizerMode) getEngineMode();
         if (mode == null) {
             voice = null;
         } else {
@@ -80,9 +80,19 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     }
 
     /** */
-    private VoiceFileInfo toNativeVoice(Voice voice) {
-        Optional<VoiceFileInfo> result = openJTalk.getVoices().stream().filter(v -> v.name.equals(voice != null ? voice.getName() : null)).findFirst();
-        return result.orElse(null);
+    private Path toNativeVoice(Voice voice) {
+        Scanner s = new Scanner(GyutanEngineListFactory.class.getResourceAsStream("/htsvoice.csv"));
+        String defalutName = null;
+        while (s.hasNextLine()) {
+            String[] parts = s.nextLine().split(",");
+            if (defalutName == null) {
+                defalutName = parts[0];
+            }
+            if (voice.getName().equals(parts[1])) {
+                return Paths.get(System.getProperty("htsvoice.dir"), parts[0]);
+            }
+        }
+        return Paths.get(System.getProperty("htsvoice.dir"), defalutName);
     }
 
     @Override
@@ -107,7 +117,6 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
             Thread.sleep(500);
         } catch (InterruptedException e) {
         }
-        openJTalk = null;
 
         //
         setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
@@ -143,14 +152,18 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     private AudioInputStream synthe(String text) {
         try {
 //System.err.println("vioce: " + getSynthesizerProperties().getVoice());
-            openJTalk.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
-            Path path = Files.createTempFile(getClass().getName(), ".aiff");
-            openJTalk.speakToFile(text, path.toString());
-            byte[] wav = Files.readAllBytes(path);
+            Path wave = Files.createTempFile(getClass().getName(), ".wav");
+            Path voice = toNativeVoice(getSynthesizerProperties().getVoice());
+            boolean flag = gyutan.initialize(System.getProperty("sen.home"), voice.toString());
+            if (!flag) {
+                throw new IOException("initialize");
+            }
+            gyutan.synthesis(text, new FileOutputStream(wave.toFile()), null);
+            byte[] wav = Files.readAllBytes(wave);
             ByteArrayInputStream bais = new ByteArrayInputStream(wav);
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
             AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
-            Files.delete(path);
+            Files.delete(wave);
             return ais;
         } catch (IOException | UnsupportedAudioFileException e) {
             throw new IllegalStateException(e);

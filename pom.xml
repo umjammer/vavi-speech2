@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.6</version>
+  <version>0.0.7</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -19,6 +19,10 @@
   <issueManagement>
     <system>https//github.com/umjammer/vavi-speech2/issues</system>
   </issueManagement>
+
+  <properties>
+    <jsapi2.version>0.6.3</jsapi2.version>
+  </properties>
 
   <distributionManagement>
     <repository>
@@ -70,6 +74,8 @@
               <trimStackTrace>false</trimStackTrace>
               <systemProperties>
                 <sen.home>${sen.home}</sen.home>
+                <vavi.speech.voicevox.url>${voicevox.url}</vavi.speech.voicevox.url>
+                <htsvoice.dir>${htsvoice.dir}</htsvoice.dir>
               </systemProperties>
               <environmentVariables>
                 <GOOGLE_APPLICATION_CREDENTIALS>${google.credential}</GOOGLE_APPLICATION_CREDENTIALS>
@@ -188,15 +194,16 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- jspai2 -->
     <dependency>
-      <groupId>com.github.umjammer.jsapi</groupId>
+      <groupId>org.jvoicexml</groupId>
       <artifactId>javax.speech</artifactId>
-      <version>0.6.1</version>
+      <version>${jsapi2.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.github.umjammer.jsapi</groupId>
+      <groupId>org.jvoicexml</groupId>
       <artifactId>org.jvoicexml.jsapi2</artifactId>
-      <version>0.6.1</version>
+      <version>${jsapi2.version}</version>
     </dependency>
 
     <dependency>
@@ -208,11 +215,15 @@
     <dependency>
       <groupId>vavi</groupId>
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.4</version>
+      <version>0.1.5</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>
           <artifactId>speech</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jvoicexml</groupId>
+          <artifactId>freetts_jsapi10</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -239,6 +250,12 @@
     </dependency>
 
     <dependency>
+      <groupId>com.github.umjammer</groupId>
+      <artifactId>Gyutan</artifactId>
+      <version>0.0.2</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
@@ -261,5 +278,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
 </project>
