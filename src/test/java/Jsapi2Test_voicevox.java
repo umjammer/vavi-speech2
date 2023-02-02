@@ -15,7 +15,6 @@ import javax.speech.synthesis.Voice;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import vavi.speech.voicevox.VoiceVox;
-import vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory;
 import vavi.util.Debug;
 
 
@@ -55,20 +54,20 @@ Debug.println(Level.WARNING, e.getMessage());
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(VoiceVoxEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory.class.getName());
 
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(3);
         String voiceName = "ずんだもん(ノーマル)";
 //        String voiceName = "四国めたん(ツンツン)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
+        synthesizer.getSynthesizerProperties().setVolume(3);
 
         for (String line : text.split("。")) {
             System.out.println(line);

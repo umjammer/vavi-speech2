@@ -5,7 +5,6 @@
  */
 
 import java.util.Arrays;
-
 import javax.speech.Engine;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.Synthesizer;
@@ -14,8 +13,6 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-
-import vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory;
 
 
 /**
@@ -46,7 +43,7 @@ class Jsapi2Test_aquestalk10 {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(AquesTalk10EngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -55,10 +52,10 @@ class Jsapi2Test_aquestalk10 {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(2);
         String voiceName = "F1";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
+        synthesizer.getSynthesizerProperties().setVolume(2);
 
         for (String line : text.split("。")) {
             System.out.println(line);
