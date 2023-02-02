@@ -4,7 +4,6 @@
  * Programmed by Naohide Sano
  */
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +15,6 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
-import vavi.speech.modifier.ojosama.YakuwarigoModifier;
 
 
 /**

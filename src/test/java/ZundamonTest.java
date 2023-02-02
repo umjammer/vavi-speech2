@@ -16,7 +16,7 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
-import vavi.speech.modifier.ojosama.YakuwarigoModifier;
+import vavi.speech.modifier.yakuwarigo.YakuwarigoModifier;
 
 
 /**
