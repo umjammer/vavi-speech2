@@ -5,20 +5,15 @@
  */
 
 import java.util.Arrays;
-
 import javax.speech.Engine;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
-import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
-import vavi.speech.rococoa.jsapi2.RococoaEngineListFactory;
 import vavi.util.Debug;
 
 
@@ -48,7 +43,7 @@ class Jsapi2Test_rococoa {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(RococoaEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(vavi.speech.rococoa.jsapi2.RococoaEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -57,12 +52,12 @@ class Jsapi2Test_rococoa {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(2); // 0 ~ 100
         String voiceName = "Kyoko";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
 Debug.println(voice.getName());
         // to specify exact age doesn't work.
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
+        synthesizer.getSynthesizerProperties().setVolume(2); // 0 ~ 100
 
         for (String line : text.split("。")) {
             System.out.println(line);

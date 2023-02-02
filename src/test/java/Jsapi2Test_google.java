@@ -5,7 +5,6 @@
  */
 
 import java.util.Arrays;
-
 import javax.speech.Engine;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.Synthesizer;
@@ -13,8 +12,6 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
-
-import vavi.speech.googlecloud.jsapi2.GoogleCloudEngineListFactory;
 
 
 /**
@@ -45,7 +42,7 @@ class Jsapi2Test_google {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(GoogleCloudEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(vavi.speech.googlecloud.jsapi2.GoogleCloudEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -54,11 +51,11 @@ class Jsapi2Test_google {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(3);
 //        String voiceName = "en-US-Wavenet-A";
         String voiceName = "ja-JP-Wavenet-B";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
+        synthesizer.getSynthesizerProperties().setVolume(3);
 
         for (String line : text.split("。")) {
             System.out.println(line);

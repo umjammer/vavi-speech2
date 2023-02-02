@@ -5,7 +5,6 @@
  */
 
 import java.util.Arrays;
-
 import javax.speech.Engine;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.Synthesizer;
@@ -14,8 +13,6 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory;
 
 
 /**
@@ -57,7 +54,7 @@ class Jsapi2Test_openjtalk {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(OpenJTalkEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -66,11 +63,11 @@ class Jsapi2Test_openjtalk {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(3);
 //Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
         String voiceName = "mei_happy";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
+        synthesizer.getSynthesizerProperties().setVolume(3);
 
         for (String line : text.split("。")) {
             System.out.println(line);

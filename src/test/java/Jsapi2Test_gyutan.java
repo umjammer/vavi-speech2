@@ -7,22 +7,15 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.logging.Level;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
-import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
-import vavi.speech.gyutan.jsapi2.GyutanEngineListFactory;
-import vavi.speech.voicevox.VoiceVox;
-import vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory;
-import vavi.util.Debug;
 
 
 /**
@@ -58,7 +51,7 @@ class Jsapi2Test_gyutan {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(GyutanEngineListFactory.class.getName());
+        EngineManager.registerEngineListFactory(vavi.speech.gyutan.jsapi2.GyutanEngineListFactory.class.getName());
 
         Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
@@ -67,11 +60,11 @@ class Jsapi2Test_gyutan {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(3);
         String voiceName = "tohoku(neutral)";
 //        String voiceName = "tohoku(happy)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
+        synthesizer.getSynthesizerProperties().setVolume(3);
 
         for (String line : text.split("。")) {
             System.out.println(line);

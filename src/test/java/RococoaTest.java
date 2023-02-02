@@ -4,11 +4,11 @@
  * Programmed by Naohide Sano
  */
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-
 import javax.speech.Engine;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.Synthesizer;
@@ -16,15 +16,16 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
+import vavi.speech.modifier.ojosama.YakuwarigoModifier;
 
 
 /**
- * RococaTest. (jsapi2, rococoa)
+ * RococoaTest. (jsapi2, rococoa)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-class RococaTest {
+class RococoaTest {
 
     @Test
     void test1() throws Exception {
@@ -46,11 +47,11 @@ class RococaTest {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        synthesizer.getSynthesizerProperties().setVolume(1);
 Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
         String voiceName = "Kyoko";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
+        synthesizer.getSynthesizerProperties().setVolume(1);
 
         Files.lines(file).forEach(line -> {
             System.out.println(line);

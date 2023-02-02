@@ -25,6 +25,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import vavi.speech.voicevox.VoiceVox.Speaker;
 import vavi.speech.voicevox.VoiceVox.AudioQuery;
@@ -51,8 +52,11 @@ class VoiceVoxTest {
     }
 
     @Test
+    @DisplayName("raw rest api")
     void test1() throws Exception {
         String text = "ひざまずくが良いのだ、この愚かな地球人共よ";
+
+        int speakerId = 1; // ずんだもん(あまあま)
 
         String query = target
                 .path("audio_query")
@@ -65,6 +69,7 @@ Debug.println("audio_query:\n" + query);
         AudioQuery audioQuery = gson.fromJson(query, AudioQuery.class);
 Debug.println("audioQuery: " + audioQuery);
         audioQuery.speedScale = 1.2f;
+        audioQuery.volumeScale = .2f;
 
         Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
         InputStream wav = target
@@ -129,15 +134,18 @@ Debug.println("SpeakerInfo: " + speakerInfo);
     }
 
     @Test
+    @DisplayName("use wrapped api")
     void test3() throws Exception {
+        int speakerId = 3; // ずんだもん(ノーマル)
         VoiceVox voiceVox = new VoiceVox();
-        AudioQuery audioQuery = voiceVox.getQuery("ひざまずくが良いのだ、この愚かな地球人共よ", 3);
+        AudioQuery audioQuery = voiceVox.getQuery("ひざまずくが良いのだ、この愚かな地球人共よ", speakerId);
         audioQuery.setSpeed(1.1f);
         audioQuery.setVolume(0.2f);
-        speak(voiceVox.synthesis(audioQuery, 3));
+        speak(voiceVox.synthesis(audioQuery, speakerId));
     }
 
     @Test
+    @DisplayName("wrapped api list voices")
     void test4() throws Exception {
         VoiceVox voiceVox = new VoiceVox();
         Voice[] voices = voiceVox.getAllVoices();
