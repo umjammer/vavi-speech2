@@ -5,7 +5,7 @@
 
 # vavi-speech2
 
-Text to Speech and Speech to Text (JSAPI2) for Java
+Text to Speech and Speech to Text (JSAPI2) engines for Java
 
 | **Type**                    | **Description**                                                                                                                                                                                   | **Sythesizer** | **Recognizer** | **Quality** | **Comment** |
 |:----------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|:--------------:|:-----------:|:------------|
@@ -58,12 +58,18 @@ Text to Speech and Speech to Text (JSAPI2) for Java
 ## TODO
 
  * speech.properties
- * [watson](https://www.ibm.com/watson/jp-ja/developercloud/text-to-speech.html)
- * ~~[open jtalk](http://open-jtalk.sourceforge.net/)~~
-   * ~~https://github.com/icn-lab/Gyutan~~ (done)
- * [festival](https://github.com/festvox/festival)
- * amazon polly
- * microsoft cognitive services text to speech
- * ~~https://github.com/julius-speech/julius~~ -> Gyutan
- * ~~VoiceVox~~
- * NicoTalk character
+ * engine
+   * [watson](https://www.ibm.com/watson/jp-ja/developercloud/text-to-speech.html)
+   * ~~[open jtalk](http://open-jtalk.sourceforge.net/)~~
+     * ~~https://github.com/icn-lab/Gyutan~~ (done)
+   * [festival](https://github.com/festvox/festival)
+   * amazon polly
+   * microsoft cognitive services text to speech
+   * ~~https://github.com/julius-speech/julius~~ -> Gyutan
+   * ~~VoiceVox~~
+     * ~~search レキシカ voice and parameter~~ (wip)
+       * vavi.speech.voicevox.VoiceVoxTest#test5
+       * RekishikaTest
+ * text analytics + nicotalk character emotion (nicotalk branch)
+   * wave lipsync
+     * https://github.com/hecomi/MMD4Mecanim-LipSync-Plugin/blob/master/Assets/LipSync/Core/LipSyncCore.cs
