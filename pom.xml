@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.8</version>
+  <version>0.0.9</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -210,7 +210,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>23.1.0</version>
+        <version>26.13.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -218,7 +218,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.9.1</version>
+        <version>5.9.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
