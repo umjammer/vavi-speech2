@@ -70,6 +70,13 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
      * ~~search レキシカ voice and parameter~~ (wip)
        * vavi.speech.voicevox.VoiceVoxTest#test5
        * RekishikaTest
+   * https://github.com/espeak-ng/espeak-ng
+   * https://github.com/festvox/flite
  * text analytics + nicotalk character emotion (nicotalk branch)
    * wave lipsync
      * https://github.com/hecomi/MMD4Mecanim-LipSync-Plugin/blob/master/Assets/LipSync/Core/LipSyncCore.cs
+ * VoiceVox editor compatible
+   * [CoeiroInk](https://coeiroink.com/)
+   * [LMROID](https://lmroidsoftware.wixsite.com/nhoshio)
+   * [SHAREVOX](https://www.sharevox.app)
+   * [http://itvoice.starfree.jp/](http://itvoice.starfree.jp/)
