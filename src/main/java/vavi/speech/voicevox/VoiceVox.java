@@ -223,7 +223,11 @@ Debug.println(Level.FINE, "version: " + version);
         SpeechLocale japan = new SpeechLocale(Locale.JAPANESE.toString());
         return Arrays.stream(speakers).flatMap(speaker -> Arrays.stream(speaker.styles).map(style -> {
             int[] vd = voiceData.get(speaker.name);
+            if (vd != null) {
             return new Voice(japan, speaker.name + "(" + style.name + ")", vd[0], vd[1], Voice.VARIANT_DONT_CARE);
+            } else {
+                return new Voice(japan, speaker.name + "(" + style.name + ")", Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE);
+            }
         })).toArray(Voice[]::new);
     }
 
