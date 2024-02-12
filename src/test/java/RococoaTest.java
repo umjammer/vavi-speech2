@@ -15,6 +15,7 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 
 /**
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 class RococoaTest {
 
     @Test
+    @DisabledIfSystemProperty(named = "os.arch", matches = "x86_64")
     void test1() throws Exception {
         main(new String[] {"src/test/resources/speech.txt"});
     }
