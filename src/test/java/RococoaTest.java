@@ -27,7 +27,6 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 class RococoaTest {
 
     @Test
-    @DisabledIfSystemProperty(named = "os.arch", matches = "x86_64")
     void test1() throws Exception {
         main(new String[] {"src/test/resources/speech.txt"});
     }

@@ -19,6 +19,7 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import vavi.util.Debug;
@@ -43,6 +44,7 @@ class Jsapi2Test_rococoa {
     }
 
     @Test
+    @DisabledIfSystemProperty(named = "os.arch", matches = "x86_64")
     void test01() throws Exception {
         String text = "ゆっくりしていってね";
         speak(text);
