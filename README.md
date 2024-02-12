@@ -1,7 +1,7 @@
 [![GitHub Packages](https://github.com/umjammer/vavi-speech2/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/umjammer?tab=packages&repo_name=vavi-speech)
 [![Java CI with Maven](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions)
 [![CodeQL](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-8-b07219)
+![Java](https://img.shields.io/badge/Java-17-b07219)
 
 # vavi-speech2
 
@@ -76,7 +76,9 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
    * wave lipsync
      * https://github.com/hecomi/MMD4Mecanim-LipSync-Plugin/blob/master/Assets/LipSync/Core/LipSyncCore.cs
  * VoiceVox editor compatible
-   * [CoeiroInk](https://coeiroink.com/)
+   * [CoeiroInk](https://coeiroink.com/) ... api doesn't work
    * [LMROID](https://lmroidsoftware.wixsite.com/nhoshio)
    * [SHAREVOX](https://www.sharevox.app)
    * [http://itvoice.starfree.jp/](http://itvoice.starfree.jp/)
+ * AVSpeechSynthesizer needs block
+ * rcp client/server (wip)
