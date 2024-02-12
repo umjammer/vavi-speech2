@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.speech.EngineList;
 import javax.speech.EngineMode;
@@ -21,6 +22,7 @@ import javax.speech.synthesis.Voice;
 import com.google.cloud.texttospeech.v1.ListVoicesRequest;
 import com.google.cloud.texttospeech.v1.ListVoicesResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+import vavi.util.Debug;
 
 
 /**
@@ -72,12 +74,21 @@ public class GoogleCloudEngineListFactory implements EngineListFactory {
         for (com.google.cloud.texttospeech.v1.Voice nativeVoice : listAllSupportedVoices()) {
             Voice voice = new Voice(new SpeechLocale(nativeVoice.getLanguageCodes(0)),
                                     nativeVoice.getName(),
-                                    nativeVoice.getSsmlGenderValue(),
+                                    toGender(nativeVoice),
                                     Voice.AGE_DONT_CARE,
                                     Voice.VARIANT_DONT_CARE);
             voiceList.add(voice);
         }
         return voiceList;
+    }
+
+    private static int toGender(com.google.cloud.texttospeech.v1.Voice nativeVoice) {
+Debug.println(Level.FINER, "nativeGender: " + nativeVoice.getName() + ", " + nativeVoice.getSsmlGenderValue());
+        return switch (nativeVoice.getSsmlGenderValue()) {
+            case 1 -> Voice.GENDER_MALE;
+            case 2 -> Voice.GENDER_FEMALE;
+            default -> Voice.GENDER_DONT_CARE;
+        };
     }
 
     /** */
