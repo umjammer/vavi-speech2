@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
@@ -20,20 +20,21 @@ import vavi.speech.modifier.yakuwarigo.YakuwarigoModifier;
 
 
 /**
- * RococoaTest. (jsapi2, rococoa)
+ * ZundamonTest. (jsapi2, voicevox)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/09/21 umjammer initial version <br>
+ * @version 0.00 2023/02/03 umjammer initial version <br>
  */
 class ZundamonTest {
 
     @Test
     void test1() throws Exception {
-        main(new String[] {"src/test/resources/speech.txt"});
+//        main(new String[] {"src/test/resources/speech.txt"});
+        main(new String[] {"tmp/text.txt"});
     }
 
     /**
-     * @param args command line arguments.
+     * @param args 0: text
      */
     public static void main(String[] args) throws Exception {
         Path file = Paths.get(args[0]);
@@ -60,7 +61,7 @@ Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).forEa
         String voiceName = "ずんだもん(ノーマル)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
-        synthesizer.getSynthesizerProperties().setVolume(3);
+//        synthesizer.getSynthesizerProperties().setVolume(3);
 
         Files.lines(file).forEach(line -> {
             try {
