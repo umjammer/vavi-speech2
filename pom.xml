@@ -241,13 +241,13 @@
     <dependency>
       <groupId>org.rococoa</groupId>
       <artifactId>rococoa-core</artifactId>
-      <version>0.8.5</version>
+      <version>0.8.6</version>
     </dependency>
 
     <dependency>
       <groupId>vavi</groupId>
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.6</version>
+      <version>0.1.7</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>

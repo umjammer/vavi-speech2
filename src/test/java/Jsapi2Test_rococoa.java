@@ -4,13 +4,20 @@
  * Programmed by Naohide Sano
  */
 
+import java.io.ByteArrayInputStream;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -66,5 +73,13 @@ Debug.println(voice.getName());
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
+    }
+
+    @Test
+    @Disabled("temporary: create zero length wave file")
+    void test02() throws Exception {
+        AudioInputStream ais = new AudioInputStream(new ByteArrayInputStream(new byte[0]), new AudioFormat(44100, 16, 2, true, false), 0);
+        AudioSystem.write(ais, AudioFileFormat.Type.WAVE, Paths.get("tmp/zero.wav").toFile());
+        ais.close();
     }
 }

@@ -9,6 +9,7 @@ package vavi.speech.rococoa.jsapi2;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.speech.EngineList;
 import javax.speech.EngineMode;
@@ -17,8 +18,10 @@ import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.rococoa.cocoa.appkit.NSSpeechSynthesizer;
-import org.rococoa.cocoa.appkit.NSVoice;
+import org.rococoa.Rococoa;
+import org.rococoa.cocoa.foundation.NSObject;
+import vavi.util.Debug;
+import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 
 
 /**
@@ -68,11 +71,12 @@ public class RococoaEngineListFactory implements EngineListFactory {
      */
     private List<Voice> getVoices() {
         List<Voice> voiceList = new LinkedList<>();
-        for (NSVoice nativeVoice : NSSpeechSynthesizer.availableVoices()) {
-            Voice voice = new Voice(new SpeechLocale(nativeVoice.getLocaleIdentifier()),
-                                    nativeVoice.getName(),
-                                    toGenger(nativeVoice.getGender()),
-                                    nativeVoice.getAge(),
+        for (NSObject object : AVSpeechSynthesisVoice.speechVoices()) {
+            AVSpeechSynthesisVoice nativeVoice = Rococoa.cast(object, AVSpeechSynthesisVoice.class);
+            Voice voice = new Voice(getSpeechLocale(nativeVoice),
+                                    nativeVoice.name(),
+                                    getGender(nativeVoice),
+                                    getAge(nativeVoice),
                                     Voice.VARIANT_DONT_CARE);
             voiceList.add(voice);
         }
@@ -80,12 +84,36 @@ public class RococoaEngineListFactory implements EngineListFactory {
     }
 
     /** */
-    private static int toGenger(NSVoice.VoiceGender gender) {
-        switch (gender) {
-        case Female: return Voice.GENDER_FEMALE;
-        case Male: return Voice.GENDER_MALE;
-        case Neuter: return Voice.GENDER_NEUTRAL;
-        default: return Voice.GENDER_DONT_CARE;
+    private static SpeechLocale getSpeechLocale(AVSpeechSynthesisVoice nativeVoice) {
+        try {
+            return new SpeechLocale(nativeVoice.identifier());
+        } catch (NullPointerException e) {
+Debug.println(Level.FINE, "getSpeechLocale: " + nativeVoice.name());
+            return SpeechLocale.getDefault();
         }
+    }
+
+    /** */
+    private static int getAge(AVSpeechSynthesisVoice nativeVoice) {
+        return Voice.AGE_DONT_CARE;
+    }
+
+    /** */
+    private static int getGender(AVSpeechSynthesisVoice nativeVoice) {
+        int gender;
+
+        try {
+            gender = nativeVoice.gender();
+        } catch (IllegalArgumentException e) {
+Debug.println(Level.FINE, "getGender: " + nativeVoice.name());
+            return Voice.GENDER_DONT_CARE;
+        }
+
+        return switch (gender) {
+            case AVSpeechSynthesisVoice.AVSpeechSynthesisVoiceGenderFemale -> Voice.GENDER_FEMALE;
+            case AVSpeechSynthesisVoice.AVSpeechSynthesisVoiceGenderMale -> Voice.GENDER_MALE;
+            case AVSpeechSynthesisVoice.AVSpeechSynthesisVoiceGenderUnspecified -> Voice.GENDER_NEUTRAL;
+            default -> Voice.GENDER_DONT_CARE;
+        };
     }
 }

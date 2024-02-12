@@ -31,7 +31,7 @@ class RococoaTest {
     }
 
     /**
-     * @param args command line arguments.
+     * @param args 0: text
      */
     public static void main(String[] args) throws Exception {
         Path file = Paths.get(args[0]);
