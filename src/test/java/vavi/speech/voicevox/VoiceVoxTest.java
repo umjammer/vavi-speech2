@@ -152,4 +152,34 @@ Debug.println("SpeakerInfo: " + speakerInfo);
 Arrays.stream(voices).forEach(System.err::println);
         assertEquals(22, voiceVox.getId(voices[10]));
     }
+
+    @Test
+    @DisplayName("search レキシカ voice and parameter. is he or she really virtual voice?")
+    void test5() throws Exception {
+        String text = "宇宙はバチクソ面白いので";
+
+        int speakerId = 43;  // 櫻歌ミコ(ノーマル)
+
+        String query = target
+                .path("audio_query")
+                .queryParam("text", text)
+                .queryParam("speaker", speakerId)
+                .request()
+                .post(null, String.class);
+Debug.println("audio_query:\n" + query);
+
+        AudioQuery audioQuery = gson.fromJson(query, AudioQuery.class);
+Debug.println("audioQuery: " + audioQuery);
+        audioQuery.speedScale = 0.97f;
+        audioQuery.pitchScale = .07f;
+        audioQuery.volumeScale = .2f;
+
+        Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
+        InputStream wav = target
+                .path("synthesis")
+                .queryParam("speaker", speakerId)
+                .request()
+                .post(entity, InputStream.class);
+        speak(wav);
+    }
 }

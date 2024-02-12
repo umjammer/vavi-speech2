@@ -9,6 +9,7 @@ package vavi.speech.voicevox.jsapi2;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -19,12 +20,14 @@ import javax.speech.AudioSegment;
 import javax.speech.EngineException;
 import javax.speech.EngineStateException;
 import javax.speech.synthesis.Speakable;
+import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
 
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 import vavi.speech.voicevox.VoiceVox;
+import vavi.util.Debug;
 
 
 /**
@@ -114,9 +117,15 @@ logger.fine("default voice: " + voice.getName());
     @Override
     public AudioSegment handleSpeak(int id, String item) {
         try {
-            int voiceId = client.getId(getSynthesizerProperties().getVoice());
-            VoiceVox.AudioQuery audioFormat = client.getQuery(item, voiceId);
-            InputStream wave = client.synthesis(audioFormat, voiceId);
+            SynthesizerProperties props = getSynthesizerProperties();
+            int voiceId = client.getId(props.getVoice());
+            VoiceVox.AudioQuery audioQuery = client.getQuery(item, voiceId);
+            // TODO adapt parameters
+Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() / 200f, props.getPitch() / 300f);
+//            audioQuery.setSpeed(props.getSpeakingRate() / 200f);
+//            audioQuery.setPitch(props.getPitch() / 300f);
+//            audioQuery.setIntonation(props.getPitchRange());
+            InputStream wave = client.synthesis(audioQuery, voiceId);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!

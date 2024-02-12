@@ -129,11 +129,19 @@ Debug.println(Level.FINE, "version: " + version);
                     ", kana='" + kana + '\'' +
                     '}';
         }
-        /** @param speed 1: default */
+        /** @param speed default: 1, range: 0.50 ~ 2.00 */
         public void setSpeed(float speed) {
             speedScale = speed;
         }
-        /** @param volume 1: default */
+        /** @param pitch default: 0, range: -0.15 ~ 0.15 */
+        public void setPitch(float pitch) {
+            pitchScale = pitch;
+        }
+        /** @param intonation range: 0 ~ 2 */
+        public void setIntonation(float intonation) {
+            intonationScale = intonation;
+        }
+        /** @param volume default: 1, range: 0.50 ~ 2.00 */
         public void setVolume(float volume) {
             volumeScale = volume;
         }
@@ -224,7 +232,7 @@ Debug.println(Level.FINE, "version: " + version);
         return Arrays.stream(speakers).flatMap(speaker -> Arrays.stream(speaker.styles).map(style -> {
             int[] vd = voiceData.get(speaker.name);
             if (vd != null) {
-            return new Voice(japan, speaker.name + "(" + style.name + ")", vd[0], vd[1], Voice.VARIANT_DONT_CARE);
+                return new Voice(japan, speaker.name + "(" + style.name + ")", vd[0], vd[1], Voice.VARIANT_DONT_CARE);
             } else {
                 return new Voice(japan, speaker.name + "(" + style.name + ")", Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE);
             }
@@ -242,6 +250,7 @@ Debug.println(Level.FINE, "version: " + version);
     /** to complement lack information of voicevox for jsapi voice */
     private static Map<String, int[]> voiceData = new HashMap<>();
 
+    /* cvs: name, gender, age */
     static {
         Scanner scanner = new Scanner(VoiceVox.class.getResourceAsStream("voicevox.csv"));
         while (scanner.hasNextLine()) {

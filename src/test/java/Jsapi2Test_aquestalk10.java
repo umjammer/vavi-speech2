@@ -4,6 +4,9 @@
  * Programmed by Naohide Sano
  */
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
@@ -13,6 +16,7 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 
 /**
@@ -21,6 +25,7 @@ import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
+@EnabledIfSystemProperty(named = "os.arch", matches = "x86_64")
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
 class Jsapi2Test_aquestalk10 {
 
@@ -41,6 +46,13 @@ class Jsapi2Test_aquestalk10 {
         speak(text);
     }
 
+    @Test
+    void test02() throws Exception {
+        Path path = Paths.get("tmp/repezen.txt");
+        String text = String.join("\n", Files.readAllLines(path));
+        speak(text);
+    }
+
     /** */
     void speak(String text) throws Exception {
         EngineManager.registerEngineListFactory(vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory.class.getName());
@@ -57,7 +69,7 @@ class Jsapi2Test_aquestalk10 {
         synthesizer.getSynthesizerProperties().setVoice(voice);
         synthesizer.getSynthesizerProperties().setVolume(2);
 
-        for (String line : text.split("。")) {
+        for (String line : text.split("[。\n]")) {
             System.out.println(line);
             synthesizer.speak(line + "。", System.err::println);
         }

@@ -55,7 +55,6 @@ public final class RococoaSynthesizerMode extends SynthesizerMode implements Eng
         super(engineName, modeName, running, supportsLetterToSound, false, voices);
     }
 
-    /* */
     @Override
     public Engine createEngine() throws IllegalArgumentException, EngineException {
         return new RococoaSynthesizer(this);
