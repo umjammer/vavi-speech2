@@ -21,7 +21,7 @@
   </issueManagement>
 
   <properties>
-    <jsapi2.groupId>com.github.umjammer.jsapi</jsapi2.groupId> <!-- >org.jvoicexml / com.github.umjammer.jsapi -->
+    <jsapi2.groupId>com.github.umjammer.jsapi</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi -->
     <jsapi2.version>0.6.5</jsapi2.version>
     <jersey.version>3.1.1</jersey.version>
   </properties>
@@ -160,45 +160,6 @@
         </plugins>
       </build>
     </profile>
-
-    <profile>
-      <id>mac</id>
-      <activation>
-        <os>
-          <family>mac</family>
-        </os>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>3.6.0</version>
-            <executions>
-              <execution>
-                <id>copy</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.rococoa</groupId>
-                      <artifactId>rococoa-core</artifactId>
-                      <type>dylib</type>
-                      <overWrite>false</overWrite>
-                      <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-                      <destFileName>librococoa.dylib</destFileName>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   </profiles>
 
   <build>
@@ -259,9 +220,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.rococoa</groupId>
+      <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-core</artifactId>
-      <version>0.8.6</version>
+      <version>0.8.7</version>
     </dependency>
 
     <dependency>
