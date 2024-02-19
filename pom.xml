@@ -21,7 +21,9 @@
   </issueManagement>
 
   <properties>
-    <jsapi2.version>0.6.3</jsapi2.version>
+    <jsapi2.groupId>com.github.umjammer.jsapi</jsapi2.groupId> <!-- >org.jvoicexml / com.github.umjammer.jsapi -->
+    <jsapi2.version>0.6.5</jsapi2.version>
+    <jersey.version>3.1.1</jersey.version>
   </properties>
 
   <distributionManagement>
@@ -246,12 +248,12 @@
   <dependencies>
     <!-- jspai2 -->
     <dependency>
-      <groupId>org.jvoicexml</groupId>
+      <groupId>${jsapi2.groupId}</groupId>
       <artifactId>javax.speech</artifactId>
       <version>${jsapi2.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.jvoicexml</groupId>
+      <groupId>${jsapi2.groupId}</groupId>
       <artifactId>org.jvoicexml.jsapi2</artifactId>
       <version>${jsapi2.version}</version>
     </dependency>
@@ -263,16 +265,16 @@
     </dependency>
 
     <dependency>
-      <groupId>vavi</groupId>
+      <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.7</version>
+      <version>0.1.8</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>
           <artifactId>speech</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.jvoicexml</groupId>
+          <groupId>com.github.umjammer.FreeTTS</groupId>
           <artifactId>freetts_jsapi10</artifactId>
         </exclusion>
         <exclusion>
@@ -301,12 +303,12 @@
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-client</artifactId>
-      <version>3.1.1</version>
+      <version>${jersey.version}</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.inject</groupId>
       <artifactId>jersey-hk2</artifactId>
-      <version>3.1.1</version>
+      <version>${jersey.version}</version>
     </dependency>
     <dependency>
       <groupId>jakarta.activation</groupId>
