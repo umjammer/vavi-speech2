@@ -28,6 +28,7 @@ import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.recognition.BaseRecognizer;
 import org.jvoicexml.jsapi2.recognition.BaseResult;
 import org.jvoicexml.jsapi2.recognition.GrammarDefinition;
+import vavi.util.Debug;
 
 
 /**
@@ -90,19 +91,18 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
                 file.deleteOnExit();
                 FileOutputStream out = new FileOutputStream(file);
 
-                StringBuffer xml = new StringBuffer();
+                StringBuilder xml = new StringBuilder();
                 xml.append(grammar.toString());
                 int index = xml.indexOf("06/grammar");
                 xml.insert(index + 11, " xml:lang=\"de-DE\" ");
                 out.write(xml.toString().getBytes());
                 out.close();
                 grammarSources[i] = file.getCanonicalPath();
-                // System.out.println(xml);
-                // System.out.println(grammarSources[i]);
+//Debug.println(xml);
+//Debug.println(grammarSources[i]);
 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Debug.printStackTrace(e);
             }
             ++i;
         }

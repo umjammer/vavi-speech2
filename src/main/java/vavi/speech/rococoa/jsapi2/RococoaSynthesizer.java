@@ -180,7 +180,7 @@ try { // TODO ad-hoc
             delegate.waitForSpeechDone(10000, true);
             return new BaseAudioSegment(item, AudioSystem.getAudioInputStream(RococoaSynthesizer.class.getResourceAsStream("/zero.wav")));
 } catch (Throwable t) {
- t.printStackTrace();
+ Debug.printStackTrace(t);
  return null;
 }
         }

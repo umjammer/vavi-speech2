@@ -34,8 +34,7 @@ public class RococoaEngineListFactory implements EngineListFactory {
 
     @Override
     public EngineList createEngineList(EngineMode require) {
-        if (require instanceof SynthesizerMode) {
-            SynthesizerMode mode = (SynthesizerMode) require;
+        if (require instanceof SynthesizerMode mode) {
             List<Voice> allVoices = getVoices();
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
@@ -56,7 +55,7 @@ public class RococoaEngineListFactory implements EngineListFactory {
                                        mode.getRunning(),
                                        mode.getSupportsLetterToSound(),
                                        mode.getMarkupSupport(),
-                                       voices.toArray(new Voice[0]))
+                                       voices.toArray(Voice[]::new))
             };
             return new EngineList(features);
         }
@@ -69,7 +68,7 @@ public class RococoaEngineListFactory implements EngineListFactory {
      *
      * @return all voices
      */
-    private List<Voice> getVoices() {
+    private static List<Voice> getVoices() {
         List<Voice> voiceList = new LinkedList<>();
         for (NSObject object : AVSpeechSynthesisVoice.speechVoices()) {
             AVSpeechSynthesisVoice nativeVoice = Rococoa.cast(object, AVSpeechSynthesisVoice.class);

@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
@@ -28,6 +29,7 @@ import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.recognition.BaseRecognizer;
 import org.jvoicexml.jsapi2.recognition.BaseResult;
 import org.jvoicexml.jsapi2.recognition.GrammarDefinition;
+import vavi.util.Debug;
 
 
 /**
@@ -36,9 +38,9 @@ import org.jvoicexml.jsapi2.recognition.GrammarDefinition;
  * @author Dirk Schnelle-Walka
  */
 public final class RococoaRecognizer extends BaseRecognizer {
+
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(RococoaRecognizer.class
-            .getName());
+    private static final Logger logger = Logger.getLogger(RococoaRecognizer.class.getName());
 
     /** SAPI recognizer Handle. **/
     private long recognizerHandle;
@@ -90,19 +92,18 @@ public final class RococoaRecognizer extends BaseRecognizer {
                 file.deleteOnExit();
                 FileOutputStream out = new FileOutputStream(file);
 
-                StringBuffer xml = new StringBuffer();
+                StringBuilder xml = new StringBuilder();
                 xml.append(grammar.toString());
                 int index = xml.indexOf("06/grammar");
                 xml.insert(index + 11, " xml:lang=\"de-DE\" ");
                 out.write(xml.toString().getBytes());
                 out.close();
                 grammarSources[i] = file.getCanonicalPath();
-                // System.out.println(xml);
-                // System.out.println(grammarSources[i]);
+//logger.log(Level.TRACE, xml);
+//logger.log(Level.TRACE, grammarSources[i]);
 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Debug.printStackTrace(e);
             }
             ++i;
         }
@@ -114,8 +115,7 @@ public final class RococoaRecognizer extends BaseRecognizer {
             throws EngineStateException;
 
     @Override
-    protected boolean setGrammars(
-            Collection<GrammarDefinition> grammarDefinition) {
+    protected boolean setGrammars(Collection<GrammarDefinition> grammarDefinition) {
         return false;
     }
 
@@ -139,31 +139,27 @@ public final class RococoaRecognizer extends BaseRecognizer {
         System.out.println("Java Code " + utterance);
 
         RuleGrammar grammar = currentGrammar; // current grammar is not available
-System.out.println(grammar);
+logger.log(Level.FINE, grammar.toString());
 
         BaseResult result;
         try {
             result = new BaseResult(grammar, utterance);
         } catch (GrammarException e) {
-            LOGGER.warning(e.getMessage());
+            logger.warning(e.getMessage());
             return;
         }
 
-        ResultEvent created = new ResultEvent(result,
-                ResultEvent.RESULT_CREATED, false, false);
+        ResultEvent created = new ResultEvent(result, ResultEvent.RESULT_CREATED, false, false);
         postResultEvent(created);
 
-        ResultEvent grammarFinalized = new ResultEvent(result,
-                ResultEvent.GRAMMAR_FINALIZED);
+        ResultEvent grammarFinalized = new ResultEvent(result, ResultEvent.GRAMMAR_FINALIZED);
         postResultEvent(grammarFinalized);
 
         if (result.getResultState() == Result.REJECTED) {
-            ResultEvent rejected = new ResultEvent(result,
-                    ResultEvent.RESULT_REJECTED, false, false);
+            ResultEvent rejected = new ResultEvent(result, ResultEvent.RESULT_REJECTED, false, false);
             postResultEvent(rejected);
         } else {
-            ResultEvent accepted = new ResultEvent(result,
-                    ResultEvent.RESULT_ACCEPTED, false, false);
+            ResultEvent accepted = new ResultEvent(result, ResultEvent.RESULT_ACCEPTED, false, false);
             postResultEvent(accepted);
         }
     }
@@ -187,10 +183,7 @@ System.out.println(grammar);
 
     @Override
     protected void handlePropertyChangeRequest(
-            BaseEngineProperties properties,
-            String propName, Object oldValue,
-            Object newValue) {
-        LOGGER.warning("changing property '" + propName
-                + "' to '" + newValue + "' ignored");
+            BaseEngineProperties properties, String propName, Object oldValue, Object newValue) {
+        logger.warning("changing property '" + propName + "' to '" + newValue + "' ignored");
     }
 }

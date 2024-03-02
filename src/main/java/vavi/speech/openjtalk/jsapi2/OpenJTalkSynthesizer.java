@@ -42,7 +42,7 @@ import vavi.speech.openjtalk.OpenJTalkWrapper.VoiceFileInfo;
  */
 public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(OpenJTalkSynthesizer.class.getName());
+    private static final Logger logger = Logger.getLogger(OpenJTalkSynthesizer.class.getName());
 
     /** */
     private OpenJTalkWrapper openJTalk = new OpenJTalkWrapper();
@@ -70,7 +70,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
                 voice = voices[0];
             }
         }
-        LOGGER.fine("default voice: " + (voice != null ? voice.getName() : ""));
+logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
         getSynthesizerProperties().setVoice(voice);
 
         //
@@ -105,7 +105,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
         // Leave some time to let all resources detach
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
         openJTalk = null;
 
@@ -129,7 +129,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
         AudioManager manager = getAudioManager();
         String locator = manager.getMediaLocator();
         // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-        InputStream in = synthe(item);
+        InputStream in = synthesis(item);
         AudioSegment segment;
         if (locator == null) {
             segment = new BaseAudioSegment(item, in);
@@ -140,9 +140,9 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
     }
 
     /** */
-    private AudioInputStream synthe(String text) {
+    private AudioInputStream synthesis(String text) {
         try {
-//System.err.println("vioce: " + getSynthesizerProperties().getVoice());
+//logger.log(Level.DEBUG, "vioce: " + getSynthesizerProperties().getVoice());
             openJTalk.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
             Path path = Files.createTempFile(getClass().getName(), ".aiff");
             openJTalk.speakToFile(text, path.toString());

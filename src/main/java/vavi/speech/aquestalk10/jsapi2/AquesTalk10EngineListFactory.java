@@ -33,8 +33,7 @@ public class AquesTalk10EngineListFactory implements EngineListFactory {
 
     @Override
     public EngineList createEngineList(EngineMode require) {
-        if (require instanceof SynthesizerMode) {
-            SynthesizerMode mode = (SynthesizerMode) require;
+        if (require instanceof SynthesizerMode mode) {
             List<Voice> allVoices = getVoices();
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
@@ -54,7 +53,7 @@ public class AquesTalk10EngineListFactory implements EngineListFactory {
                                        mode.getRunning(),
                                        mode.getSupportsLetterToSound(),
                                        mode.getMarkupSupport(),
-                                       voices.toArray(new Voice[0]))
+                                       voices.toArray(Voice[]::new))
             };
             return new EngineList(features);
         }
@@ -67,7 +66,7 @@ public class AquesTalk10EngineListFactory implements EngineListFactory {
      *
      * @return all voices
      */
-    private List<Voice> getVoices() {
+    private static List<Voice> getVoices() {
         List<Voice> voiceList = new LinkedList<>();
         for (Map.Entry<String, AQTK_VOICE> aquesTalkVoice : AquesTalk10Wrapper.voices.entrySet()) {
             Voice voice = new Voice(new SpeechLocale(Locale.JAPAN.toString()),
@@ -82,11 +81,10 @@ public class AquesTalk10EngineListFactory implements EngineListFactory {
 
     /** */
     private static int toGender(AQTK_VOICE voice) {
-        switch (voice.bas) {
-        case 0: return Voice.GENDER_FEMALE;
-        case 1: return Voice.GENDER_FEMALE;
-        case 2: return Voice.GENDER_MALE;
-        default: return Voice.GENDER_DONT_CARE;
-        }
+        return switch (voice.bas) {
+            case 0, 1 -> Voice.GENDER_FEMALE;
+            case 2 -> Voice.GENDER_MALE;
+            default -> Voice.GENDER_DONT_CARE;
+        };
     }
 }

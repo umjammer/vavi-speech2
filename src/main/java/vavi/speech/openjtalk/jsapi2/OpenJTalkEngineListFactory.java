@@ -31,8 +31,7 @@ public class OpenJTalkEngineListFactory implements EngineListFactory {
 
     @Override
     public EngineList createEngineList(EngineMode require) {
-        if (require instanceof SynthesizerMode) {
-            SynthesizerMode mode = (SynthesizerMode) require;
+        if (require instanceof SynthesizerMode mode) {
             List<Voice> allVoices = getVoices();
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
@@ -52,7 +51,7 @@ public class OpenJTalkEngineListFactory implements EngineListFactory {
                                        mode.getRunning(),
                                        mode.getSupportsLetterToSound(),
                                        mode.getMarkupSupport(),
-                                       voices.toArray(new Voice[0]))
+                                       voices.toArray(Voice[]::new))
             };
             return new EngineList(features);
         }
@@ -65,7 +64,7 @@ public class OpenJTalkEngineListFactory implements EngineListFactory {
      *
      * @return all voices
      */
-    private List<Voice> getVoices() {
+    private static List<Voice> getVoices() {
         List<Voice> voiceList = new LinkedList<>();
         for (OpenJTalkWrapper.VoiceFileInfo jTalkVoice : new OpenJTalkWrapper().getVoices()) {
             Voice voice = new Voice(new SpeechLocale(Locale.JAPAN.toString()),

@@ -6,15 +6,11 @@
 
 package vavi.speech.voicevox.jsapi2;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import javax.speech.EngineList;
 import javax.speech.EngineMode;
-import javax.speech.SpeechLocale;
 import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
@@ -32,8 +28,7 @@ public class VoiceVoxEngineListFactory implements EngineListFactory {
 
     @Override
     public EngineList createEngineList(EngineMode require) {
-        if (require instanceof SynthesizerMode) {
-            SynthesizerMode mode = (SynthesizerMode) require;
+        if (require instanceof SynthesizerMode mode) {
             List<Voice> allVoices = Arrays.asList(new VoiceVox().getAllVoices());
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
@@ -53,7 +48,7 @@ public class VoiceVoxEngineListFactory implements EngineListFactory {
                                        mode.getRunning(),
                                        mode.getSupportsLetterToSound(),
                                        mode.getMarkupSupport(),
-                                       voices.toArray(new Voice[0]))
+                                       voices.toArray(Voice[]::new))
             };
             return new EngineList(features);
         }

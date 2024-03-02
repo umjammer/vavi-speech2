@@ -43,8 +43,9 @@ import com.google.protobuf.ByteString;
  * @version 0.00 2019/09/20 umjammer initial version <br>
  */
 public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
+
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(GoogleCloudTextToSpeechSynthesizer.class.getName());
+    private static final Logger logger = Logger.getLogger(GoogleCloudTextToSpeechSynthesizer.class.getName());
 
     /** */
     private TextToSpeechClient client;
@@ -72,7 +73,7 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
                 voice = voices[0];
             }
         }
-LOGGER.fine("default voice: " + voice.getName());
+logger.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
         try {
@@ -88,7 +89,7 @@ LOGGER.fine("default voice: " + voice.getName());
     }
 
     /** */
-    private com.google.cloud.texttospeech.v1.Voice toNativeVoice(Voice voice) {
+    private static com.google.cloud.texttospeech.v1.Voice toNativeVoice(Voice voice) {
         if (voice == null) {
             return null;
         }
@@ -116,7 +117,7 @@ LOGGER.fine("default voice: " + voice.getName());
         // Leave some time to let all resources detach
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
         client.close();
 
@@ -138,7 +139,7 @@ LOGGER.fine("default voice: " + voice.getName());
     @Override
     public AudioSegment handleSpeak(int id, String item) {
         try {
-            byte[] bytes = synthe(item);
+            byte[] bytes = synthesis(item);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
@@ -156,7 +157,7 @@ LOGGER.fine("default voice: " + voice.getName());
     }
 
     /** */
-    private byte[] synthe(String text) {
+    private byte[] synthesis(String text) {
         SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
 
         VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()

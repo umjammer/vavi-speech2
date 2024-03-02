@@ -18,8 +18,6 @@ import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import vavi.speech.openjtalk.OpenJTalkWrapper;
-
 
 /**
  * Factory for the Gyutan (OpenJTalk in Java) Speech engine.
@@ -31,8 +29,7 @@ public class GyutanEngineListFactory implements EngineListFactory {
 
     @Override
     public EngineList createEngineList(EngineMode require) {
-        if (require instanceof SynthesizerMode) {
-            SynthesizerMode mode = (SynthesizerMode) require;
+        if (require instanceof SynthesizerMode mode) {
             List<Voice> allVoices = getVoices();
             List<Voice> voices = new ArrayList<>();
             if (mode.getVoices() == null) {
@@ -52,7 +49,7 @@ public class GyutanEngineListFactory implements EngineListFactory {
                                        mode.getRunning(),
                                        mode.getSupportsLetterToSound(),
                                        mode.getMarkupSupport(),
-                                       voices.toArray(new Voice[0]))
+                                       voices.toArray(Voice[]::new))
             };
             return new EngineList(features);
         }
@@ -65,7 +62,7 @@ public class GyutanEngineListFactory implements EngineListFactory {
      *
      * @return all voices
      */
-    private List<Voice> getVoices() {
+    private static List<Voice> getVoices() {
         List<Voice> voiceList = new LinkedList<>();
         Scanner s = new Scanner(GyutanEngineListFactory.class.getResourceAsStream("/htsvoice.csv"));
         while (s.hasNextLine()) {
@@ -73,7 +70,7 @@ public class GyutanEngineListFactory implements EngineListFactory {
 
             Voice voice = new Voice(new SpeechLocale(Locale.JAPAN.toString()),
                     parts[1],
-                    toGendaer(parts[2]),
+                    toGender(parts[2]),
                     toAge(parts[3]),
                     Voice.VARIANT_DONT_CARE);
             voiceList.add(voice);
@@ -82,25 +79,25 @@ public class GyutanEngineListFactory implements EngineListFactory {
     }
 
     /** */
-    private static int toGendaer(String gender) {
-        switch (gender.toLowerCase()) {
-        case "male": return Voice.GENDER_MALE;
-        case "female": return Voice.GENDER_FEMALE;
-        case "neutral": return Voice.GENDER_NEUTRAL;
-        default: return Voice.GENDER_DONT_CARE;
-        }
+    private static int toGender(String gender) {
+        return switch (gender.toLowerCase()) {
+            case "male" -> Voice.GENDER_MALE;
+            case "female" -> Voice.GENDER_FEMALE;
+            case "neutral" -> Voice.GENDER_NEUTRAL;
+            default -> Voice.GENDER_DONT_CARE;
+        };
     }
 
     /** */
     private static int toAge(String age) {
-        switch (age.toLowerCase()) {
-        case "chile": return Voice.AGE_CHILD;
-        case "teenager": return Voice.AGE_TEENAGER;
-        case "younger_adult": return Voice.AGE_YOUNGER_ADULT;
-        case "middle_adult": return Voice.AGE_MIDDLE_ADULT;
-        case "older_adult": return Voice.AGE_OLDER_ADULT;
-        case "unknown": return Voice.AGE_DONT_CARE;
-        default: return Integer.parseInt(age);
-        }
+        return switch (age.toLowerCase()) {
+            case "chile" -> Voice.AGE_CHILD;
+            case "teenager" -> Voice.AGE_TEENAGER;
+            case "younger_adult" -> Voice.AGE_YOUNGER_ADULT;
+            case "middle_adult" -> Voice.AGE_MIDDLE_ADULT;
+            case "older_adult" -> Voice.AGE_OLDER_ADULT;
+            case "unknown" -> Voice.AGE_DONT_CARE;
+            default -> Integer.parseInt(age);
+        };
     }
 }
