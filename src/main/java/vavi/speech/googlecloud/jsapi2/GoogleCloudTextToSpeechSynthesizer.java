@@ -64,11 +64,11 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
         Voice voice;
         GoogleCloudTextToSpeechSynthesizerMode mode = (GoogleCloudTextToSpeechSynthesizerMode) getEngineMode();
         if (mode == null) {
-            voice = null;
+            throw new EngineException("not engine mode");
         } else {
             Voice[] voices = mode.getVoices();
-            if (voices == null) {
-                voice = null;
+            if (voices == null || voices.length < 1) {
+                throw new EngineException("no voice");
             } else {
                 voice = voices[0];
             }

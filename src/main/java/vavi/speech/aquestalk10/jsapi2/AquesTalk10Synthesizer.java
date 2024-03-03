@@ -72,11 +72,11 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
         Voice voice;
         AquesTalk10SynthesizerMode mode = (AquesTalk10SynthesizerMode) getEngineMode();
         if (mode == null) {
-            voice = null;
+            throw new EngineException("not engine mode");
         } else {
             Voice[] voices = mode.getVoices();
-            if (voices == null) {
-                voice = null;
+            if (voices == null || voices.length < 1) {
+                throw new EngineException("no voice");
             } else {
                 voice = voices[0];
             }

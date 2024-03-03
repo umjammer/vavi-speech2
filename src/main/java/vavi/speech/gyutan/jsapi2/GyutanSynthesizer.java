@@ -61,11 +61,11 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
         Voice voice;
         GyutanSynthesizerMode mode = (GyutanSynthesizerMode) getEngineMode();
         if (mode == null) {
-            voice = null;
+            throw new EngineException("not engine mode");
         } else {
             Voice[] voices = mode.getVoices();
             if (voices == null || voices.length < 1) {
-                voice = null;
+                throw new EngineException("no voice");
             } else {
                 voice = voices[0];
             }

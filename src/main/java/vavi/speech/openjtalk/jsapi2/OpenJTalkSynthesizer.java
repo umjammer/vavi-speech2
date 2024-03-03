@@ -41,6 +41,7 @@ import vavi.speech.openjtalk.OpenJTalkWrapper.VoiceFileInfo;
  * @version 0.00 2019/09/26 umjammer initial version <br>
  */
 public final class OpenJTalkSynthesizer extends BaseSynthesizer {
+
     /** Logger for this class. */
     private static final Logger logger = Logger.getLogger(OpenJTalkSynthesizer.class.getName());
 
@@ -61,16 +62,16 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
         Voice voice;
         OpenJTalkSynthesizerMode mode = (OpenJTalkSynthesizerMode) getEngineMode();
         if (mode == null) {
-            voice = null;
+            throw new EngineException("not engine mode");
         } else {
             Voice[] voices = mode.getVoices();
             if (voices == null || voices.length < 1) {
-                voice = null;
+                throw new EngineException("no voice");
             } else {
                 voice = voices[0];
             }
         }
-logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
+logger.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
         //
