@@ -70,25 +70,22 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
         Voice voice;
         RococoaSynthesizerMode mode = (RococoaSynthesizerMode) getEngineMode();
-        if (mode != null) {
+        if (mode == null) {
+            throw new EngineException("not engine mode");
+        } else {
             Voice[] voices = mode.getVoices();
-            if (voices != null) {
-                try {
-                    AVSpeechSynthesisVoice defaultNativeVoice = AVSpeechSynthesisVoice.withLanguage(Locale.getDefault().toString());
-                    Optional<Voice> result = Arrays.stream(voices).filter(v -> v.getName().equals(defaultNativeVoice.name())).findFirst();
-//Debug.println(Level.FINER, "default voice1: " + result.get().getName());
-                    if (result.isPresent()) {
-                        voice = result.get();
-logger.fine("default voice: " + voice.getName());
-                        getSynthesizerProperties().setVoice(voice);
-                    }
-                } catch (IllegalArgumentException e) {
-Debug.println(Level.FINE, "no default voice");
-                }
+            if (voices == null || voices.length < 1) {
+                throw new EngineException("no voice");
+            } else {
+                AVSpeechSynthesisVoice defaultNativeVoice = AVSpeechSynthesisVoice.withLanguage(Locale.getDefault().toString());
+//Debug.println(Level.FINER, "default voice: " + defaultNativeVoice.getName());
+                Optional<Voice> result = Arrays.stream(voices).filter(v -> v.getName().equals(defaultNativeVoice.name())).findFirst();
+                voice = result.orElseGet(() -> voices[0]);
             }
         }
+logger.fine("default voice: " + voice.getName());
+        getSynthesizerProperties().setVoice(voice);
 
-//Debug.println(Level.FINER, "default voice2: " + NSSpeechSynthesizer.defaultVoice().getName());
         synthesizer = AVSpeechSynthesizer.newInstance();
         delegate = new SynthesizerDelegate(synthesizer); // delegate is implemented in vavi-speech
 
@@ -180,7 +177,7 @@ try { // TODO ad-hoc
             delegate.waitForSpeechDone(10000, true);
             return new BaseAudioSegment(item, AudioSystem.getAudioInputStream(RococoaSynthesizer.class.getResourceAsStream("/zero.wav")));
 } catch (Throwable t) {
- t.printStackTrace();
+ Debug.printStackTrace(t);
  return null;
 }
         }

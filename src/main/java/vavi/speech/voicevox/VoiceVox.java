@@ -41,7 +41,7 @@ public class VoiceVox {
     private static String url = "http://localhost:50021/";
 
     /** */
-    private static Gson gson = new GsonBuilder().create();
+    private static final Gson gson = new GsonBuilder().create();
 
     /* */
     static {
@@ -52,7 +52,7 @@ public class VoiceVox {
     }
 
     /** */
-    private WebTarget target;
+    private final WebTarget target;
 
     /** */
     private Speaker[] speakers;
@@ -60,7 +60,8 @@ public class VoiceVox {
     /** */
     public VoiceVox() {
         try {
-            Client client = ClientBuilder.newClient();
+            @SuppressWarnings("resource")
+            Client client = ClientBuilder.newClient(); // DON'T CLOSE
             target = client.target(url);
 
             String version = target.path("version")
@@ -248,7 +249,7 @@ Debug.println(Level.FINE, "version: " + version);
     }
 
     /** to complement lack information of voicevox for jsapi voice */
-    private static Map<String, int[]> voiceData = new HashMap<>();
+    private static final Map<String, int[]> voiceData = new HashMap<>();
 
     /* cvs: name, gender, age */
     static {

@@ -42,10 +42,10 @@ import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 public final class GyutanSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(GyutanSynthesizer.class.getName());
+    private static final Logger logger = Logger.getLogger(GyutanSynthesizer.class.getName());
 
     /** */
-    private Gyutan gyutan = new Gyutan();
+    private final Gyutan gyutan = new Gyutan();
 
     /**
      * Constructs a new synthesizer object.
@@ -61,16 +61,16 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
         Voice voice;
         GyutanSynthesizerMode mode = (GyutanSynthesizerMode) getEngineMode();
         if (mode == null) {
-            voice = null;
+            throw new EngineException("not engine mode");
         } else {
             Voice[] voices = mode.getVoices();
             if (voices == null || voices.length < 1) {
-                voice = null;
+                throw new EngineException("no voice");
             } else {
                 voice = voices[0];
             }
         }
-        LOGGER.fine("default voice: " + (voice != null ? voice.getName() : ""));
+logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
         getSynthesizerProperties().setVoice(voice);
 
         //
@@ -80,7 +80,7 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
     }
 
     /** */
-    private Path toNativeVoice(Voice voice) {
+    private static Path toNativeVoice(Voice voice) {
         Scanner s = new Scanner(GyutanEngineListFactory.class.getResourceAsStream("/htsvoice.csv"));
         String defalutName = null;
         while (s.hasNextLine()) {

@@ -1,5 +1,5 @@
 [![Release](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)
-[![Java CI](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions)
+[![Java CI](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml)
 ![Java](https://img.shields.io/badge/Java-17-b07219)
 
@@ -81,4 +81,4 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
    * [SHAREVOX](https://www.sharevox.app)
    * [http://itvoice.starfree.jp/](http://itvoice.starfree.jp/)
  * AVSpeechSynthesizer needs block
- * rcp client/server (wip)
+ * ~~rcp client/server (wip)~~ -> [vavi-speech-rpc](https://github.com/umjammer/vavi-speech-rpc)

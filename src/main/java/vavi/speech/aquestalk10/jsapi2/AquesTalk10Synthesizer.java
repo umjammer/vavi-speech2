@@ -44,7 +44,7 @@ import vavi.util.properties.annotation.PropsEntity;
 public final class AquesTalk10Synthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(AquesTalk10Synthesizer.class.getName());
+    private static final Logger logger = Logger.getLogger(AquesTalk10Synthesizer.class.getName());
 
     /** */
     @Property(binder = InstanciationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
@@ -72,16 +72,16 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
         Voice voice;
         AquesTalk10SynthesizerMode mode = (AquesTalk10SynthesizerMode) getEngineMode();
         if (mode == null) {
-            voice = null;
+            throw new EngineException("not engine mode");
         } else {
             Voice[] voices = mode.getVoices();
-            if (voices == null) {
-                voice = null;
+            if (voices == null || voices.length < 1) {
+                throw new EngineException("no voice");
             } else {
                 voice = voices[0];
             }
         }
-LOGGER.fine("default voice: " + voice.getName());
+logger.fine("default voice: " + voice.getName());
         getSynthesizerProperties().setVoice(voice);
 
         aquesTalk10 = AquesTalk10Wrapper.getInstance();
@@ -95,7 +95,7 @@ LOGGER.fine("default voice: " + voice.getName());
     /**
      * @param voice when null, returns default voice.
      */
-    private AQTK_VOICE toNativeVoice(Voice voice) {
+    private static AQTK_VOICE toNativeVoice(Voice voice) {
         return AquesTalk10Wrapper.voices.get(voice == null ? "F1" : voice.getName());
     }
 
@@ -119,7 +119,7 @@ LOGGER.fine("default voice: " + voice.getName());
         // Leave some time to let all resources detach
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
         aquesTalk10 = null;
 

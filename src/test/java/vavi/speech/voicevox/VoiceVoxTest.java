@@ -24,6 +24,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,10 +46,17 @@ class VoiceVoxTest {
 
     private WebTarget target;
 
+    private Client c;
+
     @BeforeEach
-    public void setUp() throws Exception {
-        Client c = ClientBuilder.newClient();
+    void setUp() throws Exception {
+        c = ClientBuilder.newClient();
         target = c.target("http://localhost:50021/");
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        c.close();
     }
 
     @Test
@@ -81,7 +89,7 @@ Debug.println("audioQuery: " + audioQuery);
     }
 
     /** */
-    void speak(InputStream is) throws Exception {
+    static void speak(InputStream is) throws Exception {
         AudioInputStream ais = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
         DataLine.Info line = new DataLine.Info(Clip.class, ais.getFormat());
         Clip clip = (Clip) AudioSystem.getLine(line);
