@@ -149,7 +149,7 @@ Debug.println("SpeakerInfo: " + speakerInfo);
         AudioQuery audioQuery = voiceVox.getQuery("ひざまずくが良いのだ、この愚かな地球人共よ", speakerId);
         audioQuery.setSpeed(1.1f);
         audioQuery.setVolume(0.2f);
-        speak(voiceVox.synthesis(audioQuery, speakerId));
+        speak(voiceVox.synthesize(audioQuery, speakerId));
     }
 
     @Test

@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -31,6 +32,7 @@ import org.icn.gyutan.Gyutan;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
+import vavi.util.Debug;
 
 
 /**
@@ -43,9 +45,6 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
     private static final Logger logger = Logger.getLogger(GyutanSynthesizer.class.getName());
-
-    /** */
-    private final Gyutan gyutan = new Gyutan();
 
     /**
      * Constructs a new synthesizer object.
@@ -115,7 +114,7 @@ logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
         // Leave some time to let all resources detach
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         //
@@ -151,14 +150,11 @@ logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
     /** */
     private AudioInputStream synthe(String text) {
         try {
-//System.err.println("vioce: " + getSynthesizerProperties().getVoice());
+Debug.println(Level.FINER, "vioce: " + getSynthesizerProperties().getVoice());
             Path wave = Files.createTempFile(getClass().getName(), ".wav");
             Path voice = toNativeVoice(getSynthesizerProperties().getVoice());
-            boolean flag = gyutan.initialize(System.getProperty("sen.home"), voice.toString());
-            if (!flag) {
-                throw new IOException("initialize");
-            }
-            gyutan.synthesis(text, new FileOutputStream(wave.toFile()), null);
+            Gyutan gyutan = new Gyutan(System.getProperty("sen.home"), voice.toString());
+            gyutan.synthesize(text, new FileOutputStream(wave.toFile()), null);
             byte[] wav = Files.readAllBytes(wave);
             ByteArrayInputStream bais = new ByteArrayInputStream(wav);
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!

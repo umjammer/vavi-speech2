@@ -160,7 +160,7 @@ Debug.println(Level.FINER, "result: " + nativeVoice);
         if (false) {
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
-            InputStream in = synthesis(item);
+            InputStream in = synthesize(item);
             AudioSegment segment;
             if (locator == null) {
                 segment = new BaseAudioSegment(item, in);
@@ -184,7 +184,7 @@ try { // TODO ad-hoc
     }
 
     /** */
-    private AudioInputStream synthesis(String text) {
+    private AudioInputStream synthesize(String text) {
         try {
 //Debug.println(Level.FINER, "voice: " + getSynthesizerProperties().getVoice());
             AVSpeechUtterance utterance = AVSpeechUtterance.of(text);
