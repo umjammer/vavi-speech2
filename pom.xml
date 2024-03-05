@@ -217,9 +217,9 @@
     </dependency>
 
     <dependency>
-      <groupId>vavi</groupId> <!-- vavi / com.github.umjammer -->
+      <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.10-SNAPSHOT</version>
+      <version>0.1.10</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>
