@@ -130,7 +130,7 @@ logger.fine("default voice: " + voice.getName());
         AudioManager manager = getAudioManager();
         String locator = manager.getMediaLocator();
         // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-        InputStream in = synthesis(item);
+        InputStream in = synthesize(item);
         AudioSegment segment;
         if (locator == null) {
             segment = new BaseAudioSegment(item, in);
@@ -141,7 +141,7 @@ logger.fine("default voice: " + voice.getName());
     }
 
     /** */
-    private AudioInputStream synthesis(String text) {
+    private AudioInputStream synthesize(String text) {
         try {
 //logger.log(Level.DEBUG, "vioce: " + getSynthesizerProperties().getVoice());
             openJTalk.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));

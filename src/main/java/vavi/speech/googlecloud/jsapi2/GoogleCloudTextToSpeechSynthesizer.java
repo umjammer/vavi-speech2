@@ -139,7 +139,7 @@ logger.fine("default voice: " + voice.getName());
     @Override
     public AudioSegment handleSpeak(int id, String item) {
         try {
-            byte[] bytes = synthesis(item);
+            byte[] bytes = synthesize(item);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
@@ -157,7 +157,7 @@ logger.fine("default voice: " + voice.getName());
     }
 
     /** */
-    private byte[] synthesis(String text) {
+    private byte[] synthesize(String text) {
         SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
 
         VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()

@@ -10,7 +10,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -25,7 +24,6 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-
 import vavi.beans.InstanciationBinder;
 import vavi.speech.Phonemizer;
 import vavi.speech.aquestalk10.jna.AquesTalk10.AQTK_VOICE;
@@ -142,7 +140,7 @@ logger.fine("default voice: " + voice.getName());
     public AudioSegment handleSpeak(int id, String item) {
         try {
             aquesTalk10.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
-            byte[] bytes = aquesTalk10.synthe(phonemizer.phoneme(item));
+            byte[] bytes = aquesTalk10.synthesize(phonemizer.phoneme(item));
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!

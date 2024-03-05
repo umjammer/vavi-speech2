@@ -14,9 +14,14 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import vavi.util.Debug;
+import vavi.util.properties.annotation.Property;
+import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
@@ -25,9 +30,24 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
+@PropsEntity(url = "file:local.properties")
 @EnabledIfSystemProperty(named = "os.arch", matches = "x86_64")
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
 class Jsapi2Test_aquestalk10 {
+
+    static boolean localPropertiesExists() {
+        return Files.exists(Paths.get("local.properties"));
+    }
+
+    @Property(name = "text")
+    String text = "src/test/resources/test.txt";
+
+    @BeforeEach
+    void setup() throws Exception {
+        if (localPropertiesExists()) {
+            PropsEntity.Util.bind(this);
+        }
+    }
 
     /**
      * @param args 0: text
@@ -47,8 +67,9 @@ class Jsapi2Test_aquestalk10 {
     }
 
     @Test
+    @EnabledIf("localPropertiesExists")
     void test02() throws Exception {
-        Path path = Paths.get("tmp/repezen.txt");
+        Path path = Paths.get(text);
         String text = String.join("\n", Files.readAllLines(path));
         speak(text);
     }
@@ -69,6 +90,7 @@ class Jsapi2Test_aquestalk10 {
         synthesizer.getSynthesizerProperties().setVoice(voice);
         synthesizer.getSynthesizerProperties().setVolume(2);
 
+Debug.println("split " + text.split("[。\n]").length);
         for (String line : text.split("[。\n]")) {
             System.out.println(line);
             synthesizer.speak(line + "。", System.err::println);

@@ -125,7 +125,7 @@ Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() /
 //            audioQuery.setSpeed(props.getSpeakingRate() / 200f);
 //            audioQuery.setPitch(props.getPitch() / 300f);
 //            audioQuery.setIntonation(props.getPitchRange());
-            InputStream wave = client.synthesis(audioQuery, voiceId);
+            InputStream wave = client.synthesize(audioQuery, voiceId);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!

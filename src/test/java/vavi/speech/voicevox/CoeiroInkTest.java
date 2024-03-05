@@ -24,12 +24,11 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import vavi.speech.voicevox.VoiceVox.Speaker;
 import vavi.speech.voicevox.VoiceVox.AudioQuery;
+import vavi.speech.voicevox.VoiceVox.Speaker;
 import vavi.speech.voicevox.VoiceVox.SpeakerInfo;
 import vavi.util.Debug;
 
@@ -37,34 +36,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
- * VoiceVoxTest.
+ * CoeiroInkTest.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
- * @version 0.00 2023-01-12 nsano initial version <br>
+ * @version 0.00 2023-04-22 nsano initial version <br>
  */
-class VoiceVoxTest {
+class CoeiroInkTest {
 
     private WebTarget target;
 
-    private Client c;
-
     @BeforeEach
-    void setUp() throws Exception {
-        c = ClientBuilder.newClient();
-        target = c.target("http://localhost:50021/");
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
-        c.close();
+    public void setUp() throws Exception {
+        Client c = ClientBuilder.newClient();
+        target = c.target("http://localhost:50032/");
     }
 
     @Test
     @DisplayName("raw rest api")
     void test1() throws Exception {
-        String text = "ひざまずくが良いのだ、この愚かな地球人共よ";
+        String text = "これはテストです。";
 
-        int speakerId = 1; // ずんだもん(あまあま)
+        int speakerId = 1; // つくよみちゃん(れいせい)
 
         String query = target
                 .path("audio_query")
@@ -72,14 +64,9 @@ class VoiceVoxTest {
                 .queryParam("speaker", 1)
                 .request()
                 .post(null, String.class);
-Debug.println("audio_query:\n" + query);
+Debug.println(query);
 
-        AudioQuery audioQuery = gson.fromJson(query, AudioQuery.class);
-Debug.println("audioQuery: " + audioQuery);
-        audioQuery.speedScale = 1.2f;
-        audioQuery.volumeScale = .2f;
-
-        Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
+        Entity<String> entity = Entity.entity(query, MediaType.APPLICATION_JSON);
         InputStream wav = target
                 .path("synthesis")
                 .queryParam("speaker", 1)
@@ -102,7 +89,7 @@ Debug.println("audioQuery: " + audioQuery);
         clip.close();
     }
 
-    static Gson gson = new GsonBuilder().create();
+    static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Test
     void test2() throws Exception {
@@ -159,35 +146,5 @@ Debug.println("SpeakerInfo: " + speakerInfo);
         Voice[] voices = voiceVox.getAllVoices();
 Arrays.stream(voices).forEach(System.err::println);
         assertEquals(22, voiceVox.getId(voices[10]));
-    }
-
-    @Test
-    @DisplayName("search レキシカ voice and parameter. is he or she really virtual voice?")
-    void test5() throws Exception {
-        String text = "宇宙はバチクソ面白いので";
-
-        int speakerId = 43;  // 櫻歌ミコ(ノーマル)
-
-        String query = target
-                .path("audio_query")
-                .queryParam("text", text)
-                .queryParam("speaker", speakerId)
-                .request()
-                .post(null, String.class);
-Debug.println("audio_query:\n" + query);
-
-        AudioQuery audioQuery = gson.fromJson(query, AudioQuery.class);
-Debug.println("audioQuery: " + audioQuery);
-        audioQuery.speedScale = 0.97f;
-        audioQuery.pitchScale = .07f;
-        audioQuery.volumeScale = .2f;
-
-        Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
-        InputStream wav = target
-                .path("synthesis")
-                .queryParam("speaker", speakerId)
-                .request()
-                .post(entity, InputStream.class);
-        speak(wav);
     }
 }

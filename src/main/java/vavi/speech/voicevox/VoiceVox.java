@@ -159,7 +159,7 @@ Debug.println(Level.FINE, "version: " + version);
     }
 
     /** */
-    public InputStream synthesis(AudioQuery audioQuery, int speakerId) {
+    public InputStream synthesize(AudioQuery audioQuery, int speakerId) {
         Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
         return target.path("synthesis")
                 .queryParam("speaker", speakerId)

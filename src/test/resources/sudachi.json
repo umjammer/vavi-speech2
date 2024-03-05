@@ -1,7 +1,7 @@
 {
-    "systemDict" : "sudachi-dictionary-20210802/system_full.dic",
+    "systemDict" : "sudachi/sudachi-dictionary-20210802/system_full.dic",
     "userDict" : [ ],
-    "characterDefinitionFile" : "char.def",
+    "characterDefinitionFile" : "sudachi/char.def",
     "inputTextPlugin" : [
         { "class" : "com.worksap.nlp.sudachi.ProlongedSoundMarkInputTextPlugin",
           "prolongedSoundMarks": ["ー", "〜", "〰"],

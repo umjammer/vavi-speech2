@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.12</version>
+  <version>0.0.13</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -219,7 +219,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.9</version>
+      <version>0.1.10</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>
@@ -269,9 +269,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.umjammer</groupId>
-      <artifactId>Gyutan</artifactId>
-      <version>0.0.2</version>
+      <groupId>com.github.umjammer</groupId> <!-- icn-lab / com.github.umjammer -->
+      <artifactId>Gyutan</artifactId> <!-- gyutan / Gyutan -->
+      <version>0.0.3</version>
     </dependency>
 
     <dependency>
