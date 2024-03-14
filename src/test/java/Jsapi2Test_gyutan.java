@@ -16,6 +16,10 @@ import javax.speech.synthesis.Voice;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import vavi.speech.gyutan.jsapi2.GyutanSynthesizer;
+import vavi.speech.gyutan.jsapi2.GyutanSynthesizerMode;
+
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 
 /**
@@ -51,9 +55,9 @@ class Jsapi2Test_gyutan {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(vavi.speech.gyutan.jsapi2.GyutanEngineListFactory.class.getName());
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new GyutanSynthesizerMode());
+        assertInstanceOf(GyutanSynthesizer.class, synthesizer);
 
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);
