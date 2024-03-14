@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -31,8 +30,7 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-import org.rococoa.Rococoa;
-import org.rococoa.cocoa.foundation.NSObject;
+import vavi.speech.WrappedVoice;
 import vavi.speech.rococoa.SynthesizerDelegate;
 import vavi.util.Debug;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
@@ -68,23 +66,25 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        Voice voice;
-        RococoaSynthesizerMode mode = (RococoaSynthesizerMode) getEngineMode();
-        if (mode == null) {
-            throw new EngineException("not engine mode");
-        } else {
-            Voice[] voices = mode.getVoices();
-            if (voices == null || voices.length < 1) {
-                throw new EngineException("no voice");
+        if (getSynthesizerProperties().getVoice() == null) {
+            Voice voice;
+            RococoaSynthesizerMode mode = (RococoaSynthesizerMode) getEngineMode();
+            if (mode == null) {
+                throw new EngineException("not engine mode");
             } else {
-                AVSpeechSynthesisVoice defaultNativeVoice = AVSpeechSynthesisVoice.withLanguage(Locale.getDefault().toString());
+                Voice[] voices = mode.getVoices();
+                if (voices == null || voices.length < 1) {
+                    throw new EngineException("no voice");
+                } else {
+                    AVSpeechSynthesisVoice defaultNativeVoice = AVSpeechSynthesisVoice.withLanguage(Locale.getDefault().toString());
 //Debug.println(Level.FINER, "default voice: " + defaultNativeVoice.getName());
-                Optional<Voice> result = Arrays.stream(voices).filter(v -> v.getName().equals(defaultNativeVoice.name())).findFirst();
-                voice = result.orElseGet(() -> voices[0]);
+                    Optional<Voice> result = Arrays.stream(voices).filter(v -> v.getName().equals(defaultNativeVoice.name())).findFirst();
+                    voice = result.orElseGet(() -> voices[0]);
+                }
             }
-        }
 logger.fine("default voice: " + voice.getName());
-        getSynthesizerProperties().setVoice(voice);
+            getSynthesizerProperties().setVoice(voice);
+        }
 
         synthesizer = AVSpeechSynthesizer.newInstance();
         delegate = new SynthesizerDelegate(synthesizer); // delegate is implemented in vavi-speech
@@ -93,22 +93,6 @@ logger.fine("default voice: " + voice.getName());
         long newState = ALLOCATED | RESUMED;
         newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
         setEngineState(CLEAR_ALL_STATE, newState);
-    }
-
-    /** */
-    private AVSpeechSynthesisVoice toNativeVoice(Voice voice) {
-Debug.println(Level.FINER, "toNativeVoice: " + getSynthesizerProperties().getVoice());
-        if (voice == null) {
-            return null;
-        }
-        for (NSObject object : AVSpeechSynthesisVoice.speechVoices()) {
-            AVSpeechSynthesisVoice nativeVoice = Rococoa.cast(object, AVSpeechSynthesisVoice.class);
-            if (nativeVoice.name().equals(voice.getName())) {
-Debug.println(Level.FINER, "result: " + nativeVoice);
-                return nativeVoice;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -171,7 +155,8 @@ Debug.println(Level.FINER, "result: " + nativeVoice);
         } else {
 try { // TODO ad-hoc
             AVSpeechUtterance utterance = AVSpeechUtterance.of(item);
-            utterance.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
+            var voice = ((WrappedVoice<AVSpeechSynthesisVoice>) getSynthesizerProperties().getVoice()).getNativeVoice();
+            utterance.setVoice(voice);
             utterance.setVolume(getSynthesizerProperties().getVolume() / 100f);
             synthesizer.speakUtterance(utterance);
             delegate.waitForSpeechDone(10000, true);
@@ -188,7 +173,8 @@ try { // TODO ad-hoc
         try {
 //Debug.println(Level.FINER, "voice: " + getSynthesizerProperties().getVoice());
             AVSpeechUtterance utterance = AVSpeechUtterance.of(text);
-            utterance.setVoice(toNativeVoice(getSynthesizerProperties().getVoice()));
+            var voice = ((WrappedVoice<AVSpeechSynthesisVoice>) getSynthesizerProperties().getVoice()).getNativeVoice();
+            utterance.setVoice(voice);
             Path path = Files.createTempFile(getClass().getName(), ".aiff");
             synthesizer.writeUtterance_toBufferCallback(utterance, null);
             // wait to finish writing whole data

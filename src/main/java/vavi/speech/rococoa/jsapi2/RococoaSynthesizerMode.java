@@ -26,7 +26,8 @@ public final class RococoaSynthesizerMode extends SynthesizerMode implements Eng
      * Constructs a new object.
      */
     public RococoaSynthesizerMode() {
-        super();
+        super("Rococoa", null,
+                null, null, null, null);
     }
 
     /**
@@ -35,7 +36,8 @@ public final class RococoaSynthesizerMode extends SynthesizerMode implements Eng
      * @param locale the locale associated with this mode
      */
     public RococoaSynthesizerMode(SpeechLocale locale) {
-        super(locale);
+        super("Rococoa", null, null, null, null,
+                new Voice[] {new Voice(locale, null, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE)});
     }
 
     /**
