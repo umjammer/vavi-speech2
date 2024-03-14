@@ -22,9 +22,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 
 ### maven
 
- * https://github.com/umjammer/vavi-speech2/packages/1691523
- * this project uses gitlab package registry. add a personal access token to `~/.m2/settings.xml`
- * see https://docs.gitlab.com/ee/user/packages/maven_repository/index.html#authenticate-to-the-package-registry-with-maven
+ * https://jitpack.io/#umjammer/vavi-speech2
 
 ### AquesTalk10
 
