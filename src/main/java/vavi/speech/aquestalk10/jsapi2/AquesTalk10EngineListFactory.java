@@ -42,7 +42,7 @@ public class AquesTalk10EngineListFactory extends BaseEnginFactory<AQTK_VOICE> i
     protected List<WrappedVoice<AQTK_VOICE>> geAlltVoices() {
 try {
         return AquesTalk10Voice.factory.getAllVoices();
-} catch (UnsatisfiedLinkError e) {
+} catch (Throwable e) {
  logger.log(Level.WARNING, "AquesTalk10 doesn't work on arm64", e);
         return Collections.emptyList();
 }
