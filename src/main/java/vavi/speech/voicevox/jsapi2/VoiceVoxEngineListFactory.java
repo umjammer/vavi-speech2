@@ -6,8 +6,6 @@
 
 package vavi.speech.voicevox.jsapi2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.speech.EngineList;
 import javax.speech.EngineMode;
@@ -15,7 +13,8 @@ import javax.speech.spi.EngineListFactory;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import vavi.speech.voicevox.VoiceVox;
+import vavi.speech.BaseEnginFactory;
+import vavi.speech.WrappedVoice;
 
 
 /**
@@ -24,35 +23,25 @@ import vavi.speech.voicevox.VoiceVox;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2023/01/12 umjammer initial version <br>
  */
-public class VoiceVoxEngineListFactory implements EngineListFactory {
+public class VoiceVoxEngineListFactory extends BaseEnginFactory<Voice> implements EngineListFactory {
 
     @Override
     public EngineList createEngineList(EngineMode require) {
-        if (require instanceof SynthesizerMode mode) {
-            List<Voice> allVoices = Arrays.asList(new VoiceVox().getAllVoices());
-            List<Voice> voices = new ArrayList<>();
-            if (mode.getVoices() == null) {
-                voices.addAll(allVoices);
-            } else {
-                for (Voice availableVoice : allVoices) {
-                    for (Voice requiredVoice : mode.getVoices()) {
-                        if (availableVoice.match(requiredVoice)) {
-                            voices.add(availableVoice);
-                        }
-                    }
-                }
-            }
-            SynthesizerMode[] features = new SynthesizerMode[] {
-                new VoiceVoxSynthesizerMode(null,
-                                       mode.getEngineName(),
-                                       mode.getRunning(),
-                                       mode.getSupportsLetterToSound(),
-                                       mode.getMarkupSupport(),
-                                       voices.toArray(Voice[]::new))
-            };
-            return new EngineList(features);
-        }
+        return createEngineListForSynthesizer(require);
+    }
 
-        return null;
+    @Override
+    protected List<WrappedVoice<Voice>> geAlltVoices() {
+        return VoiceVoxVoice.factory.getAllVoices();
+    }
+
+    @Override
+    protected SynthesizerMode createSynthesizerMode(DomainLocale<Voice> domainLocale, List<WrappedVoice<Voice>> wrappedVoices) {
+        return new VoiceVoxSynthesizerMode("VoiceVox",
+                "VoiceVox/" + domainLocale.getDomain() + "/" + domainLocale.getLocale(),
+                false,
+                false,
+                false,
+                wrappedVoices.toArray(Voice[]::new));
     }
 }

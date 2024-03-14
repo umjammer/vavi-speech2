@@ -17,6 +17,8 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 import vavi.speech.modifier.yakuwarigo.YakuwarigoModifier;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizer;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode;
 
 
 /**
@@ -48,9 +50,8 @@ class ZundamonTest {
         YakuwarigoModifier modifier = new YakuwarigoModifier(option);
 
         //
-        EngineManager.registerEngineListFactory(vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory.class.getName());
-
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode.DEFAULT);
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new VoiceVoxSynthesizerMode());
+        assert synthesizer instanceof VoiceVoxSynthesizer;
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);
