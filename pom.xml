@@ -21,8 +21,8 @@
   </issueManagement>
 
   <properties>
-    <jsapi2.groupId>com.github.umjammer.jsapi</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi -->
-    <jsapi2.version>0.6.6</jsapi2.version>
+    <jsapi2.groupId>com.github.umjammer.jsapi2</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi2 -->
+    <jsapi2.version>0.6.9</jsapi2.version>
 
     <jersey.version>3.1.5</jersey.version>
   </properties>
