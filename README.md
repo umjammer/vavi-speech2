@@ -5,6 +5,8 @@
 
 # vavi-speech2
 
+<img alt="yukkuries" src="https://github.com/umjammer/vavi-speech2/assets/493908/5ccc63da-5dc8-40ac-b6f6-d8dce89b7cf7" width="300" />
+
 Text to Speech and Speech to Text (JSAPI2) engines for Java
 
 | **Type**                    | **Description**                                                                                                                                                                                   | **Sythesizer** | **Recognizer** | **Quality** | **Comment** |
@@ -35,20 +37,23 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * [get token as json](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries)
  * set environment variable `"GOOGLE_APPLICATION_CREDENTIALS"` `your_json_path`
 
-### Rococoa
-
- * locate `librococoa.dylib` into one of class paths
-   * if you use maven it's already done, you can find it at `target/test-classes`.
-
 ### Open JTalk
 
- * make `libjtalk.dylib` from `https://github.com/rosmarinus/jtalkdll`
- * locate `libjtalk.dylib` into `DYLD_LIBRARY_PATH`
+ * make `libjtalk.dylib` from https://github.com/rosmarinus/jtalkdll
+ * locate `libjtalk.dylib` into java classpath or `jna.library.path` system property
 
 ### VOICEVOX
 
  * [download](https://voicevox.hiroshiba.jp/) the application
  * run the application before using this library
+
+## Usage
+
+### user
+
+  * [zundamod](https://github.com/umjammer/zundamod)
+  * [w/ chatGPT](https://github.com/umjammer/vavi-speech-sandbox/)
+  * [RPC](https://github.com/umjammer/vavi-speech-rpc/)
 
 ## Reference
 
