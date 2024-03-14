@@ -1,0 +1,6 @@
+vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory
+vavi.speech.googlecloud.jsapi2.GoogleCloudEngineListFactory
+vavi.speech.gyutan.jsapi2.GyutanEngineListFactory
+#vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory
+vavi.speech.rococoa.jsapi2.RococoaEngineListFactory
+vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory

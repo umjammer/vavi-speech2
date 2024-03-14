@@ -10,11 +10,14 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
+import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
+import vavi.speech.rococoa.jsapi2.RococoaSynthesizer;
+import vavi.speech.rococoa.jsapi2.RococoaSynthesizerMode;
 
 
 /**
@@ -24,6 +27,10 @@ import org.junit.jupiter.api.Test;
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
 class RococoaTest {
+
+    static {
+        System.setProperty("javax.speech.SpeechLocale.comparisonStrictness", "LENIENT");
+    }
 
     @Test
     void test1() throws Exception {
@@ -36,9 +43,8 @@ class RococoaTest {
     public static void main(String[] args) throws Exception {
         Path file = Paths.get(args[0]);
 
-        EngineManager.registerEngineListFactory(vavi.speech.rococoa.jsapi2.RococoaEngineListFactory.class.getName());
-
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new RococoaSynthesizerMode(new SpeechLocale("ja")));
+        assert synthesizer instanceof RococoaSynthesizer : String.valueOf(synthesizer);
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);
@@ -46,10 +52,10 @@ class RococoaTest {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
 Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
-        String voiceName = "Kyoko";
+        String voiceName = "O-Ren";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
-        synthesizer.getSynthesizerProperties().setVolume(1);
+        synthesizer.getSynthesizerProperties().setVolume(20);
 
         Files.lines(file).forEach(line -> {
             System.out.println(line);

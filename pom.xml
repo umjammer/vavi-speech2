@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.13</version>
+  <version>0.0.14</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -21,8 +21,8 @@
   </issueManagement>
 
   <properties>
-    <jsapi2.groupId>com.github.umjammer.jsapi</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi -->
-    <jsapi2.version>0.6.6</jsapi2.version>
+    <jsapi2.groupId>com.github.umjammer.jsapi2</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi2 -->
+    <jsapi2.version>0.6.9</jsapi2.version>
 
     <jersey.version>3.1.5</jersey.version>
   </properties>
@@ -106,7 +106,10 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.2.2</version>
             <configuration>
-              <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
+              <argLine>
+                -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
+                -Dvavi.util.logging.VaviFormatter.extraClassMethod=sun\.util\.logging\.internal\.LoggingProviderImpl\$JULWrapper#log
+              </argLine>
               <reuseForks>false</reuseForks>
               <trimStackTrace>false</trimStackTrace>
               <includes>

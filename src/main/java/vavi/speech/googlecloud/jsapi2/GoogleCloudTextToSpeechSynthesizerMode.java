@@ -15,7 +15,7 @@ import javax.speech.synthesis.Voice;
 
 
 /**
- * Synthesizer mode for Cocoa.
+ * Synthesizer mode for Google Cloud Text To Speech.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/20 umjammer initial version <br>
@@ -26,7 +26,8 @@ public final class GoogleCloudTextToSpeechSynthesizerMode extends SynthesizerMod
      * Constructs a new object.
      */
     public GoogleCloudTextToSpeechSynthesizerMode() {
-        super();
+        super("GoogleCloud", null,
+                null, null, null, null);
     }
 
     /**
@@ -35,13 +36,14 @@ public final class GoogleCloudTextToSpeechSynthesizerMode extends SynthesizerMod
      * @param locale the locale associated with this mode
      */
     public GoogleCloudTextToSpeechSynthesizerMode(SpeechLocale locale) {
-        super(locale);
+        super("GoogleCloud", null, null, null, null,
+                new Voice[] {new Voice(locale, null, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE)});
     }
 
     /**
      * Constructs a new object.
      *
-     * Mac synthesizer does not support ssml
+     * Google Cloud Text To Speech synthesizer does not support ssml
      *
      * @param engineName the name of the engine
      * @param modeName the name of the mode

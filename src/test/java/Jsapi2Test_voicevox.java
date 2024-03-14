@@ -15,7 +15,11 @@ import javax.speech.synthesis.Voice;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import vavi.speech.voicevox.VoiceVox;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizer;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode;
 import vavi.util.Debug;
+
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 
 /**
@@ -54,9 +58,9 @@ Debug.println(Level.WARNING, e.getMessage());
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory.class.getName());
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new VoiceVoxSynthesizerMode());
+        assertInstanceOf(VoiceVoxSynthesizer.class, synthesizer);
 
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);
@@ -66,6 +70,8 @@ Debug.println(Level.WARNING, e.getMessage());
         String voiceName = "ずんだもん(ノーマル)";
 //        String voiceName = "四国めたん(ツンツン)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
+        synthesizer.getSynthesizerProperties().setSpeakingRate(120); // 50 ~ 100 ~ 200
+        synthesizer.getSynthesizerProperties().setPitch(2); // -15 ~ 0 ~ 15
         synthesizer.getSynthesizerProperties().setVoice(voice);
         synthesizer.getSynthesizerProperties().setVolume(3);
 

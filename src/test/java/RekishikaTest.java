@@ -12,6 +12,8 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizer;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode;
 
 
 /**
@@ -35,9 +37,8 @@ public class RekishikaTest {
         String text = args[0];
 
         //
-        EngineManager.registerEngineListFactory(vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory.class.getName());
-
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new VoiceVoxSynthesizerMode());
+        assert synthesizer instanceof VoiceVoxSynthesizer;
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);

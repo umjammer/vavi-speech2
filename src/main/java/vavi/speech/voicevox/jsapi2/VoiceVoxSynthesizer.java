@@ -55,20 +55,25 @@ public final class VoiceVoxSynthesizer extends BaseSynthesizer {
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        Voice voice;
-        VoiceVoxSynthesizerMode mode = (VoiceVoxSynthesizerMode) getEngineMode();
-        if (mode == null) {
-            voice = null;
-        } else {
-            Voice[] voices = mode.getVoices();
-            if (voices == null) {
-                voice = null;
+        if (getSynthesizerProperties().getVoice() == null) {
+            Voice voice;
+            VoiceVoxSynthesizerMode mode = (VoiceVoxSynthesizerMode) getEngineMode();
+            if (mode == null) {
+                throw new EngineException("not engine mode");
             } else {
-                voice = voices[6];
+                Voice[] voices = mode.getVoices();
+                if (voices == null || voices.length < 1) {
+                    throw new EngineException("no voice");
+                } else if (voices.length > 6) {
+                    voice = voices[6];
+                } else {
+logger.warning("too few default voices: " + voices.length);
+                    voice = voices[0];
+                }
             }
-        }
 logger.fine("default voice: " + voice.getName());
-        getSynthesizerProperties().setVoice(voice);
+            getSynthesizerProperties().setVoice(voice);
+        }
 
         try {
             this.client = new VoiceVox();
@@ -121,9 +126,9 @@ logger.fine("default voice: " + voice.getName());
             int voiceId = client.getId(props.getVoice());
             VoiceVox.AudioQuery audioQuery = client.getQuery(item, voiceId);
             // TODO adapt parameters
-Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() / 200f, props.getPitch() / 300f);
-//            audioQuery.setSpeed(props.getSpeakingRate() / 200f);
-//            audioQuery.setPitch(props.getPitch() / 300f);
+Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() / 100f, props.getPitch() / 100f);
+            audioQuery.setSpeed(props.getSpeakingRate() / 100f);
+            audioQuery.setPitch(props.getPitch() / 100f);
 //            audioQuery.setIntonation(props.getPitchRange());
             InputStream wave = client.synthesize(audioQuery, voiceId);
             AudioManager manager = getAudioManager();

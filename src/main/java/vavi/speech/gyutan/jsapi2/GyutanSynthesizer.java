@@ -57,20 +57,22 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        Voice voice;
-        GyutanSynthesizerMode mode = (GyutanSynthesizerMode) getEngineMode();
-        if (mode == null) {
-            throw new EngineException("not engine mode");
-        } else {
-            Voice[] voices = mode.getVoices();
-            if (voices == null || voices.length < 1) {
-                throw new EngineException("no voice");
+        if (getSynthesizerProperties().getVoice() == null) {
+            Voice voice;
+            GyutanSynthesizerMode mode = (GyutanSynthesizerMode) getEngineMode();
+            if (mode == null) {
+                throw new EngineException("not engine mode");
             } else {
-                voice = voices[0];
+                Voice[] voices = mode.getVoices();
+                if (voices == null || voices.length < 1) {
+                    throw new EngineException("no voice");
+                } else {
+                    voice = voices[0];
+                }
             }
-        }
 logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
-        getSynthesizerProperties().setVoice(voice);
+            getSynthesizerProperties().setVoice(voice);
+        }
 
         //
         long newState = ALLOCATED | RESUMED;

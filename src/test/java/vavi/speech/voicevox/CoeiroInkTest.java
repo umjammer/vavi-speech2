@@ -25,6 +25,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import vavi.speech.voicevox.VoiceVox.AudioQuery;
@@ -41,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-04-22 nsano initial version <br>
  */
+@Disabled("CoeiroInk doesn't support wev api yet")
 class CoeiroInkTest {
 
     private WebTarget target;

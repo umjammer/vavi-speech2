@@ -19,9 +19,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import vavi.speech.aquestalk10.jsapi2.AquesTalk10Synthesizer;
+import vavi.speech.aquestalk10.jsapi2.AquesTalk10SynthesizerMode;
+import vavi.speech.aquestalk10.jsapi2.AquesTalk10Voice;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 
 /**
@@ -76,9 +81,9 @@ class Jsapi2Test_aquestalk10 {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(vavi.speech.aquestalk10.jsapi2.AquesTalk10EngineListFactory.class.getName());
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new AquesTalk10SynthesizerMode());
+        assertInstanceOf(AquesTalk10Synthesizer.class, synthesizer);
 
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);

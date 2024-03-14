@@ -6,6 +6,8 @@
 
 package vavi.speech.voicevox;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,7 +37,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-01-14 nsano initial version <br>
  */
-public class VoiceVox {
+public class VoiceVox implements Closeable {
 
     /** VoiceVox application web api */
     private static String url = "http://localhost:50021/";
@@ -58,10 +60,12 @@ public class VoiceVox {
     private Speaker[] speakers;
 
     /** */
+    private final Client client;
+
+    /** */
     public VoiceVox() {
         try {
-            @SuppressWarnings("resource")
-            Client client = ClientBuilder.newClient(); // DON'T CLOSE
+            client = ClientBuilder.newClient(); // DON'T CLOSE
             target = client.target(url);
 
             String version = target.path("version")
@@ -70,6 +74,11 @@ Debug.println(Level.FINE, "version: " + version);
         } catch (Exception e) {
             throw new IllegalStateException("VoiceVox is not available at " + url, e);
         }
+    }
+
+    @Override
+    public void close() throws IOException {
+        client.close();
     }
 
     /** */

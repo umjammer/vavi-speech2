@@ -26,7 +26,8 @@ public final class GyutanSynthesizerMode extends SynthesizerMode implements Engi
      * Constructs a new object.
      */
     public GyutanSynthesizerMode() {
-        super();
+        super("Gyutan", null,
+                null, null, null, null);
     }
 
     /**
@@ -35,13 +36,14 @@ public final class GyutanSynthesizerMode extends SynthesizerMode implements Engi
      * @param locale the locale associated with this mode
      */
     public GyutanSynthesizerMode(SpeechLocale locale) {
-        super(locale);
+        super("Gyutan", null, null, null, null,
+                new Voice[] {new Voice(locale, null, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE)});
     }
 
     /**
      * Constructs a new object.
      *
-     * OpenJTalk synthesizer does not support ssml
+     * Gyutan synthesizer does not support ssml
      *
      * @param engineName the name of the engine
      * @param modeName the name of the mode

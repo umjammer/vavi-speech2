@@ -14,6 +14,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
+import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
@@ -21,13 +22,19 @@ import javax.speech.synthesis.Voice;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import vavi.speech.rococoa.jsapi2.RococoaSynthesizer;
+import vavi.speech.rococoa.jsapi2.RococoaSynthesizerMode;
 import vavi.util.Debug;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 import vavix.rococoa.avfoundation.AVSpeechSynthesizer;
 import vavix.rococoa.avfoundation.AVSpeechUtterance;
+
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 
 /**
@@ -37,9 +44,13 @@ import vavix.rococoa.avfoundation.AVSpeechUtterance;
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
 @EnabledOnOs(OS.MAC)
+@DisabledIfSystemProperty(named = "os.arch", matches = "x86_64") // currently rococoa doesn't work on x86_64
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
 class Jsapi2Test_rococoa {
 
     static {
+        System.setProperty("javax.speech.SpeechLocale.comparisonStrictness", "LENIENT");
+
         System.setProperty("vavi.util.logging.VaviFormatter.extraClassMethod",
                 "sun\\.util\\.logging\\.internal\\.LoggingProviderImpl.*#log");
     }
@@ -63,9 +74,9 @@ class Jsapi2Test_rococoa {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(vavi.speech.rococoa.jsapi2.RococoaEngineListFactory.class.getName());
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new RococoaSynthesizerMode(new SpeechLocale("ja")));
+        assertInstanceOf(RococoaSynthesizer.class, synthesizer);
 
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);

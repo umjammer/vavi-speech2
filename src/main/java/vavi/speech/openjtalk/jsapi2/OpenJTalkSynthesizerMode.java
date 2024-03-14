@@ -26,7 +26,8 @@ public final class OpenJTalkSynthesizerMode extends SynthesizerMode implements E
      * Constructs a new object.
      */
     public OpenJTalkSynthesizerMode() {
-        super();
+        super("OpenJTalk", null,
+                null, null, null, null);
     }
 
     /**
@@ -35,7 +36,8 @@ public final class OpenJTalkSynthesizerMode extends SynthesizerMode implements E
      * @param locale the locale associated with this mode
      */
     public OpenJTalkSynthesizerMode(SpeechLocale locale) {
-        super(locale);
+        super("OpenJTalk", null, null, null, null,
+                new Voice[] {new Voice(locale, null, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE)});
     }
 
     /**

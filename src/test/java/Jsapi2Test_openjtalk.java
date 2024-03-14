@@ -13,6 +13,11 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import vavi.speech.gyutan.jsapi2.GyutanSynthesizer;
+import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizer;
+import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizerMode;
+
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 
 /**
@@ -54,9 +59,9 @@ class Jsapi2Test_openjtalk {
 
     /** */
     void speak(String text) throws Exception {
-        EngineManager.registerEngineListFactory(vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory.class.getName());
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new OpenJTalkSynthesizerMode());
+        assertInstanceOf(OpenJTalkSynthesizer.class, synthesizer);
 
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(SynthesizerMode.DEFAULT);
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
         synthesizer.waitEngineState(Engine.ALLOCATED);
