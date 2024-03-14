@@ -22,6 +22,7 @@ import javax.speech.synthesis.Voice;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -44,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  */
 @EnabledOnOs(OS.MAC)
 @DisabledIfSystemProperty(named = "os.arch", matches = "x86_64") // currently rococoa doesn't work on x86_64
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
 class Jsapi2Test_rococoa {
 
     static {
