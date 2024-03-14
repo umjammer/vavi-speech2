@@ -26,7 +26,8 @@ public final class AquesTalk10SynthesizerMode extends SynthesizerMode implements
      * Constructs a new object.
      */
     public AquesTalk10SynthesizerMode() {
-        super();
+        super("AquesTalk10", null,
+                null, null, null, null);
     }
 
     /**
@@ -35,7 +36,8 @@ public final class AquesTalk10SynthesizerMode extends SynthesizerMode implements
      * @param locale the locale associated with this mode
      */
     public AquesTalk10SynthesizerMode(SpeechLocale locale) {
-        super(locale);
+        super("AquesTalk10", null, null, null, null,
+                new Voice[] {new Voice(locale, null, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE)});
     }
 
     /**

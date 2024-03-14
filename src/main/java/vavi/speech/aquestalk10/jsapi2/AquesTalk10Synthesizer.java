@@ -44,7 +44,7 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
     /** Logger for this class. */
     private static final Logger logger = Logger.getLogger(AquesTalk10Synthesizer.class.getName());
 
-    /** */
+    /** kanji -> kana */
     @Property(binder = InstanciationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
     private Phonemizer phonemizer;
 
@@ -67,20 +67,22 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        Voice voice;
-        AquesTalk10SynthesizerMode mode = (AquesTalk10SynthesizerMode) getEngineMode();
-        if (mode == null) {
-            throw new EngineException("not engine mode");
-        } else {
-            Voice[] voices = mode.getVoices();
-            if (voices == null || voices.length < 1) {
-                throw new EngineException("no voice");
+        if (getSynthesizerProperties().getVoice() == null) {
+            Voice voice;
+            AquesTalk10SynthesizerMode mode = (AquesTalk10SynthesizerMode) getEngineMode();
+            if (mode == null) {
+                throw new EngineException("not engine mode");
             } else {
-                voice = voices[0];
+                Voice[] voices = mode.getVoices();
+                if (voices == null || voices.length < 1) {
+                    throw new EngineException("no voice");
+                } else {
+                    voice = voices[0];
+                }
             }
-        }
 logger.fine("default voice: " + voice.getName());
-        getSynthesizerProperties().setVoice(voice);
+            getSynthesizerProperties().setVoice(voice);
+        }
 
         aquesTalk10 = AquesTalk10Wrapper.getInstance();
 
