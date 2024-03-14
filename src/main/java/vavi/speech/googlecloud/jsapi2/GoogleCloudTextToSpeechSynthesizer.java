@@ -9,9 +9,7 @@ package vavi.speech.googlecloud.jsapi2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Optional;
 import java.util.logging.Logger;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -23,10 +21,6 @@ import javax.speech.EngineStateException;
 import javax.speech.synthesis.Speakable;
 import javax.speech.synthesis.Voice;
 
-import org.jvoicexml.jsapi2.BaseAudioSegment;
-import org.jvoicexml.jsapi2.BaseEngineProperties;
-import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-
 import com.google.cloud.texttospeech.v1.AudioConfig;
 import com.google.cloud.texttospeech.v1.AudioEncoding;
 import com.google.cloud.texttospeech.v1.SynthesisInput;
@@ -34,10 +28,15 @@ import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
 import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
 import com.google.protobuf.ByteString;
+import org.jvoicexml.jsapi2.BaseAudioSegment;
+import org.jvoicexml.jsapi2.BaseEngineProperties;
+import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
+import vavi.speech.WrappedVoice;
+import vavi.util.Debug;
 
 
 /**
- * A Cocoa compliant {@link javax.speech.synthesis.Synthesizer}.
+ * A Google Cloud Text To Speech compliant {@link javax.speech.synthesis.Synthesizer}.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/20 umjammer initial version <br>
@@ -61,40 +60,33 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
 
     @Override
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
-        Voice voice;
-        GoogleCloudTextToSpeechSynthesizerMode mode = (GoogleCloudTextToSpeechSynthesizerMode) getEngineMode();
-        if (mode == null) {
-            throw new EngineException("not engine mode");
-        } else {
-            Voice[] voices = mode.getVoices();
-            if (voices == null || voices.length < 1) {
-                throw new EngineException("no voice");
+        if (getSynthesizerProperties().getVoice() == null) {
+            Voice voice;
+            GoogleCloudTextToSpeechSynthesizerMode mode = (GoogleCloudTextToSpeechSynthesizerMode) getEngineMode();
+            if (mode == null) {
+                throw new EngineException("not engine mode");
             } else {
-                voice = voices[0];
+                Voice[] voices = mode.getVoices();
+                if (voices == null || voices.length < 1) {
+                    throw new EngineException("no voice");
+                } else {
+                    voice = voices[0];
+                }
             }
-        }
 logger.fine("default voice: " + voice.getName());
-        getSynthesizerProperties().setVoice(voice);
+            getSynthesizerProperties().setVoice(voice);
+        }
 
         try {
             this.client = TextToSpeechClient.create();
         } catch (IOException e) {
-            throw (EngineException) new EngineException().initCause(e);
+            throw (EngineException) new EngineException("real speech engine creation failed").initCause(e);
         }
 
         //
         long newState = ALLOCATED | RESUMED;
         newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
         setEngineState(CLEAR_ALL_STATE, newState);
-    }
-
-    /** */
-    private static com.google.cloud.texttospeech.v1.Voice toNativeVoice(Voice voice) {
-        if (voice == null) {
-            return null;
-        }
-        Optional<com.google.cloud.texttospeech.v1.Voice> result = GoogleCloudEngineListFactory.listAllSupportedVoices().stream().filter(v -> v.getName().equals(voice.getName())).findFirst();
-        return result.orElse(null);
     }
 
     @Override
@@ -119,6 +111,8 @@ logger.fine("default voice: " + voice.getName());
             Thread.sleep(500);
         } catch (InterruptedException ignored) {
         }
+
+        client.shutdownNow();
         client.close();
 
         //
@@ -162,7 +156,7 @@ logger.fine("default voice: " + voice.getName());
 
         VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
                 .setLanguageCode(getSynthesizerProperties().getVoice().getSpeechLocale().getLanguage())
-                .setName(toNativeVoice(getSynthesizerProperties().getVoice()).getName())
+                .setName(((WrappedVoice<com.google.cloud.texttospeech.v1.Voice>) getSynthesizerProperties().getVoice()).getNativeVoice().getName())
                 .build();
 
         AudioConfig audioConfig = AudioConfig.newBuilder()
