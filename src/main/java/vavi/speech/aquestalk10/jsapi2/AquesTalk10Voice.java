@@ -6,16 +6,19 @@
 
 package vavi.speech.aquestalk10.jsapi2;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Voice;
 
 import vavi.speech.WrappedVoice;
 import vavi.speech.aquestalk10.jna.AquesTalk10.AQTK_VOICE;
 import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
+import vavi.util.Debug;
 
 
 /**
@@ -51,12 +54,22 @@ public class AquesTalk10Voice extends WrappedVoice<AQTK_VOICE> {
 
     @Override
     public List<WrappedVoice<AQTK_VOICE>> getAllVoices() {
-        List<WrappedVoice<AQTK_VOICE>> voices = new LinkedList<>();
-        for (Map.Entry<String, AQTK_VOICE> nativeVoice : AquesTalk10Wrapper.voices.entrySet()) {
-            WrappedVoice<AQTK_VOICE> voice = new AquesTalk10Voice(nativeVoice);
-            voices.add(voice);
+        try {
+            List<WrappedVoice<AQTK_VOICE>> voices = new LinkedList<>();
+            for (Map.Entry<String, AQTK_VOICE> nativeVoice : AquesTalk10Wrapper.voices.entrySet()) {
+                WrappedVoice<AQTK_VOICE> voice = new AquesTalk10Voice(nativeVoice);
+                voices.add(voice);
+            }
+            return voices;
+        } catch (UnsatisfiedLinkError e) {
+            if (System.getProperty("os.arch").equals("aarch64")) {
+Debug.println(Level.WARNING, "AquesTalk10 doesn't support arm64 architecture.");
+            } else {
+Debug.println(Level.SEVERE, "install AquesTalk10 and locate frameworks at proper directory.");
+            }
+Debug.printStackTrace(Level.FINEST, e);
+            return Collections.emptyList();
         }
-        return voices;
     }
 
     @Override
