@@ -54,7 +54,7 @@ public final class RococoaSynthesizerMode extends SynthesizerMode implements Eng
                                   Boolean supportsLetterToSound,
                                   Boolean supportsMarkup,
                                   Voice[] voices) {
-        super(engineName, modeName, running, supportsLetterToSound, false, voices);
+        super(engineName, modeName, running, supportsLetterToSound, supportsMarkup, voices);
     }
 
     @Override

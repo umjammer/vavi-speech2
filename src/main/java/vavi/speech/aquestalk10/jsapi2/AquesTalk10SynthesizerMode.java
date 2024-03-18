@@ -54,7 +54,7 @@ public final class AquesTalk10SynthesizerMode extends SynthesizerMode implements
                                       Boolean supportsLetterToSound,
                                       Boolean supportsMarkup,
                                       Voice[] voices) {
-        super(engineName, modeName, running, supportsLetterToSound, false, voices);
+        super(engineName, modeName, running, supportsLetterToSound, supportsMarkup, voices);
     }
 
     @Override
