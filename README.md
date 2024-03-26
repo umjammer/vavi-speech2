@@ -45,6 +45,10 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * [download](https://voicevox.hiroshiba.jp/) the application
  * run the application before using this library
 
+### DoCoMo AI Agent API
+
+ * https://agentcraft.sebastien.ai/
+
 ## Usage
 
 ### user
@@ -83,5 +87,8 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
    * [LMROID](https://lmroidsoftware.wixsite.com/nhoshio)
    * [SHAREVOX](https://www.sharevox.app)
    * [http://itvoice.starfree.jp/](http://itvoice.starfree.jp/)
- * AVSpeechSynthesizer needs block
+ * AVSpeechSynthesizer needs [obj-c block](https://github.com/umjammer/rococoa/discussions/23)
  * ~~rcp client/server (wip)~~ -> [vavi-speech-rpc](https://github.com/umjammer/vavi-speech-rpc)
+
+---
+<sub>images by <a href="https://commons.nicovideo.jp/works/nc327182">霊夢</a>, <a href="https://commons.nicovideo.jp/works/nc327184">魔理沙</a>, <a href="https://seiga.nicovideo.jp/seiga/im10865385">ずんだもん</a></sub>
