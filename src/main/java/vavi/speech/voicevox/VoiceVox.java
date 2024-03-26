@@ -141,19 +141,31 @@ Debug.println(Level.FINE, "version: " + version);
         }
         /** @param speed default: 1, range: 0.50 ~ 2.00 */
         public void setSpeed(float speed) {
-            speedScale = speed;
+            if (0.5 <= speed && speed <= 2.0)
+                speedScale = speed;
+            else
+                speedScale = 1;
         }
         /** @param pitch default: 0, range: -0.15 ~ 0.15 */
         public void setPitch(float pitch) {
-            pitchScale = pitch;
+            if (-0.15 <= pitch && pitch <= 0.15)
+                pitchScale = pitch;
+            else
+                pitchScale = 0;
         }
         /** @param intonation range: 0 ~ 2 */
         public void setIntonation(float intonation) {
-            intonationScale = intonation;
+            if (0 <= intonation && intonation <= 2)
+                intonationScale = intonation;
+            else
+                intonationScale = 1;
         }
         /** @param volume default: 1, range: 0.50 ~ 2.00 */
         public void setVolume(float volume) {
-            volumeScale = volume;
+            if (0.5 <= volume && volume <= 2.0)
+                volumeScale = volume;
+            else
+                volumeScale = 1;
         }
     }
 
