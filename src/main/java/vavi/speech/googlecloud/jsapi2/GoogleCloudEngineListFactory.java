@@ -48,8 +48,8 @@ public class GoogleCloudEngineListFactory extends BaseEnginFactory<com.google.cl
     protected List<WrappedVoice<com.google.cloud.texttospeech.v1.Voice>> geAlltVoices() {
         try {
             return GoogleCloudTextToSpeechVoice.factory.getAllVoices();
-        } catch (IllegalStateException e) {
-logger.log(Level.WARNING, e.getMessage());
+        } catch (Throwable t) {
+logger.log(Level.WARNING, t.getMessage() + " env: " + System.getenv("GOOGLE_APPLICATION_CREDENTIALS"), t);
             return Collections.emptyList();
         }
     }

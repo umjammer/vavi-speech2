@@ -6,6 +6,9 @@
 
 package vavi.speech.rococoa.jsapi2;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+import java.util.Collections;
 import java.util.List;
 import javax.speech.EngineList;
 import javax.speech.EngineMode;
@@ -17,6 +20,8 @@ import vavi.speech.BaseEnginFactory;
 import vavi.speech.WrappedVoice;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 
+import static java.lang.System.getLogger;
+
 
 /**
  * Factory for the Mac Speech engine.
@@ -26,6 +31,8 @@ import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
  */
 public class RococoaEngineListFactory extends BaseEnginFactory<AVSpeechSynthesisVoice> implements EngineListFactory {
 
+    private static final Logger logger = getLogger(RococoaEngineListFactory.class.getName());
+
     @Override
     public EngineList createEngineList(EngineMode require) {
         return createEngineListForSynthesizer(require);
@@ -33,7 +40,16 @@ public class RococoaEngineListFactory extends BaseEnginFactory<AVSpeechSynthesis
 
     @Override
     protected List<WrappedVoice<AVSpeechSynthesisVoice>> geAlltVoices() {
-        return RococoaVoice.factory.getAllVoices();
+        try {
+            List<WrappedVoice<AVSpeechSynthesisVoice>> voices = RococoaVoice.factory.getAllVoices();
+            if (voices != null) {
+                return voices;
+            }
+logger.log(Level.WARNING, "voices are null, something is wrong");
+        } catch (Throwable t) {
+logger.log(Level.WARNING, t.getMessage());
+        }
+        return Collections.emptyList();
     }
 
     @Override

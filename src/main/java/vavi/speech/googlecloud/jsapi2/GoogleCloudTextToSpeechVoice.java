@@ -47,6 +47,7 @@ public class GoogleCloudTextToSpeechVoice extends WrappedVoice<com.google.cloud.
                 nativeVoice);
     }
 
+    /** @throws IllegalStateException credentials are not set */
     @Override
     public List<com.google.cloud.texttospeech.v1.Voice> getAllNativeVoices() {
         try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
@@ -62,6 +63,7 @@ public class GoogleCloudTextToSpeechVoice extends WrappedVoice<com.google.cloud.
         }
     }
 
+    /** @throws IllegalStateException credentials are not set */
     @Override
     public List<WrappedVoice<com.google.cloud.texttospeech.v1.Voice>> getAllVoices() {
         List<WrappedVoice<com.google.cloud.texttospeech.v1.Voice>> voiceList = new LinkedList<>();
