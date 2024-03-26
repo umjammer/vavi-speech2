@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.14</version>
+  <version>0.0.15</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -216,13 +216,13 @@
     <dependency>
       <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-core</artifactId>
-      <version>0.8.7</version>
+      <version>0.8.11</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.10</version>
+      <version>0.1.11</version>
       <exclusions>
         <exclusion>
           <groupId>javax.speech</groupId>

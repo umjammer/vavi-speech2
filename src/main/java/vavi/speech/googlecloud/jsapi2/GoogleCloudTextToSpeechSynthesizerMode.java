@@ -54,7 +54,7 @@ public final class GoogleCloudTextToSpeechSynthesizerMode extends SynthesizerMod
                                                   Boolean supportsLetterToSound,
                                                   Boolean supportsMarkup,
                                                   Voice[] voices) {
-        super(engineName, modeName, running, supportsLetterToSound, false, voices);
+        super(engineName, modeName, running, supportsLetterToSound, supportsMarkup, voices);
     }
 
     @Override

@@ -9,6 +9,7 @@ package vavi.speech;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.speech.EngineList;
@@ -124,7 +125,14 @@ public abstract class BaseEnginFactory<V> {
 logger.log(Level.TRACE, getClass().getSimpleName() + " --------");
 
         // get all voices available
-        List<WrappedVoice<V>> voices = geAlltVoices();
+        List<WrappedVoice<V>> voices = null;
+        try {
+            voices = geAlltVoices();
+        } catch (Throwable t) {
+logger.log(Level.WARNING, t.getMessage(), t);
+        }
+        if (voices == null)
+            voices = Collections.emptyList();
 logger.log(Level.TRACE, "voices: " + voices.size());
 
         // We want to get all combinations of domains and locales
