@@ -108,7 +108,6 @@
             <configuration>
               <argLine>
                 -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
-                -Dvavi.util.logging.VaviFormatter.extraClassMethod=sun\.util\.logging\.internal\.LoggingProviderImpl\$JULWrapper#log
               </argLine>
               <reuseForks>false</reuseForks>
               <trimStackTrace>false</trimStackTrace>
@@ -216,7 +215,7 @@
     <dependency>
       <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-core</artifactId>
-      <version>0.8.11</version>
+      <version>0.8.12</version>
     </dependency>
 
     <dependency>
