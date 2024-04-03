@@ -6,8 +6,6 @@
 
 package vavi.speech.voicevox.jsapi2;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import javax.speech.synthesis.Voice;
 
-import org.checkerframework.checker.units.qual.A;
 import vavi.speech.WrappedVoice;
 import vavi.speech.voicevox.VoiceVox;
 

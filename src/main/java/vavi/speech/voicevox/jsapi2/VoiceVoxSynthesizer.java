@@ -77,7 +77,7 @@ logger.fine("default voice: " + voice.getName());
 
         try {
             this.client = new VoiceVox();
-            this.client.getAllVoices();
+            this.client.getAllVoices(); // necessary
         } catch (IllegalStateException e) {
             throw (EngineException) new EngineException().initCause(e.getCause());
         }
@@ -128,7 +128,7 @@ logger.fine("default voice: " + voice.getName());
             // TODO adapt parameters
 Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() / 100f, props.getPitch() / 100f);
             audioQuery.setSpeed(props.getSpeakingRate() / 100f);
-            audioQuery.setPitch(props.getPitch() / 100f);
+            audioQuery.setPitch((props.getPitch() - 16) / 100f);
 //            audioQuery.setIntonation(props.getPitchRange());
             InputStream wave = client.synthesize(audioQuery, voiceId);
             AudioManager manager = getAudioManager();

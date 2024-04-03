@@ -71,7 +71,7 @@ Debug.println(Level.WARNING, e.getMessage());
 //        String voiceName = "四国めたん(ツンツン)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setSpeakingRate(120); // 50 ~ 100 ~ 200
-        synthesizer.getSynthesizerProperties().setPitch(2); // -15 ~ 0 ~ 15
+        synthesizer.getSynthesizerProperties().setPitch(16); // 1 ~ 16 ~ 31
         synthesizer.getSynthesizerProperties().setVoice(voice);
         synthesizer.getSynthesizerProperties().setVolume(3);
 
