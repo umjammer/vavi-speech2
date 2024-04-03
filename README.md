@@ -16,6 +16,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 | Cocoa                       | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA | ✅ | 🚫 | 😃 |             |
 | Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                          | ✅ | - | 💩 |             |
 | VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  | ✅ | - | 😃 | ずんだもん       |
+| CoeiroInk                   | [CoeiroInk](https://coeiroink.com/), REST                                                                                                                                                  | ✅ | - | 😃 | つくよみちゃん       |
 | Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                          | ✅ | - | 💩 |             |
 
 ## Install
@@ -83,7 +84,9 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
    * wave lipsync
      * https://github.com/hecomi/MMD4Mecanim-LipSync-Plugin/blob/master/Assets/LipSync/Core/LipSyncCore.cs
  * VoiceVox editor compatible
-   * [CoeiroInk](https://coeiroink.com/) ... api doesn't work
+   * ~~[CoeiroInk](https://coeiroink.com/)~~ ... ~~api doesn't work~~ ~~api is different from VoiceVox?~~ yes
+     * https://github.com/sevenc-nanashi/coeiroink-v2-bridge 🎯
+     * ~~https://github.com/sinsen9000/MultiSpeech~~ api is old
    * [LMROID](https://lmroidsoftware.wixsite.com/nhoshio)
    * [SHAREVOX](https://www.sharevox.app)
    * [http://itvoice.starfree.jp/](http://itvoice.starfree.jp/)

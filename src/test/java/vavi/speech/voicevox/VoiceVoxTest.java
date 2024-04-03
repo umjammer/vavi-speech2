@@ -150,6 +150,7 @@ Debug.println("SpeakerInfo: " + speakerInfo);
         audioQuery.setSpeed(1.1f);
         audioQuery.setVolume(0.2f);
         speak(voiceVox.synthesize(audioQuery, speakerId));
+        voiceVox.close();
     }
 
     @Test
@@ -159,6 +160,7 @@ Debug.println("SpeakerInfo: " + speakerInfo);
         Voice[] voices = voiceVox.getAllVoices();
 Arrays.stream(voices).forEach(System.err::println);
         assertEquals(22, voiceVox.getId(voices[10]));
+        voiceVox.close();
     }
 
     @Test

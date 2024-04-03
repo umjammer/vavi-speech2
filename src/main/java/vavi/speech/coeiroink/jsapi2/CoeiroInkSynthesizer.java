@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2023 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2024 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.speech.voicevox.jsapi2;
+package vavi.speech.coeiroink.jsapi2;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -26,30 +26,36 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
+import vavi.speech.WrappedVoice;
+import vavi.speech.coeiroink.CoeiroInk;
+import vavi.speech.coeiroink.CoeiroInk.Prosody;
+import vavi.speech.coeiroink.CoeiroInk.Speaker;
+import vavi.speech.coeiroink.CoeiroInk.Synthesis;
 import vavi.speech.voicevox.VoiceVox;
+import vavi.speech.voicevox.VoiceVox.AudioQuery;
 import vavi.util.Debug;
 
 
 /**
- * A VoiceVox {@link javax.speech.synthesis.Synthesizer}.
+ * A CoeiroInk {@link javax.speech.synthesis.Synthesizer}.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2023/01/12 umjammer initial version <br>
+ * @version 0.00 2024/04/03 umjammer initial version <br>
  */
-public final class VoiceVoxSynthesizer extends BaseSynthesizer {
+public final class CoeiroInkSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(VoiceVoxSynthesizer.class.getName());
+    private static final Logger logger = Logger.getLogger(CoeiroInkSynthesizer.class.getName());
 
     /** */
-    private VoiceVox client;
+    private CoeiroInk client;
 
     /**
      * Constructs a new synthesizer object.
      *
      * @param mode the synthesizer mode
      */
-    VoiceVoxSynthesizer(VoiceVoxSynthesizerMode mode) {
+    CoeiroInkSynthesizer(CoeiroInkSynthesizerMode mode) {
         super(mode);
     }
 
@@ -57,17 +63,14 @@ public final class VoiceVoxSynthesizer extends BaseSynthesizer {
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
         if (getSynthesizerProperties().getVoice() == null) {
             Voice voice;
-            VoiceVoxSynthesizerMode mode = (VoiceVoxSynthesizerMode) getEngineMode();
+            CoeiroInkSynthesizerMode mode = (CoeiroInkSynthesizerMode) getEngineMode();
             if (mode == null) {
                 throw new EngineException("not engine mode");
             } else {
                 Voice[] voices = mode.getVoices();
                 if (voices == null || voices.length < 1) {
                     throw new EngineException("no voice");
-                } else if (voices.length > 6) {
-                    voice = voices[6];
                 } else {
-logger.warning("too few default voices: " + voices.length);
                     voice = voices[0];
                 }
             }
@@ -76,8 +79,7 @@ logger.fine("default voice: " + voice.getName());
         }
 
         try {
-            this.client = new VoiceVox();
-            this.client.getAllVoices(); // necessary
+            this.client = new CoeiroInk();
         } catch (IllegalStateException e) {
             throw (EngineException) new EngineException().initCause(e.getCause());
         }
@@ -123,14 +125,19 @@ logger.fine("default voice: " + voice.getName());
     public AudioSegment handleSpeak(int id, String item) {
         try {
             SynthesizerProperties props = getSynthesizerProperties();
-            int voiceId = client.getId(props.getVoice());
-            VoiceVox.AudioQuery audioQuery = client.getQuery(item, voiceId);
+            @SuppressWarnings("unchecked")
+            Speaker nativeVoice = ((WrappedVoice<Speaker>) props.getVoice()).getNativeVoice();
+            Prosody prosody = client.getProsody(item);
             // TODO adapt parameters
 Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() / 100f, props.getPitch() / 100f);
-            audioQuery.setSpeed(props.getSpeakingRate() / 100f);
-            audioQuery.setPitch((props.getPitch() - 16) / 100f);
-//            audioQuery.setIntonation(props.getPitchRange());
-            InputStream wave = client.synthesize(audioQuery, voiceId);
+            Synthesis synthesis = new Synthesis();
+            synthesis.speakerUuid = nativeVoice.speakerUuid;
+            synthesis.styleId = nativeVoice.styles[0].styleId;
+            synthesis.text = item;
+            synthesis.prosodyDetail = prosody.detail;
+            synthesis.speedScale = props.getSpeakingRate() / 100f;
+            synthesis.pitchScale = (props.getPitch() - 16) / 100f;
+            InputStream wave = client.synthesize(synthesis);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
