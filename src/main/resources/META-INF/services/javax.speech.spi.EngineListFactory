@@ -4,3 +4,4 @@ vavi.speech.gyutan.jsapi2.GyutanEngineListFactory
 #vavi.speech.openjtalk.jsapi2.OpenJTalkEngineListFactory
 vavi.speech.rococoa.jsapi2.RococoaEngineListFactory
 vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory
+vavi.speech.coeiroink.jsapi2.CoeiroInkEngineListFactory
