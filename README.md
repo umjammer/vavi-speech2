@@ -46,7 +46,12 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * [download](https://voicevox.hiroshiba.jp/) the application
  * run the application before using this library
 
-### DoCoMo AI Agent API
+### COEIROINK
+
+* [download](https://coeiroink.com/) the application
+* run the application before using this library
+
+### DoCoMo AI Agent API (wip)
 
  * https://agentcraft.sebastien.ai/
 
