@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.17</version>
+  <version>0.0.18</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -22,7 +22,7 @@
 
   <properties>
     <jsapi2.groupId>com.github.umjammer.jsapi2</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi2 -->
-    <jsapi2.version>0.6.9</jsapi2.version>
+    <jsapi2.version>0.6.10</jsapi2.version>
 
     <jersey.version>3.1.5</jersey.version>
   </properties>
@@ -39,14 +39,6 @@
           <value>!true</value>
         </property>
       </activation>
-      <properties>
-        <sen.home/>
-        <voicevox.url/>
-        <htsvoice.dir/>
-        <google.credential/>
-        <docomo.goo.hiragana.apiKey/>
-        <yahoo.japan.apiKey/>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -185,6 +177,11 @@
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
+    <repository>
+      <id>maven_central</id>
+      <name>Maven Central</name>
+      <url>https://repo.maven.apache.org/maven2/</url>
+    </repository>
   </repositories>
 
   <dependencyManagement>
@@ -232,12 +229,12 @@
       <version>0.1.12</version>
       <exclusions>
         <exclusion>
-          <groupId>javax.speech</groupId>
-          <artifactId>speech</artifactId>
+          <groupId>com.github.umjammer</groupId>
+          <artifactId>javax-speech</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.github.umjammer.FreeTTS</groupId>
-          <artifactId>freetts_jsapi10</artifactId>
+          <artifactId>freetts-jsapi10</artifactId>
         </exclusion>
         <exclusion>
           <artifactId>guava</artifactId>
@@ -248,7 +245,7 @@
 <dependency>
   <artifactId>guava</artifactId>
   <groupId>com.google.guava</groupId>
-  <version>32.1.3-jre</version>
+  <version>33.1.0-jre</version>
 </dependency>
 
     <dependency>
