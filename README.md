@@ -1,7 +1,7 @@
 [![Release](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)
 [![Java CI](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-17-b07219)
+![Java](https://img.shields.io/badge/Java-21-b07219)
 
 # vavi-speech2
 
@@ -10,14 +10,15 @@
 Text to Speech and Speech to Text (JSAPI2) engines for Java
 
 | **Type**                    | **Description**                                                                                                                                                                                   | **Sythesizer** | **Recognizer** | **Quality** | **Comment** |
-|:----------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|:--------------:|:-----------:|:------------|
-| AquesTalk10                 | [AquesTalk](https://www.a-quest.com/products/aquestalk.html), JNA                                                                                                                                 | ✅ |  - | 😐 | ゆっくり        |
-| Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries), Library                                                                  | ✅ | 🚧 | 👑 |             |
-| Cocoa                       | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA | ✅ | 🚫 | 😃 |             |
-| Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                          | ✅ | - | 💩 |             |
-| VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  | ✅ | - | 😃 | ずんだもん       |
-| CoeiroInk                   | [CoeiroInk](https://coeiroink.com/), REST                                                                                                                                                  | ✅ | - | 😃 | つくよみちゃん       |
-| Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                          | ✅ | - | 💩 |             |
+|:----------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------:|:--------------:|:-----------:|:------------|
+| AquesTalk10                 | [AquesTalk](https://www.a-quest.com/products/aquestalk.html), JNA                                                                                                                                 |       ✅        |       -        |     😐      | ゆっくり        |
+| Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries), Library                                                                                  |       ✅        |       🚧       |     👑      |             |
+| Cocoa                       | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA |       ✅        |       🚫       |     😃      |             |
+| Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                                                                           |       ✅        |       -        |     💩      |             |
+| VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  |       ✅        |       -        |     😃      | ずんだもん       |
+| CoeiroInk                   | [CoeiroInk](https://coeiroink.com/), REST                                                                                                                                                         |       ✅        |       -        |     😃      | つくよみちゃん     |
+| Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                                                                             |       ✅        |       -        |     💩      |             |
+| AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                             |       ✅        |       -        |     👑      |             |
 
 ## Install
 
@@ -54,6 +55,11 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 ### DoCoMo AI Agent API (wip)
 
  * https://agentcraft.sebastien.ai/
+
+### AivisSpeech
+
+* [download](https://aivis-project.com/) the application
+* run the application before using this library
 
 ## Usage
 
