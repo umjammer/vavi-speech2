@@ -9,12 +9,13 @@ package vavi.speech.voicevox;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.logging.Level;
 import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Voice;
 
@@ -25,7 +26,8 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -39,38 +41,45 @@ import vavi.util.Debug;
  */
 public class VoiceVox implements Closeable {
 
-    /** VoiceVox application web api */
-    private static String url = "http://localhost:50021/";
+    private static final Logger logger = getLogger(VoiceVox.class.getName());
 
-    /** */
+    /** rest response parser */
     private static final Gson gson = new GsonBuilder().create();
 
-    /* */
-    static {
-        String url = System.getProperty("vavi.speech.voicevox.url");
-        if (url != null) {
-            VoiceVox.url = url;
+    /** rest target */
+    private final WebTarget target;
+
+    /** voices */
+    private Speaker[] speakers;
+
+    /** rest client */
+    private final Client client;
+
+    /** server url */
+    private static String getUrl() {
+        String url = System.getProperty("vavi.speech.voicevox.url", null);
+        if (url == null || !url.startsWith("http:")) {
+            return "http://localhost:50021/";
+        } else {
+            return url;
         }
     }
 
     /** */
-    private final WebTarget target;
-
-    /** */
-    private Speaker[] speakers;
-
-    /** */
-    private final Client client;
-
-    /** */
     public VoiceVox() {
+        this(getUrl());
+    }
+
+    /** */
+    public VoiceVox(String url) {
         try {
             client = ClientBuilder.newClient(); // DON'T CLOSE
+logger.log(Level.DEBUG, "url: " + url);
             target = client.target(url);
 
             String version = target.path("version")
                     .request().get(String.class);
-Debug.println(Level.FINE, "version: " + version);
+logger.log(Level.DEBUG, "version: " + version);
         } catch (Exception e) {
             throw new IllegalStateException("VoiceVox is not available at " + url, e);
         }
@@ -116,10 +125,10 @@ Debug.println(Level.FINE, "version: " + version);
             }
         }
         AccentPhrase[] accent_phrases;
-        float speedScale;
-        float pitchScale;
+        public float speedScale;
+        public float pitchScale;
         float intonationScale;
-        float volumeScale;
+        public float volumeScale;
         float prePhonemeLength;
         float postPhonemeLength;
         int outputSamplingRate;
@@ -190,7 +199,7 @@ Debug.println(Level.FINE, "version: " + version);
     /** */
     public static class Speaker {
         String name;
-        String speaker_uuid;
+        public String speaker_uuid;
         public static class Style {
             int id;
             String name;

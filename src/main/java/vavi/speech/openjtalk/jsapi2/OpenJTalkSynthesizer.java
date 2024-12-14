@@ -9,10 +9,11 @@ package vavi.speech.openjtalk.jsapi2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -43,7 +44,7 @@ import vavi.speech.openjtalk.OpenJTalkWrapper.VoiceFileInfo;
 public final class OpenJTalkSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(OpenJTalkSynthesizer.class.getName());
+    private static final Logger logger = System.getLogger(OpenJTalkSynthesizer.class.getName());
 
     /** */
     private OpenJTalkWrapper openJTalk = new OpenJTalkWrapper();
@@ -72,7 +73,7 @@ public final class OpenJTalkSynthesizer extends BaseSynthesizer {
                     voice = voices[0];
                 }
             }
-logger.fine("default voice: " + voice.getName());
+logger.log(Level.DEBUG, "default voice: " + voice.getName());
             getSynthesizerProperties().setVoice(voice);
         }
 

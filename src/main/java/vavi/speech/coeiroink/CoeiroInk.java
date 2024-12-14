@@ -9,6 +9,8 @@ package vavi.speech.coeiroink;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,8 +18,6 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.gson.Gson;
@@ -29,9 +29,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status.Family;
-import vavi.speech.voicevox.VoiceVox;
 import vavi.util.CharNormalizerJa;
-import vavi.util.Debug;
 
 
 /**
@@ -42,33 +40,34 @@ import vavi.util.Debug;
  */
 public class CoeiroInk implements Closeable {
 
-    private static final Logger logger = Logger.getLogger(CoeiroInk.class.getName());
+    private static final Logger logger = System.getLogger(CoeiroInk.class.getName());
 
-    /** VoiceVox application web api */
-    private static String url = "http://127.0.0.1:50032/";
-
-    /** */
+    /** rest response parser */
     private static final Gson gson = new GsonBuilder().create();
 
-    /* */
-    static {
-        String url = System.getProperty("vavi.speech.coeiroink.url");
-        if (url != null) {
-            CoeiroInk.url = url;
+    /** rest target */
+    private final WebTarget target;
+
+    /** rest client */
+    private final Client client;
+
+    /** server url */
+    private static String getUrl() {
+        String url = System.getProperty("vavi.speech.coeiroink.url", null);
+        if (url == null || !url.startsWith("http:")) {
+            return "http://localhost:50032/";
+        } else {
+            return url;
         }
     }
 
     /** */
-    private final WebTarget target;
-
-    /** */
-    private VoiceVox.Speaker[] speakers;
-
-    /** */
-    private final Client client;
-
-    /** */
     public CoeiroInk() {
+        this(getUrl());
+    }
+
+    /** */
+    public CoeiroInk(String url) {
         try {
             client = ClientBuilder.newClient(); // DON'T CLOSE
             target = client.target(url);
@@ -78,7 +77,7 @@ public class CoeiroInk implements Closeable {
                     .request()
                     .get(String.class);
             EngineInfo engineInfo = gson.fromJson(json, EngineInfo.class);
-Debug.println(Level.FINE, "version: " + engineInfo.version);
+logger.log(Level.DEBUG, "version: " + engineInfo.version);
         } catch (Exception e) {
             throw new IllegalStateException("CoeiroInk is not available at " + url, e);
         }
@@ -330,7 +329,7 @@ Debug.println(Level.FINE, "version: " + engineInfo.version);
                 response = i.call();
 
                 if (response.getStatusInfo().getFamily() == Family.SERVER_ERROR) {
-                    logger.warning(String.format("Server error %s when accessing path %s. Delaying %dms", response.getStatus(), response.getLocation() != null ? response.getLocation().toASCIIString() : "null", delay));
+                    logger.log(Level.WARNING, String.format("Server error %s when accessing path %s. Delaying %dms", response.getStatus(), response.getLocation() != null ? response.getLocation().toASCIIString() : "null", delay));
                 }
 
                 delay = backoff.nextBackOffMillis();

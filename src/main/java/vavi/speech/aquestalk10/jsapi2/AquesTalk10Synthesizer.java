@@ -9,7 +9,8 @@ package vavi.speech.aquestalk10.jsapi2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Logger;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -42,7 +43,7 @@ import vavi.util.properties.annotation.PropsEntity;
 public final class AquesTalk10Synthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(AquesTalk10Synthesizer.class.getName());
+    private static final Logger logger = System.getLogger(AquesTalk10Synthesizer.class.getName());
 
     /** kanji -> kana */
     @Property(binder = InstanciationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
@@ -80,7 +81,7 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
                     voice = voices[0];
                 }
             }
-logger.fine("default voice: " + voice.getName());
+logger.log(Level.DEBUG, "default voice: " + voice.getName());
             getSynthesizerProperties().setVoice(voice);
         }
 

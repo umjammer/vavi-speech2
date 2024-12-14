@@ -9,7 +9,8 @@ package vavi.speech.googlecloud.jsapi2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Logger;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -32,7 +33,6 @@ import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 import vavi.speech.WrappedVoice;
-import vavi.util.Debug;
 
 
 /**
@@ -44,7 +44,7 @@ import vavi.util.Debug;
 public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(GoogleCloudTextToSpeechSynthesizer.class.getName());
+    private static final Logger logger = System.getLogger(GoogleCloudTextToSpeechSynthesizer.class.getName());
 
     /** */
     private TextToSpeechClient client;
@@ -73,7 +73,7 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
                     voice = voices[0];
                 }
             }
-logger.fine("default voice: " + voice.getName());
+logger.log(Level.DEBUG, "default voice: " + voice.getName());
             getSynthesizerProperties().setVoice(voice);
         }
 
@@ -154,6 +154,7 @@ logger.fine("default voice: " + voice.getName());
     private byte[] synthesize(String text) {
         SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
 
+        @SuppressWarnings("unchecked")
         VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
                 .setLanguageCode(getSynthesizerProperties().getVoice().getSpeechLocale().getLanguage())
                 .setName(((WrappedVoice<com.google.cloud.texttospeech.v1.Voice>) getSynthesizerProperties().getVoice()).getNativeVoice().getName())

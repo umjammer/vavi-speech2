@@ -9,8 +9,8 @@ package vavi.speech.coeiroink.jsapi2;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -31,9 +31,6 @@ import vavi.speech.coeiroink.CoeiroInk;
 import vavi.speech.coeiroink.CoeiroInk.Prosody;
 import vavi.speech.coeiroink.CoeiroInk.Speaker;
 import vavi.speech.coeiroink.CoeiroInk.Synthesis;
-import vavi.speech.voicevox.VoiceVox;
-import vavi.speech.voicevox.VoiceVox.AudioQuery;
-import vavi.util.Debug;
 
 
 /**
@@ -45,7 +42,7 @@ import vavi.util.Debug;
 public final class CoeiroInkSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(CoeiroInkSynthesizer.class.getName());
+    private static final Logger logger = System.getLogger(CoeiroInkSynthesizer.class.getName());
 
     /** */
     private CoeiroInk client;
@@ -74,7 +71,7 @@ public final class CoeiroInkSynthesizer extends BaseSynthesizer {
                     voice = voices[0];
                 }
             }
-logger.fine("default voice: " + voice.getName());
+logger.log(Level.DEBUG, "default voice: " + voice.getName());
             getSynthesizerProperties().setVoice(voice);
         }
 
@@ -129,7 +126,7 @@ logger.fine("default voice: " + voice.getName());
             Speaker nativeVoice = ((WrappedVoice<Speaker>) props.getVoice()).getNativeVoice();
             Prosody prosody = client.getProsody(item);
             // TODO adapt parameters
-Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() / 100f, props.getPitch() / 100f);
+logger.log(Level.DEBUG, "speed: %3.1f, pitch: %3.1f".formatted(props.getSpeakingRate() / 100f, props.getPitch() / 100f));
             Synthesis synthesis = new Synthesis();
             synthesis.speakerUuid = nativeVoice.speakerUuid;
             synthesis.styleId = nativeVoice.styles[0].styleId;
