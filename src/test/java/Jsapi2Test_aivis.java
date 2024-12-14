@@ -14,26 +14,27 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
-import vavi.speech.coeiroink.CoeiroInk;
-import vavi.speech.coeiroink.jsapi2.CoeiroInkSynthesizer;
-import vavi.speech.coeiroink.jsapi2.CoeiroInkSynthesizerMode;
+import vavi.speech.aivis.jsapi2.AivisSynthesizer;
+import vavi.speech.aivis.jsapi2.AivisSynthesizerMode;
+import vavi.speech.voicevox.VoiceVox;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizer;
+import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode;
 import vavi.util.Debug;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 
 /**
- * Jsapi2Test_coeiroink. (jsapi2, coeiroink)
+ * Jsapi2Test_aivis. (jsapi2, aivis)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2024/03/03 umjammer initial version <br>
+ * @version 0.00 2024/12/14 umjammer initial version <br>
  */
 @EnabledIf("localServerExists")
-class Jsapi2Test_coeiroink {
+class Jsapi2Test_aivis {
 
     static boolean localServerExists() {
-        try {
-            new CoeiroInk();
+        try (var dummy = new VoiceVox("http://127.0.0.1:10101/")) {
             return true;
         } catch (Exception e) {
 Debug.println(Level.WARNING, e.getMessage());
@@ -45,21 +46,21 @@ Debug.println(Level.WARNING, e.getMessage());
      * @param args command line arguments.
      */
     public static void main(String[] args) throws Exception {
-        Jsapi2Test_coeiroink app = new Jsapi2Test_coeiroink();
+        Jsapi2Test_aivis app = new Jsapi2Test_aivis();
         String text = args[0];
         app.speak(text);
     }
 
     @Test
     void test01() throws Exception {
-        String text = "そこでつくよみちゃんの出番です！";
+        String text = "成功の鍵は、タイミングと少しの運。不運だけは確実に訪れる。";
         speak(text);
     }
 
     /** */
     void speak(String text) throws Exception {
-        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new CoeiroInkSynthesizerMode());
-        assertInstanceOf(CoeiroInkSynthesizer.class, synthesizer);
+        Synthesizer synthesizer = (Synthesizer) EngineManager.createEngine(new AivisSynthesizerMode());
+        assertInstanceOf(AivisSynthesizer.class, synthesizer);
 
         synthesizer.addSynthesizerListener(System.err::println);
         synthesizer.allocate();
@@ -67,7 +68,7 @@ Debug.println(Level.WARNING, e.getMessage());
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        String voiceName = "つくよみちゃん";
+        String voiceName = "Anneli(ノーマル)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setSpeakingRate(100); // 50 ~ 100 ~ 200
         synthesizer.getSynthesizerProperties().setPitch(16); // 1 ~ 16 ~ 31

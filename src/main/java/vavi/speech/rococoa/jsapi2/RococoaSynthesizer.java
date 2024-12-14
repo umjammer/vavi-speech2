@@ -9,12 +9,13 @@ package vavi.speech.rococoa.jsapi2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -32,7 +33,6 @@ import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 import vavi.speech.WrappedVoice;
 import vavi.speech.rococoa.SynthesizerDelegate;
-import vavi.util.Debug;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 import vavix.rococoa.avfoundation.AVSpeechSynthesizer;
 import vavix.rococoa.avfoundation.AVSpeechUtterance;
@@ -47,7 +47,7 @@ import vavix.rococoa.avfoundation.AVSpeechUtterance;
 public final class RococoaSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(RococoaSynthesizer.class.getName());
+    private static final Logger logger = System.getLogger(RococoaSynthesizer.class.getName());
 
     /** */
     private AVSpeechSynthesizer synthesizer;
@@ -77,12 +77,12 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
                     throw new EngineException("no voice");
                 } else {
                     AVSpeechSynthesisVoice defaultNativeVoice = AVSpeechSynthesisVoice.withLanguage(Locale.getDefault().toString());
-//Debug.println(Level.FINER, "default voice: " + defaultNativeVoice.getName());
+//logger.log(Level.TRACE, "default voice: " + defaultNativeVoice.getName());
                     Optional<Voice> result = Arrays.stream(voices).filter(v -> v.getName().equals(defaultNativeVoice.name())).findFirst();
                     voice = result.orElseGet(() -> voices[0]);
                 }
             }
-logger.fine("default voice: " + voice.getName());
+logger.log(Level.DEBUG, "default voice: " + voice.getName());
             getSynthesizerProperties().setVoice(voice);
         }
 
@@ -140,6 +140,7 @@ logger.fine("default voice: " + voice.getName());
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AudioSegment handleSpeak(int id, String item) {
         if (false) {
             AudioManager manager = getAudioManager();
@@ -162,7 +163,7 @@ try { // TODO ad-hoc
             delegate.waitForSpeechDone(10000, true);
             return new BaseAudioSegment(item, AudioSystem.getAudioInputStream(RococoaSynthesizer.class.getResourceAsStream("/zero.wav")));
 } catch (Throwable t) {
- Debug.printStackTrace(t);
+ logger.log(Level.ERROR, t.getMessage(), t);
  return null;
 }
         }
@@ -171,8 +172,9 @@ try { // TODO ad-hoc
     /** */
     private AudioInputStream synthesize(String text) {
         try {
-//Debug.println(Level.FINER, "voice: " + getSynthesizerProperties().getVoice());
+//logger.log(Level.TRACE, "voice: " + getSynthesizerProperties().getVoice());
             AVSpeechUtterance utterance = AVSpeechUtterance.of(text);
+            @SuppressWarnings("unchecked")
             var voice = ((WrappedVoice<AVSpeechSynthesisVoice>) getSynthesizerProperties().getVoice()).getNativeVoice();
             utterance.setVoice(voice);
             Path path = Files.createTempFile(getClass().getName(), ".aiff");

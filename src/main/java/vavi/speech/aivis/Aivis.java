@@ -1,24 +1,24 @@
 /*
- * Copyright (c) 2023 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2024 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.speech.voicevox;
+package vavi.speech.aivis;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
-import javax.speech.SpeechLocale;
+import java.util.List;
+import java.util.StringJoiner;
+
 import javax.speech.synthesis.Voice;
 
+import com.google.common.graph.AbstractValueGraph;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import jakarta.ws.rs.client.Client;
@@ -31,17 +31,17 @@ import static java.lang.System.getLogger;
 
 
 /**
- * VoiceVox.
+ * Aivis.
  * <p>
  * system property
- * <li>vavi.speech.voicevox.url ... VoiceVox REST api url, default is "http://localhost:50021/"</li>
+ * <li>vavi.speech.aivis.url ... Aivis REST api url, default is "http://localhost:10101/"</li>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
- * @version 0.00 2023-01-14 nsano initial version <br>
+ * @version 0.00 2024-12-14 nsano initial version <br>
  */
-public class VoiceVox implements Closeable {
+public class Aivis implements Closeable {
 
-    private static final Logger logger = getLogger(VoiceVox.class.getName());
+    private static final Logger logger = getLogger(Aivis.class.getName());
 
     /** rest response parser */
     private static final Gson gson = new GsonBuilder().create();
@@ -49,29 +49,26 @@ public class VoiceVox implements Closeable {
     /** rest target */
     private final WebTarget target;
 
-    /** voices */
-    private Speaker[] speakers;
-
     /** rest client */
     private final Client client;
 
     /** server url */
     private static String getUrl() {
-        String url = System.getProperty("vavi.speech.voicevox.url", null);
+        String url = System.getProperty("vavi.speech.aivis.url", null);
         if (url == null || !url.startsWith("http:")) {
-            return "http://localhost:50021/";
+            return "http://localhost:10101/";
         } else {
             return url;
         }
     }
 
     /** */
-    public VoiceVox() {
+    public Aivis() {
         this(getUrl());
     }
 
     /** */
-    public VoiceVox(String url) {
+    public Aivis(String url) {
         try {
             client = ClientBuilder.newClient(); // DON'T CLOSE
 logger.log(Level.DEBUG, "url: " + url);
@@ -198,20 +195,22 @@ logger.log(Level.DEBUG, "version: " + version);
 
     /** */
     public static class Speaker {
-        String name;
+        public String name;
         public String speaker_uuid;
         public static class Style {
-            int id;
-            String name;
+            public int id;
+            public String name;
+            public String type;
             @Override public String toString() {
                 return "Style{" +
                         "id=" + id +
                         ", name='" + name + '\'' +
+                        ", type='" + type + '\'' +
                         '}';
             }
         }
-        Style[] styles;
-        String version;
+        public Style[] styles;
+        public String version;
         @Override public String toString() {
             return "Speaker{" +
                     "name='" + name + '\'' +
@@ -248,48 +247,36 @@ logger.log(Level.DEBUG, "version: " + version);
         }
     }
 
-    /** */
-    public Voice[] getAllVoices() {
-        //
-        if (speakers == null) {
-            String speakersJson = target
-                    .path("speakers")
-                    .request()
-                    .get(String.class);
+    /** flatten voice model */
+    public static class AivisSpeaker {
+        public String name;
+        public int id;
+        public String speaker_uuid;
 
-            speakers = gson.fromJson(speakersJson, Speaker[].class);
+        @Override public String toString() {
+            return new StringJoiner(", ", AivisSpeaker.class.getSimpleName() + "[", "]")
+                    .add("name='" + name + "'")
+                    .add("id=" + id)
+                    .add("speaker_uuid='" + speaker_uuid + "'")
+                    .toString();
         }
-        SpeechLocale japan = new SpeechLocale(Locale.JAPANESE.toString());
+    }
+
+    /** */
+    public AivisSpeaker[] getAllVoices() {
+        String speakersJson = target
+                .path("speakers")
+                .request()
+                .get(String.class);
+logger.log(Level.TRACE, speakersJson);
+        Speaker[] speakers = gson.fromJson(speakersJson, Speaker[].class);
+
         return Arrays.stream(speakers).flatMap(speaker -> Arrays.stream(speaker.styles).map(style -> {
-            int[] vd = voiceData.get(speaker.name);
-            if (vd != null) {
-                return new Voice(japan, speaker.name + "(" + style.name + ")", vd[0], vd[1], Voice.VARIANT_DONT_CARE);
-            } else {
-                return new Voice(japan, speaker.name + "(" + style.name + ")", Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE);
-            }
-        })).toArray(Voice[]::new);
-    }
-
-    /** */
-    public int getId(Voice voice) {
-        String name = voice.getName().replaceFirst("\\(.+\\)", "");
-        Speaker speaker = Arrays.stream(speakers).filter(s -> s.name.equals(name)).findFirst().get();
-        String style = voice.getName().substring(voice.getName().indexOf("(") + 1, voice.getName().length() - 1);
-        return Arrays.stream(speaker.styles).filter(s -> s.name.equals(style)).findFirst().get().id;
-    }
-
-    /** to complement lack information of voicevox for jsapi voice */
-    private static final Map<String, int[]> voiceData = new HashMap<>();
-
-    /* cvs: name, gender, age */
-    static {
-        Scanner scanner = new Scanner(VoiceVox.class.getResourceAsStream("voicevox.csv"));
-        while (scanner.hasNextLine()) {
-            String[] parts = scanner.nextLine().split(",");
-            String name = parts[0];
-            int gender = Integer.parseInt(parts[1]);
-            int age = Integer.parseInt(parts[2]);
-            voiceData.put(name, new int[] {gender, age});
-        }
+            AivisSpeaker aivisSpeaker = new AivisSpeaker();
+            aivisSpeaker.id = style.id;
+            aivisSpeaker.name = speaker.name + "(" + style.name + ")";
+            aivisSpeaker.speaker_uuid = speaker.speaker_uuid;
+            return aivisSpeaker;
+        })).toArray(AivisSpeaker[]::new);
     }
 }

@@ -129,7 +129,8 @@ logger.log(Level.TRACE, getClass().getSimpleName() + " --------");
         try {
             voices = geAlltVoices();
         } catch (Throwable t) {
-logger.log(Level.WARNING, t.getMessage(), t);
+logger.log(Level.WARNING, t.getMessage());
+logger.log(Level.TRACE, t.getMessage(), t);
         }
         if (voices == null)
             voices = Collections.emptyList();

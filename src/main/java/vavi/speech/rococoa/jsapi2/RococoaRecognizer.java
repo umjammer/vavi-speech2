@@ -10,9 +10,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
 import javax.speech.AudioException;
@@ -29,7 +29,6 @@ import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.recognition.BaseRecognizer;
 import org.jvoicexml.jsapi2.recognition.BaseResult;
 import org.jvoicexml.jsapi2.recognition.GrammarDefinition;
-import vavi.util.Debug;
 
 
 /**
@@ -40,7 +39,7 @@ import vavi.util.Debug;
 public final class RococoaRecognizer extends BaseRecognizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(RococoaRecognizer.class.getName());
+    private static final Logger logger = System.getLogger(RococoaRecognizer.class.getName());
 
     /** SAPI recognizer Handle. **/
     private long recognizerHandle;
@@ -103,7 +102,7 @@ public final class RococoaRecognizer extends BaseRecognizer {
 //logger.log(Level.TRACE, grammarSources[i]);
 
             } catch (IOException e) {
-                Debug.printStackTrace(e);
+                logger.log(Level.ERROR, e.getMessage(), e);
             }
             ++i;
         }
@@ -139,13 +138,13 @@ public final class RococoaRecognizer extends BaseRecognizer {
         System.out.println("Java Code " + utterance);
 
         RuleGrammar grammar = currentGrammar; // current grammar is not available
-logger.log(Level.FINE, grammar.toString());
+logger.log(Level.DEBUG, grammar.toString());
 
         BaseResult result;
         try {
             result = new BaseResult(grammar, utterance);
         } catch (GrammarException e) {
-            logger.warning(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
             return;
         }
 
@@ -167,13 +166,11 @@ logger.log(Level.FINE, grammar.toString());
     @Override
     protected void handleReleaseFocus() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     protected void handleRequestFocus() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -184,6 +181,6 @@ logger.log(Level.FINE, grammar.toString());
     @Override
     protected void handlePropertyChangeRequest(
             BaseEngineProperties properties, String propName, Object oldValue, Object newValue) {
-        logger.warning("changing property '" + propName + "' to '" + newValue + "' ignored");
+        logger.log(Level.WARNING, "changing property '" + propName + "' to '" + newValue + "' ignored");
     }
 }

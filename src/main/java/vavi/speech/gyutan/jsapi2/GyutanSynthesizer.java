@@ -10,12 +10,12 @@ import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -32,7 +32,6 @@ import org.icn.gyutan.Gyutan;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-import vavi.util.Debug;
 
 
 /**
@@ -44,7 +43,7 @@ import vavi.util.Debug;
 public final class GyutanSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(GyutanSynthesizer.class.getName());
+    private static final Logger logger = System.getLogger(GyutanSynthesizer.class.getName());
 
     /**
      * Constructs a new synthesizer object.
@@ -70,7 +69,7 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
                     voice = voices[0];
                 }
             }
-logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
+logger.log(Level.DEBUG, "default voice: " + (voice != null ? voice.getName() : ""));
             getSynthesizerProperties().setVoice(voice);
         }
 
@@ -152,7 +151,7 @@ logger.fine("default voice: " + (voice != null ? voice.getName() : ""));
     /** */
     private AudioInputStream synthe(String text) {
         try {
-Debug.println(Level.FINER, "vioce: " + getSynthesizerProperties().getVoice());
+logger.log(Level.TRACE, "vioce: " + getSynthesizerProperties().getVoice());
             Path wave = Files.createTempFile(getClass().getName(), ".wav");
             Path voice = toNativeVoice(getSynthesizerProperties().getVoice());
             Gyutan gyutan = new Gyutan(System.getProperty("sen.home"), voice.toString());

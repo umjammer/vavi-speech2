@@ -10,8 +10,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Collection;
-import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
 import javax.speech.AudioException;
@@ -28,7 +29,6 @@ import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.recognition.BaseRecognizer;
 import org.jvoicexml.jsapi2.recognition.BaseResult;
 import org.jvoicexml.jsapi2.recognition.GrammarDefinition;
-import vavi.util.Debug;
 
 
 /**
@@ -37,9 +37,9 @@ import vavi.util.Debug;
  * @author Dirk Schnelle-Walka
  */
 public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
+
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(GoogleCloudSpeechRecognizer.class
-            .getName());
+    private static final Logger logger = System.getLogger(GoogleCloudSpeechRecognizer.class.getName());
 
     /** SAPI recognizer Handle. **/
     private long recognizerHandle;
@@ -98,11 +98,11 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
                 out.write(xml.toString().getBytes());
                 out.close();
                 grammarSources[i] = file.getCanonicalPath();
-//Debug.println(xml);
-//Debug.println(grammarSources[i]);
+//logger.log(Level.DEBUG, xml);
+//logger.log(Level.DEBUG, grammarSources[i]);
 
             } catch (IOException e) {
-                Debug.printStackTrace(e);
+                logger.log(Level.ERROR, e.getMessage(), e);
             }
             ++i;
         }
@@ -136,13 +136,13 @@ public final class GoogleCloudSpeechRecognizer extends BaseRecognizer {
         System.out.println("Java Code " + utterance);
 
         RuleGrammar grammar = currentGrammar; // current grammar is not available
-System.out.println(grammar);
+logger.log(Level.TRACE, grammar);
 
         BaseResult result;
         try {
             result = new BaseResult(grammar, utterance);
         } catch (GrammarException e) {
-            LOGGER.warning(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
             return;
         }
 
@@ -168,13 +168,11 @@ System.out.println(grammar);
     @Override
     protected void handleReleaseFocus() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     protected void handleRequestFocus() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -187,7 +185,6 @@ System.out.println(grammar);
             BaseEngineProperties properties,
             String propName, Object oldValue,
             Object newValue) {
-        LOGGER.warning("changing property '" + propName
-                + "' to '" + newValue + "' ignored");
+        logger.log(Level.WARNING, "changing property '" + propName + "' to '" + newValue + "' ignored");
     }
 }

@@ -9,8 +9,8 @@ package vavi.speech.voicevox.jsapi2;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -27,7 +27,6 @@ import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 import vavi.speech.voicevox.VoiceVox;
-import vavi.util.Debug;
 
 
 /**
@@ -39,7 +38,7 @@ import vavi.util.Debug;
 public final class VoiceVoxSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = Logger.getLogger(VoiceVoxSynthesizer.class.getName());
+    private static final Logger logger = System.getLogger(VoiceVoxSynthesizer.class.getName());
 
     /** */
     private VoiceVox client;
@@ -67,11 +66,11 @@ public final class VoiceVoxSynthesizer extends BaseSynthesizer {
                 } else if (voices.length > 6) {
                     voice = voices[6];
                 } else {
-logger.warning("too few default voices: " + voices.length);
+logger.log(Level.WARNING, "too few default voices: " + voices.length);
                     voice = voices[0];
                 }
             }
-logger.fine("default voice: " + voice.getName());
+logger.log(Level.DEBUG, "default voice: " + voice.getName());
             getSynthesizerProperties().setVoice(voice);
         }
 
@@ -126,7 +125,7 @@ logger.fine("default voice: " + voice.getName());
             int voiceId = client.getId(props.getVoice());
             VoiceVox.AudioQuery audioQuery = client.getQuery(item, voiceId);
             // TODO adapt parameters
-Debug.printf(Level.FINE, "speed: %3.1f, pitch: %3.1f", props.getSpeakingRate() / 100f, props.getPitch() / 100f);
+logger.log(Level.DEBUG, "speed: %3.1f, pitch: %3.1f".formatted(props.getSpeakingRate() / 100f, props.getPitch() / 100f));
             audioQuery.setSpeed(props.getSpeakingRate() / 100f);
             audioQuery.setPitch((props.getPitch() - 16) / 100f);
 //            audioQuery.setIntonation(props.getPitchRange());

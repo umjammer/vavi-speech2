@@ -7,10 +7,11 @@
 package vavi.speech.googlecloud.jsapi2;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Voice;
 
@@ -18,7 +19,8 @@ import com.google.cloud.texttospeech.v1.ListVoicesRequest;
 import com.google.cloud.texttospeech.v1.ListVoicesResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
 import vavi.speech.WrappedVoice;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -28,6 +30,8 @@ import vavi.util.Debug;
  * @version 0.00 2024-03-14 nsano initial version <br>
  */
 public class GoogleCloudTextToSpeechVoice extends WrappedVoice<com.google.cloud.texttospeech.v1.Voice> {
+
+    private static final Logger logger = getLogger(GoogleCloudTextToSpeechVoice.class.getName());
 
     /** */
     public static final GoogleCloudTextToSpeechVoice factory = new GoogleCloudTextToSpeechVoice();
@@ -92,7 +96,7 @@ public class GoogleCloudTextToSpeechVoice extends WrappedVoice<com.google.cloud.
 
     /** native gender conversion */
     private static int toGender(com.google.cloud.texttospeech.v1.Voice nativeVoice) {
-Debug.println(Level.FINEST, "nativeGender: " + nativeVoice.getName() + ", " + nativeVoice.getSsmlGenderValue());
+logger.log(Level.TRACE, "nativeGender: " + nativeVoice.getName() + ", " + nativeVoice.getSsmlGenderValue());
         return switch (nativeVoice.getSsmlGenderValue()) {
             case 1 -> Voice.GENDER_MALE;
             case 2 -> Voice.GENDER_FEMALE;

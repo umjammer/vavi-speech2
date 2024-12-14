@@ -6,19 +6,21 @@
 
 package vavi.speech.aquestalk10.jsapi2;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Voice;
 
 import vavi.speech.WrappedVoice;
 import vavi.speech.aquestalk10.jna.AquesTalk10.AQTK_VOICE;
 import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -28,6 +30,8 @@ import vavi.util.Debug;
  * @version 0.00 2024-03-14 nsano initial version <br>
  */
 public class AquesTalk10Voice extends WrappedVoice<AQTK_VOICE> {
+
+    private static final Logger logger = getLogger(AquesTalk10Voice.class.getName());
 
     /** */
     public static final AquesTalk10Voice factory = new AquesTalk10Voice();
@@ -63,11 +67,11 @@ public class AquesTalk10Voice extends WrappedVoice<AQTK_VOICE> {
             return voices;
         } catch (UnsatisfiedLinkError e) {
             if (System.getProperty("os.arch").equals("aarch64")) {
-Debug.println(Level.WARNING, "AquesTalk10 doesn't support arm64 architecture.");
+logger.log(Level.WARNING, "AquesTalk10 doesn't support arm64 architecture.");
             } else {
-Debug.println(Level.SEVERE, "install AquesTalk10 and locate frameworks at proper directory.");
+logger.log(Level.ERROR, "install AquesTalk10 and locate frameworks at proper directory.");
             }
-Debug.printStackTrace(Level.FINEST, e);
+logger.log(Level.TRACE, e);
             return Collections.emptyList();
         }
     }

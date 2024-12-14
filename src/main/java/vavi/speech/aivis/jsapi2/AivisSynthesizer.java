@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.speech.googlecloud.jsapi2;
+package vavi.speech.aivis.jsapi2;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.System.Logger;
@@ -20,41 +20,37 @@ import javax.speech.AudioSegment;
 import javax.speech.EngineException;
 import javax.speech.EngineStateException;
 import javax.speech.synthesis.Speakable;
+import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
 
-import com.google.cloud.texttospeech.v1.AudioConfig;
-import com.google.cloud.texttospeech.v1.AudioEncoding;
-import com.google.cloud.texttospeech.v1.SynthesisInput;
-import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
-import com.google.cloud.texttospeech.v1.TextToSpeechClient;
-import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
-import com.google.protobuf.ByteString;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 import vavi.speech.WrappedVoice;
+import vavi.speech.aivis.Aivis;
+import vavi.speech.aivis.Aivis.AivisSpeaker;
 
 
 /**
- * A Google Cloud Text To Speech compliant {@link javax.speech.synthesis.Synthesizer}.
+ * An Aivis {@link javax.speech.synthesis.Synthesizer}.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/09/20 umjammer initial version <br>
+ * @version 0.00 2024/12/14 umjammer initial version <br>
  */
-public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
+public final class AivisSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */
-    private static final Logger logger = System.getLogger(GoogleCloudTextToSpeechSynthesizer.class.getName());
+    private static final Logger logger = System.getLogger(AivisSynthesizer.class.getName());
 
     /** */
-    private TextToSpeechClient client;
+    private Aivis client;
 
     /**
      * Constructs a new synthesizer object.
      *
      * @param mode the synthesizer mode
      */
-    GoogleCloudTextToSpeechSynthesizer(GoogleCloudTextToSpeechSynthesizerMode mode) {
+    AivisSynthesizer(AivisSynthesizerMode mode) {
         super(mode);
     }
 
@@ -62,7 +58,7 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
     protected void handleAllocate() throws EngineStateException, EngineException, AudioException, SecurityException {
         if (getSynthesizerProperties().getVoice() == null) {
             Voice voice;
-            GoogleCloudTextToSpeechSynthesizerMode mode = (GoogleCloudTextToSpeechSynthesizerMode) getEngineMode();
+            AivisSynthesizerMode mode = (AivisSynthesizerMode) getEngineMode();
             if (mode == null) {
                 throw new EngineException("not engine mode");
             } else {
@@ -70,6 +66,7 @@ public final class GoogleCloudTextToSpeechSynthesizer extends BaseSynthesizer {
                 if (voices == null || voices.length < 1) {
                     throw new EngineException("no voice");
                 } else {
+logger.log(Level.WARNING, "too few default voices: " + voices.length);
                     voice = voices[0];
                 }
             }
@@ -78,9 +75,10 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
         }
 
         try {
-            this.client = TextToSpeechClient.create();
-        } catch (IOException e) {
-            throw (EngineException) new EngineException("real speech engine creation failed").initCause(e);
+            this.client = new Aivis();
+            this.client.getAllVoices(); // necessary
+        } catch (IllegalStateException e) {
+            throw (EngineException) new EngineException().initCause(e.getCause());
         }
 
         //
@@ -106,16 +104,6 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
 
     @Override
     public void handleDeallocate() {
-        // Leave some time to let all resources detach
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ignored) {
-        }
-
-        client.shutdownNow();
-        client.close();
-
-        //
         setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
         getQueueManager().cancelAllItems();
         getQueueManager().terminate();
@@ -133,11 +121,19 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
     @Override
     public AudioSegment handleSpeak(int id, String item) {
         try {
-            byte[] bytes = synthesize(item);
+            SynthesizerProperties props = getSynthesizerProperties();
+            int voiceId = ((WrappedVoice<AivisSpeaker>) props.getVoice()).getNativeVoice().id;
+            Aivis.AudioQuery audioQuery = client.getQuery(item, voiceId);
+            // TODO adapt parameters
+logger.log(Level.DEBUG, "speed: %3.1f, pitch: %3.1f".formatted(props.getSpeakingRate() / 100f, props.getPitch() / 100f));
+            audioQuery.setSpeed(props.getSpeakingRate() / 100f);
+            audioQuery.setPitch((props.getPitch() - 16) / 100f);
+//            audioQuery.setIntonation(props.getPitchRange());
+            InputStream wave = client.synthesize(audioQuery, voiceId);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-            InputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(bytes));
+            InputStream in = AudioSystem.getAudioInputStream(new BufferedInputStream(wave));
             AudioSegment segment;
             if (locator == null) {
                 segment = new BaseAudioSegment(item, in);
@@ -148,26 +144,6 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
         } catch (IOException | UnsupportedAudioFileException e) {
             throw new IllegalStateException(e);
         }
-    }
-
-    /** */
-    private byte[] synthesize(String text) {
-        SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
-
-        @SuppressWarnings("unchecked")
-        VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
-                .setLanguageCode(getSynthesizerProperties().getVoice().getSpeechLocale().getLanguage())
-                .setName(((WrappedVoice<com.google.cloud.texttospeech.v1.Voice>) getSynthesizerProperties().getVoice()).getNativeVoice().getName())
-                .build();
-
-        AudioConfig audioConfig = AudioConfig.newBuilder()
-                .setAudioEncoding(AudioEncoding.LINEAR16)
-                .build();
-
-        SynthesizeSpeechResponse response = client.synthesizeSpeech(input, voice, audioConfig);
-
-        ByteString audioContents = response.getAudioContent();
-        return audioContents.toByteArray();
     }
 
     @Override

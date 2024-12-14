@@ -7,11 +7,11 @@
 package vavi.speech.rococoa.jsapi2;
 
 import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.speech.SpeechLocale;
@@ -20,7 +20,6 @@ import javax.speech.synthesis.Voice;
 import org.rococoa.Rococoa;
 import org.rococoa.cocoa.foundation.NSObject;
 import vavi.speech.WrappedVoice;
-import vavi.util.Debug;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 
 import static java.lang.System.getLogger;
@@ -89,7 +88,7 @@ try {
 
     @Override
     public Locale getLocale() {
-//Debug.println("locale: " + Locale.forLanguageTag(getSpeechLocale().toString().replaceAll("_", "-")) + ", source: " + getSpeechLocale().toString());
+//logger.log(Level.DEBUG, "locale: " + Locale.forLanguageTag(getSpeechLocale().toString().replaceAll("_", "-")) + ", source: " + getSpeechLocale().toString());
         return Locale.forLanguageTag(getSpeechLocale().toString().replaceAll("_", "-"));
     }
 
@@ -101,15 +100,15 @@ try {
             Matcher m = localPattern.matcher(nativeVoice.identifier());
             if (m.find()) {
                 String found = m.group();
-//Debug.println("found: " + found);
+//logger.log(Level.DEBUG, "found: " + found);
                 String[] pair = found.split("-");
-//Debug.println("locale: " + nativeVoice.identifier() + ", " + pair[0] + ", " +  pair[1]);
+//logger.log(Level.DEBUG, "locale: " + nativeVoice.identifier() + ", " + pair[0] + ", " +  pair[1]);
                 return new SpeechLocale(pair[0], pair[1], "");
             }
         } catch (Exception e) {
-Debug.println(Level.FINE, "getSpeechLocale: " + e);
+logger.log(Level.DEBUG, "getSpeechLocale: " + e);
         }
-Debug.println(Level.FINEST, "getSpeechLocale: " + nativeVoice.identifier());
+logger.log(Level.TRACE, "getSpeechLocale: " + nativeVoice.identifier());
         return SpeechLocale.getDefault();
     }
 
@@ -125,7 +124,7 @@ Debug.println(Level.FINEST, "getSpeechLocale: " + nativeVoice.identifier());
         try {
             gender = nativeVoice.gender();
         } catch (IllegalArgumentException e) {
-Debug.println(Level.FINE, "getGender: " + nativeVoice.name());
+logger.log(Level.DEBUG, "getGender: " + nativeVoice.name());
             return Voice.GENDER_DONT_CARE;
         }
 
