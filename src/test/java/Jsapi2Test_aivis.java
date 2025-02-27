@@ -14,6 +14,7 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
+import vavi.speech.aivis.Aivis;
 import vavi.speech.aivis.jsapi2.AivisSynthesizer;
 import vavi.speech.aivis.jsapi2.AivisSynthesizerMode;
 import vavi.speech.voicevox.VoiceVox;
@@ -34,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class Jsapi2Test_aivis {
 
     static boolean localServerExists() {
-        try (var dummy = new VoiceVox("http://127.0.0.1:10101/")) {
+        try (var dummy = new Aivis()) {
             return true;
         } catch (Exception e) {
 Debug.println(Level.WARNING, e.getMessage());
