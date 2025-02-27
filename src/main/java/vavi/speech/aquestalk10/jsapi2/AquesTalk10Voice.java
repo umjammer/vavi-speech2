@@ -67,7 +67,7 @@ public class AquesTalk10Voice extends WrappedVoice<AQTK_VOICE> {
             return voices;
         } catch (UnsatisfiedLinkError e) {
             if (System.getProperty("os.arch").equals("aarch64")) {
-logger.log(Level.WARNING, "AquesTalk10 doesn't support arm64 architecture.");
+logger.log(Level.INFO, "AquesTalk10 doesn't support arm64 architecture.");
             } else {
 logger.log(Level.ERROR, "install AquesTalk10 and locate frameworks at proper directory.");
             }

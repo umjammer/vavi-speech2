@@ -18,7 +18,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 | VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  |       ✅        |       -        |     😃      | ずんだもん       |
 | CoeiroInk                   | [CoeiroInk](https://coeiroink.com/), REST                                                                                                                                                         |       ✅        |       -        |     😃      | つくよみちゃん     |
 | Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                                                                             |       ✅        |       -        |     💩      |             |
-| AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                             |       ✅        |       -        |     👑      |             |
+| AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                                 |       ✅        |       -        |     👑      |             |
 
 ## Install
 
