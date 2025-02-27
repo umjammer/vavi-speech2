@@ -69,7 +69,8 @@ public class CoeiroInkVoice extends WrappedVoice<Speaker> {
         try (CoeiroInk coeiroInk = new CoeiroInk()) {
             nativeVoices.addAll(Arrays.asList(coeiroInk.getAllVoices()));
         } catch (Throwable e) {
-            logger.log(Level.WARNING, "no CoeiroInk server found");
+            logger.log(Level.INFO, "no CoeiroInk server found");
+            logger.log(Level.TRACE, e.getMessage(), e);
         }
     }
 

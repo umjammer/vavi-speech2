@@ -75,7 +75,8 @@ public class GyutanVoice extends WrappedVoice<String[]> {
                 nativeVoices.add(parts);
             }
         } catch (NullPointerException e) {
-            logger.log(Level.WARNING, "no gyutan voices definition files 'htsvoice.csv' file in classpath");
+            logger.log(Level.INFO, "no gyutan voices definition files 'htsvoice.csv' file in classpath");
+            logger.log(Level.TRACE, e.getMessage(), e);
         }
     }
 

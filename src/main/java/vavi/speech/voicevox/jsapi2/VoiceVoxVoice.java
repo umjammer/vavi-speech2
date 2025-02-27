@@ -67,7 +67,7 @@ public class VoiceVoxVoice extends WrappedVoice<Voice> {
         try (VoiceVox voiceVox = new VoiceVox()) {
             nativeVoices.addAll(Arrays.asList(voiceVox.getAllVoices()));
         } catch (Throwable e) {
-            logger.log(Level.WARNING, "no VoiceVox server found");
+            logger.log(Level.INFO, "no VoiceVox server found");
             logger.log(Level.TRACE, e.getMessage(), e);
         }
     }

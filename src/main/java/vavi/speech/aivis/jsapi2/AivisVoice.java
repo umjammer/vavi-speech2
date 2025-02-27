@@ -69,7 +69,8 @@ public class AivisVoice extends WrappedVoice<AivisSpeaker> {
         try (Aivis aivis = new Aivis()) {
             nativeVoices.addAll(Arrays.asList(aivis.getAllVoices()));
         } catch (Throwable e) {
-            logger.log(Level.WARNING, "no Aivis server found");
+            logger.log(Level.INFO, "no Aivis server found");
+            logger.log(Level.TRACE, e.getMessage(), e);
         }
     }
 
