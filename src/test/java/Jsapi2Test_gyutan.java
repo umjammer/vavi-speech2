@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2023/01/14 umjammer initial version <br>
  */
-@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*") // cause needs sen.home
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*") // 'cause this needs "sen.home"
 class Jsapi2Test_gyutan {
 
     /**

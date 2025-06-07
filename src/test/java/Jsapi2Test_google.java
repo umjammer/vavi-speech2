@@ -13,6 +13,8 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizer;
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizerMode;
 
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
+@EnabledIfEnvironmentVariable(named = "GOOGLE_APPLICATION_CREDENTIALS", matches = ".*")
 class Jsapi2Test_google {
 
     static {
