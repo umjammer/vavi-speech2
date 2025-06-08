@@ -19,7 +19,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 | CoeiroInk                   | [CoeiroInk](https://coeiroink.com/), REST                                                                                                                                                         |       ✅        |       -        |     😃      | つくよみちゃん     |
 | Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                                                                             |       ✅        |       -        |     💩      |             |
 | AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                                 |       ✅        |       -        |     👑      |             |
-| Google Gemini API           | [Google Gemini API](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#java_1)                                                                                                          |       🚧       |       -        |     🚀      |
+| Google AI Studio            | [Google Gemini API](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#java_1)                                                                                                          |       ✅        |       -        |     🚀      |
 
 ## Install
 
@@ -62,9 +62,9 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 * [download](https://aivis-project.com/) the application
 * run the application before using this library
 
-### Google Gemini API
+### Google Gemini API (Google AI Studio)
 
-* [get] api key
+* [get](https://aistudio.google.com/apikey) api key
 * set environment variable `"GOOGLE_API_KEY"` the api key
 
 ## Usage

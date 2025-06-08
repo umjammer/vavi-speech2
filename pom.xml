@@ -24,7 +24,7 @@
     <jsapi2.groupId>com.github.umjammer.jsapi2</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi2 -->
     <jsapi2.version>0.6.10</jsapi2.version>
 
-    <jersey.version>3.1.7</jersey.version>
+    <jersey.version>3.1.9</jersey.version>
   </properties>
 
   <profiles>
@@ -68,6 +68,7 @@
                 <GOOGLE_APPLICATION_CREDENTIALS>${google.credential}</GOOGLE_APPLICATION_CREDENTIALS>
                 <DOCOMO_GOO_HIRAGANA_API_KEY>${docomo.goo.hiragana.apiKey}</DOCOMO_GOO_HIRAGANA_API_KEY>
                 <YAHOOJAPAN_API_KEY>${yahoo.japan.apiKey}</YAHOOJAPAN_API_KEY>
+                <GOOGLE_API_KEY>${google.aistudio.apiKey}</GOOGLE_API_KEY>
               </environmentVariables>
               <argLine>
                 -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
@@ -186,7 +187,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.10.3</version>
+        <version>5.12.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -218,15 +219,15 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <groupId>com.google.genai</groupId>
       <artifactId>google-genai</artifactId>
       <version>1.0.0</version>
     </dependency>
 
     <dependency>
+      <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <artifactId>vavi-speech</artifactId>
-      <version>0.1.14</version>
+      <version>0.1.15</version>
       <exclusions>
         <exclusion> <!-- mandatory -->
           <groupId>com.github.umjammer</groupId>
