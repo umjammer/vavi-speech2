@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
 @PropsEntity(url = "file:local.properties")
-@EnabledIfSystemProperty(named = "os.arch", matches = "x86_64")
+@EnabledIfSystemProperty(named = "os.arch", matches = "x86_64") // not works on arm64
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
 class Jsapi2Test_aquestalk10 {
 

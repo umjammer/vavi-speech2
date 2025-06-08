@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2024/03/03 umjammer initial version <br>
  */
-@EnabledIf("localServerExists")
+@EnabledIf("localServerExists") // make sure CoeiroInk.app is running
 class Jsapi2Test_coeiroink {
 
     static boolean localServerExists() {

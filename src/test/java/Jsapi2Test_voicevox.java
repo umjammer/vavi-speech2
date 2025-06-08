@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2023/01/14 umjammer initial version <br>
  */
-@EnabledIf("localServerExists")
+@EnabledIf("localServerExists") // make sure VoiceVox.app is running
 class Jsapi2Test_voicevox {
 
     static boolean localServerExists() {

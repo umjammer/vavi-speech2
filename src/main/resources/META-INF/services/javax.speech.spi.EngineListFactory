@@ -6,3 +6,4 @@ vavi.speech.rococoa.jsapi2.RococoaEngineListFactory
 vavi.speech.voicevox.jsapi2.VoiceVoxEngineListFactory
 vavi.speech.coeiroink.jsapi2.CoeiroInkEngineListFactory
 vavi.speech.aivis.jsapi2.AivisEngineListFactory
+vavi.speech.googlegenai.jsapi2.GoogleGenAITTSListFactory

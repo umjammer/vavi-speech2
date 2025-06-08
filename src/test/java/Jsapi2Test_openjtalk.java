@@ -13,6 +13,8 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+
 import vavi.speech.gyutan.jsapi2.GyutanSynthesizer;
 import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizer;
 import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizerMode;
@@ -39,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @version 0.00 2019/09/26 umjammer initial version <br>
  */
 @Disabled("because installing jtalk is dull")
-//@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
 class Jsapi2Test_openjtalk {
 
     /**

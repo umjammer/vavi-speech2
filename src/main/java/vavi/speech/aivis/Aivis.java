@@ -90,7 +90,7 @@ logger.log(Level.DEBUG, "version: " + version);
     /** */
     public static class AudioQuery {
         public static class AccentPhrase {
-            public static class Mora{
+            public static class Mora {
                 String text;
                 String consonant;
                 float consonant_length;
