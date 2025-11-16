@@ -14,9 +14,11 @@ import javax.speech.synthesis.Voice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizer;
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizerMode;
+import vavi.util.Debug;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -35,6 +37,9 @@ class Jsapi2Test_google {
 
     static {
         System.setProperty("javax.speech.SpeechLocale.comparisonStrictness", "LENIENT");
+
+        System.setProperty("vavi.speech.googlecloud.credential", System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
+Debug.println("vavi.speech.googlecloud.credential: " + System.getProperty("vavi.speech.googlecloud.credential"));
     }
 
     /**

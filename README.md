@@ -36,7 +36,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 ### Google Cloud Text To Speech
 
  * [get token as json](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries)
- * set environment variable `"GOOGLE_APPLICATION_CREDENTIALS"` `your_json_path`
+ * set system property `"vavi.speech.googlecloud.credential"` `your_json_path`
 
 ### Open JTalk
 
@@ -109,6 +109,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
    * [http://itvoice.starfree.jp/](http://itvoice.starfree.jp/)
  * AVSpeechSynthesizer needs [obj-c block](https://github.com/umjammer/rococoa/discussions/23)
  * ~~rcp client/server (wip)~~ -> [vavi-speech-rpc](https://github.com/umjammer/vavi-speech-rpc)
+ * ~~\[googlecloud] [setting by system property instead of env](https://github.com/umjammer/vavi-speech2?tab=readme-ov-file)~~
 
 ---
 <sub>images by <a href="https://commons.nicovideo.jp/works/nc327182">霊夢</a>, <a href="https://commons.nicovideo.jp/works/nc327184">魔理沙</a>, <a href="https://seiga.nicovideo.jp/seiga/im10865385">ずんだもん</a></sub>
