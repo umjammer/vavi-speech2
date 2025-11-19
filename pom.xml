@@ -24,7 +24,7 @@
     <jsapi2.groupId>com.github.umjammer.jsapi2</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi2 -->
     <jsapi2.version>0.6.10</jsapi2.version>
 
-    <jersey.version>3.1.9</jersey.version>
+    <jersey.version>3.1.10</jersey.version>
   </properties>
 
   <profiles>
