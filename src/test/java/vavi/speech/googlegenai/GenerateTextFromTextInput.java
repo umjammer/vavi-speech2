@@ -41,7 +41,13 @@ public class GenerateTextFromTextInput {
         GenerateContentResponse response =
                 client.models.generateContent(
                         "gemini-2.5-flash-preview-tts",
-                        "Say angrily:Hi! I'm Gemini AI Speech Synthesizer!",
+                        "Say rap style:" +
+                                "Started from the bottom and I never looked back." +
+                                " Look at all my haters, yeah I'm makin' 'em mad." +
+                                "I'm ready for a fight, when it's on it's on." +
+                                "I'm charging like a bull, when it's on it's on." +
+                                "When it's all said and done they gon' call me a legend." +
+                                "I'd love to break bread but I'd rather break records.",
                         GenerateContentConfig.builder()
                                 .responseModalities(List.of("AUDIO"))
                                 .speechConfig(SpeechConfig.builder()

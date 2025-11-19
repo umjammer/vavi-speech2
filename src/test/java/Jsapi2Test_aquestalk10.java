@@ -14,17 +14,17 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import vavi.speech.aquestalk10.jsapi2.AquesTalk10Synthesizer;
+import vavi.speech.aquestalk10.jsapi2.AquesTalk10SynthesizerMode;
+import vavi.util.Debug;
+import vavi.util.properties.annotation.Property;
+import vavi.util.properties.annotation.PropsEntity;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
-import vavi.speech.aquestalk10.jsapi2.AquesTalk10Synthesizer;
-import vavi.speech.aquestalk10.jsapi2.AquesTalk10SynthesizerMode;
-import vavi.speech.aquestalk10.jsapi2.AquesTalk10Voice;
-import vavi.util.Debug;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 

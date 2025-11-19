@@ -36,7 +36,20 @@ import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
 
 /**
  * A Gyutan compliant {@link javax.speech.synthesis.Synthesizer}.
- *
+ * <p>
+ * system property
+ * <ul>
+ * <li>{@code htsvoice.dir} ... voices dir</li>
+ * </ul>
+ * </p>
+ * <p>
+ * setting file ... {@code classpath:htsvoice.csv}
+ * <pre>
+ * # filename, name, gender, age
+ * tohoku-f01-neutral.htsvoice,tohoku(neutral),female,unknown
+ * </pre>
+ * filename assumed to be in the folder that specified by {@code htsvoice.dir}
+ * </p>
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2023/01/20 umjammer initial version <br>
  */
@@ -138,7 +151,7 @@ logger.log(Level.DEBUG, "default voice: " + (voice != null ? voice.getName() : "
         AudioManager manager = getAudioManager();
         String locator = manager.getMediaLocator();
         // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-        InputStream in = synthe(item);
+        InputStream in = synthesize(item);
         AudioSegment segment;
         if (locator == null) {
             segment = new BaseAudioSegment(item, in);
@@ -149,7 +162,7 @@ logger.log(Level.DEBUG, "default voice: " + (voice != null ? voice.getName() : "
     }
 
     /** */
-    private AudioInputStream synthe(String text) {
+    private AudioInputStream synthesize(String text) {
         try {
 logger.log(Level.TRACE, "vioce: " + getSynthesizerProperties().getVoice());
             Path wave = Files.createTempFile(getClass().getName(), ".wav");

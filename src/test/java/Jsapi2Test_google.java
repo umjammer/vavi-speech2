@@ -12,13 +12,12 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
-
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizer;
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizerMode;
 import vavi.util.Debug;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
