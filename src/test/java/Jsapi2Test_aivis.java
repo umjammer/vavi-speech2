@@ -12,15 +12,13 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
 import vavi.speech.aivis.Aivis;
 import vavi.speech.aivis.jsapi2.AivisSynthesizer;
 import vavi.speech.aivis.jsapi2.AivisSynthesizerMode;
-import vavi.speech.voicevox.VoiceVox;
-import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizer;
-import vavi.speech.voicevox.jsapi2.VoiceVoxSynthesizerMode;
 import vavi.util.Debug;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 

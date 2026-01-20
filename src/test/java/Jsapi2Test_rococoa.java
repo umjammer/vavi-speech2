@@ -19,20 +19,20 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import vavi.speech.rococoa.jsapi2.RococoaSynthesizer;
 import vavi.speech.rococoa.jsapi2.RococoaSynthesizerMode;
 import vavi.util.Debug;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 import vavix.rococoa.avfoundation.AVSpeechSynthesizer;
 import vavix.rococoa.avfoundation.AVSpeechUtterance;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -50,9 +50,6 @@ class Jsapi2Test_rococoa {
 
     static {
         System.setProperty("javax.speech.SpeechLocale.comparisonStrictness", "LENIENT");
-
-        System.setProperty("vavi.util.logging.VaviFormatter.extraClassMethod",
-                "sun\\.util\\.logging\\.internal\\.LoggingProviderImpl.*#log");
     }
 
     /**

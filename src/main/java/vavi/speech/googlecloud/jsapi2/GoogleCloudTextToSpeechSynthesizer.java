@@ -7,6 +7,7 @@
 package vavi.speech.googlecloud.jsapi2;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.System.Logger;
@@ -22,11 +23,14 @@ import javax.speech.EngineStateException;
 import javax.speech.synthesis.Speakable;
 import javax.speech.synthesis.Voice;
 
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.texttospeech.v1.AudioConfig;
 import com.google.cloud.texttospeech.v1.AudioEncoding;
 import com.google.cloud.texttospeech.v1.SynthesisInput;
 import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+import com.google.cloud.texttospeech.v1.TextToSpeechSettings;
 import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
 import com.google.protobuf.ByteString;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
@@ -37,7 +41,10 @@ import vavi.speech.WrappedVoice;
 
 /**
  * A Google Cloud Text To Speech compliant {@link javax.speech.synthesis.Synthesizer}.
- *
+ * <p>
+ * system property
+ * <li>{@code vavi.speech.googlecloud.credential} ... path to credential default {@code google-app-credentials.json}
+ * </p>
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/20 umjammer initial version <br>
  */
@@ -78,7 +85,14 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
         }
 
         try {
-            this.client = TextToSpeechClient.create();
+            // https://gemini.google.com/app/e8f90bb971c64462
+            String serviceAccountKeyPath = System.getProperty("vavi.speech.googlecloud.credential", "google-app-credentials.json");
+logger.log(Level.DEBUG, "vavi.speech.googlecloud.credential: " + System.getProperty("vavi.speech.googlecloud.credential"));
+            GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(serviceAccountKeyPath));
+            TextToSpeechSettings settings = TextToSpeechSettings.newBuilder()
+                    .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                    .build();
+            this.client = TextToSpeechClient.create(settings);
         } catch (IOException e) {
             throw (EngineException) new EngineException("real speech engine creation failed").initCause(e);
         }

@@ -9,6 +9,7 @@ package vavi.speech.rococoa.jsapi2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.nio.file.Files;
@@ -16,10 +17,11 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.speech.AudioException;
 import javax.speech.AudioManager;
 import javax.speech.AudioSegment;
@@ -31,11 +33,19 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
+import org.rococoa.ObjCBlocks.BlockLiteral;
+import org.rococoa.Rococoa;
+import org.rococoa.cocoa.foundation.NSError;
 import vavi.speech.WrappedVoice;
-import vavi.speech.rococoa.SynthesizerDelegate;
+import vavix.rococoa.avfoundation.AVAudioFile;
+import vavix.rococoa.avfoundation.AVAudioFormat;
+import vavix.rococoa.avfoundation.AVAudioPCMBuffer;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 import vavix.rococoa.avfoundation.AVSpeechSynthesizer;
+import vavix.rococoa.avfoundation.AVSpeechSynthesizer.AVSpeechSynthesizerBufferCallback;
 import vavix.rococoa.avfoundation.AVSpeechUtterance;
+
+import static org.rococoa.ObjCBlocks.block;
 
 
 /**
@@ -53,7 +63,7 @@ public final class RococoaSynthesizer extends BaseSynthesizer {
     private AVSpeechSynthesizer synthesizer;
 
     /** */
-    private SynthesizerDelegate delegate;
+//    private SynthesizerDelegate delegate;
 
     /**
      * Constructs a new synthesizer object.
@@ -87,7 +97,7 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
         }
 
         synthesizer = AVSpeechSynthesizer.newInstance();
-        delegate = new SynthesizerDelegate(synthesizer); // delegate is implemented in vavi-speech
+//        delegate = new SynthesizerDelegate(synthesizer); // delegate is implemented in vavi-speech
 
         //
         long newState = ALLOCATED | RESUMED;
@@ -140,54 +150,77 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public AudioSegment handleSpeak(int id, String item) {
-        if (false) {
-            AudioManager manager = getAudioManager();
-            String locator = manager.getMediaLocator();
-            InputStream in = synthesize(item);
-            AudioSegment segment;
-            if (locator == null) {
-                segment = new BaseAudioSegment(item, in);
-            } else {
-                segment = new BaseAudioSegment(locator, item, in);
-            }
-            return segment;
+        AudioManager manager = getAudioManager();
+        String locator = manager.getMediaLocator();
+        InputStream in = synthesize(item);
+        AudioSegment segment;
+        if (locator == null) {
+            segment = new BaseAudioSegment(item, in);
         } else {
-try { // TODO ad-hoc
-            AVSpeechUtterance utterance = AVSpeechUtterance.of(item);
-            var voice = ((WrappedVoice<AVSpeechSynthesisVoice>) getSynthesizerProperties().getVoice()).getNativeVoice();
-            utterance.setVoice(voice);
-            utterance.setVolume(getSynthesizerProperties().getVolume() / 100f);
-            synthesizer.speakUtterance(utterance);
-            delegate.waitForSpeechDone(10000, true);
-            return new BaseAudioSegment(item, AudioSystem.getAudioInputStream(RococoaSynthesizer.class.getResourceAsStream("/zero.wav")));
-} catch (Throwable t) {
- logger.log(Level.ERROR, t.getMessage(), t);
- return null;
-}
+            segment = new BaseAudioSegment(locator, item, in);
         }
+        return segment;
     }
 
     /** */
     private AudioInputStream synthesize(String text) {
         try {
 //logger.log(Level.TRACE, "voice: " + getSynthesizerProperties().getVoice());
-            AVSpeechUtterance utterance = AVSpeechUtterance.of(text);
-            @SuppressWarnings("unchecked")
-            var voice = ((WrappedVoice<AVSpeechSynthesisVoice>) getSynthesizerProperties().getVoice()).getNativeVoice();
-            utterance.setVoice(voice);
-            Path path = Files.createTempFile(getClass().getName(), ".aiff");
-            synthesizer.writeUtterance_toBufferCallback(utterance, null);
-            // wait to finish writing whole data
-            delegate.waitForSpeechDone(10000, true);
-            byte[] wav = Files.readAllBytes(path);
-            ByteArrayInputStream bais = new ByteArrayInputStream(wav);
-            // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
-            AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
-            Files.delete(path);
-            return ais;
-        } catch (IOException | UnsupportedAudioFileException e) {
+            Path path = Files.createTempFile(getClass().getName(), ".wav");
+            try {
+                AVSpeechUtterance utterance = AVSpeechUtterance.of(text);
+                var voice = ((WrappedVoice<AVSpeechSynthesisVoice>) getSynthesizerProperties().getVoice()).getNativeVoice();
+                utterance.setVoice(voice);
+                utterance.setVolume(getSynthesizerProperties().getVolume() / 100f);
+
+                CountDownLatch cdl = new CountDownLatch(1);
+                AtomicReference<AVAudioFile> audioFile = new AtomicReference<>();
+
+                BlockLiteral bufferCallback = block((AVSpeechSynthesizerBufferCallback) (blockLiteral, id) -> {
+                    try {
+                        AVAudioPCMBuffer audioBuffer = Rococoa.wrap(id, AVAudioPCMBuffer.class);
+                        if (audioBuffer == null) {
+                            cdl.countDown();
+                            throw new IllegalStateException("buffer is not pcm");
+                        }
+                        if (audioBuffer.frameLength() == 0) {
+                            // done
+                            cdl.countDown();
+                        } else {
+                            if (audioFile.get() == null) {
+                                AVAudioFormat format16 = AVAudioFormat.init(3, audioBuffer.format().sampleRate(), 1, true);
+                                audioFile.set(AVAudioFile.init(path.toUri(), format16.settings(), audioBuffer.format().commonFormat(), audioBuffer.format().isInterleaved()));
+                                if (audioFile.get() == null) {
+                                    cdl.countDown();
+                                    throw new IllegalStateException("file creation failed");
+                                }
+                            }
+                            NSError error = null;
+                            audioFile.get().writeFromBuffer_error(audioBuffer, error);
+                            if (error != null) {
+                                cdl.countDown();
+                                throw new IllegalStateException(error.description());
+                            }
+                        }
+                    } catch (IOException e) {
+                        cdl.countDown();
+                        throw new UncheckedIOException(e);
+                    }
+                });
+
+                synthesizer.writeUtterance_toBufferCallback(utterance, bufferCallback);
+                cdl.await();
+
+                if (audioFile.get() != null) {
+                    audioFile.get().close();
+                }
+
+                return AudioSystem.getAudioInputStream(new ByteArrayInputStream(Files.readAllBytes(path)));
+            } finally {
+                Files.deleteIfExists(path);
+            }
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
