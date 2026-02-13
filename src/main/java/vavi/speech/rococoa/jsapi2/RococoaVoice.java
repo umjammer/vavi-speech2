@@ -76,7 +76,8 @@ try {
             voiceList.add(voice);
         }
 } catch (Throwable e) {
- logger.log(Logger.Level.WARNING, "this exception may be caused running on x86_64 chip", e);
+ // TODO this message is shown, but stacktrace is shown before, inside bytebuddy???
+ logger.log(Logger.Level.WARNING, e + ": this exception may be caused running on x86_64 chip");
 }
         return voiceList;
     }
