@@ -9,17 +9,18 @@
 
 Text to Speech and Speech to Text (JSAPI2) engines for Java
 
-| **Type**                    | **Description**                                                                                                                                                                                   | **Sythesizer** | **Recognizer** | **Quality** | **Comment** |
-|:----------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------:|:--------------:|:-----------:|:------------|
-| AquesTalk10                 | [AquesTalk](https://www.a-quest.com/products/aquestalk.html), JNA                                                                                                                                 |       ✅        |       -        |     😐      | ゆっくり        |
-| Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries), Library                                                                                  |       ✅        |       🚧       |     👑      |             |
-| Cocoa                       | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA |       ✅        |       🚫       |     😃      |             |
-| Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                                                                           |       ✅        |       -        |     💩      |             |
-| VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  |       ✅        |       -        |     😃      | ずんだもん       |
-| CoeiroInk                   | [CoeiroInk](https://coeiroink.com/), REST                                                                                                                                                         |       ✅        |       -        |     😃      | つくよみちゃん     |
-| Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                                                                             |       ✅        |       -        |     💩      |             |
-| AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                                 |       ✅        |       -        |     👑      |             |
+| **Type**                    | **Description**                                                                                                                                                                                   | **Sythesizer** | **Recognizer** | **Quality** | **Comment**      |
+|:----------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------:|:--------------:|:-----------:|:-----------------|
+| AquesTalk10                 | [AquesTalk](https://www.a-quest.com/products/aquestalk.html), JNA                                                                                                                                 |       ✅        |       -        |     😐      | ゆっくり             |
+| Google Cloud Text To Speech | [Google Cloud Text To Speech](https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries), Library                                                                                  |       ✅        |       🚧       |     👑      |                  |
+| Cocoa                       | [Rococoa](https://github.com/iterate-ch/rococoa/blob/d5fdd3b884d5f044bc0b168aff66e5f52a014da8/rococoa/rococoa-contrib/src/test/java/org/rococoa/contrib/appkit/NSSpeechSynthesizerTest.java), JNA |       ✅        |       🚫       |     😐      |                  |
+| Open JTalk                  | [jtalkdll](https://github.com/rosmarinus/jtalkdll), JNA                                                                                                                                           |       ✅        |       -        |     💩      |                  |
+| VoiceVox                    | [VOICEVOX](https://voicevox.hiroshiba.jp/), REST                                                                                                                                                  |       ✅        |       -        |     😃      | ずんだもん            |
+| CoeiroInk                   | [CoeiroInk](https://coeiroink.com/), REST                                                                                                                                                         |       ✅        |       -        |     😃      | つくよみちゃん          |
+| Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                                                                             |       ✅        |       -        |     💩      |                  |
+| AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                                 |       ✅        |       -        |     👑      |                  |
 | Google AI Studio            | [Google Gemini API](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#java_1), Library                                                                                                 |       ✅        |       -        |     🚀      |
+| Qwen3-TTS                   | [Openai API](https://developers.openai.com/api/docs/guides/text-to-speech/), Library                                                                                                              |       ✅        |       -        |     💡      | voice cloning!   |
 
 ## Install
 
@@ -67,7 +68,26 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 * [get](https://aistudio.google.com/apikey) api key
 * set environment variable `"GOOGLE_API_KEY"` the api key
 
+### Qwen3-TTS
+
+* install https://github.com/umjammer/Qwen3-TTS-Openai-Fastapi (anything is ok as long as it's openai-compatible api)
+* run the server before using this library, don't forget to adjust port no.
+* default url is `http://localhost:50090`. this is modifiable by the system property `vavi.speech.qwen3tts.url`
+
 ## Usage
+
+### system property
+
+ * `vavi.speech.voicevox.url` ... the VOICEVOX api server url, default is `http://localhost:50021`.
+ * `vavi.speech.coeiroink.url` ... the COEIROINK api server url, default is `http://localhost:50032`.
+ * `vavi.speech.aivis.url` ... the AivisSpeech api server url, default is `http://localhost:10101`.
+ * `vavi.speech.qwen3tts.url` ... the Qwen3-TTS api server url, default is `http://localhost:50090`.
+
+### system property (qwen3-tts specific)
+
+ * `vavi.speech.qwen3tts.clone` ... use clone voice or not, default is `false`.
+ * `vavi.speech.qwen3tts.refAudio` ... when using clone voice, set reference audio file path. (only wav file is tested)
+ * `vavi.speech.qwen3tts.refText` ... when using clone voice, set reference text. (transcription of the audio above)
 
 ### user
 
@@ -107,7 +127,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
    * [LMROID](https://lmroidsoftware.wixsite.com/nhoshio)
    * [SHAREVOX](https://www.sharevox.app)
    * [http://itvoice.starfree.jp/](http://itvoice.starfree.jp/)
- * AVSpeechSynthesizer needs [obj-c block](https://github.com/umjammer/rococoa/discussions/23)
+ * ~~AVSpeechSynthesizer needs [obj-c block](https://github.com/umjammer/rococoa/discussions/23)~~
  * ~~rcp client/server (wip)~~ -> [vavi-speech-rpc](https://github.com/umjammer/vavi-speech-rpc)
  * ~~\[googlecloud] [setting by system property instead of env](https://github.com/umjammer/vavi-speech2?tab=readme-ov-file)~~
 
