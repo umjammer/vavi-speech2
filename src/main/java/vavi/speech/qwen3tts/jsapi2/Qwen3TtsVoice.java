@@ -87,6 +87,6 @@ public class Qwen3TtsVoice extends WrappedVoice<Qwen3Tts.Voice> {
 
     @Override
     public Locale getLocale() {
-        return Locale.getDefault();
+        return Locale.ROOT;
     }
 }

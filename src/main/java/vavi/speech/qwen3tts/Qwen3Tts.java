@@ -29,7 +29,10 @@ import static java.lang.System.getLogger;
 
 /**
  * Qwen3-TTS.
- *
+ * <p>
+ * system property:
+ * <li>{@code vavi.speech.qwen3tts.url} ... the api server url, default is {@code http://localhost:50090}</li>
+ * <p/>
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2026-02-13 nsano initial version <br>
  */
@@ -51,9 +54,9 @@ public class Qwen3Tts implements Closeable {
 
     /** server url */
     private static String getUrl() {
-        String url = System.getProperty("vavi.speech.voicevox.url", null);
+        String url = System.getProperty("vavi.speech.qwen3tts.url", null);
         if (url == null || !url.startsWith("http:")) {
-            return "http://localhost:50030";
+            return "http://localhost:50090";
         } else {
             return url;
         }
@@ -172,32 +175,37 @@ public class Qwen3Tts implements Closeable {
 
     boolean clone = System.getProperty("vavi.speech.qwen3tts.clone", "false").equals("true");
 
-    Path path = Path.of(System.getProperty("vavi.speech.qwen3tts.ref", ""));
+    Path path = Path.of(System.getProperty("vavi.speech.qwen3tts.refAudio", ""));
+    String text = System.getProperty("vavi.speech.qwen3tts.refText", "");
 
-    /** */
-    public InputStream synthesize2(String input, String voice) throws IOException {
+    /** clone voice */
+    private InputStream synthesizeClone(String input) throws IOException {
         AudioVoiceCloneQuery audioQuery = new AudioVoiceCloneQuery();
         audioQuery.input = input;
+        audioQuery.ref_text = text;
         audioQuery.ref_audio = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
         Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
-        String response = target.path("v1/audio/voice-clone")
-                .request().post(entity, String.class);
-logger.log(Level.INFO, response);
-        return null;
+        return target.path("v1/audio/voice-clone")
+                .request().post(entity, InputStream.class);
+    }
+
+    /** normal voice */
+    private InputStream synthesizeNormal(String input, String voice) throws IOException {
+        AudioSpeechQuery audioQuery = new AudioSpeechQuery();
+        audioQuery.input = input;
+        audioQuery.voice = voice;
+        audioQuery.instruct = "female anime voice";
+        Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
+        return target.path("v1/audio/speech")
+                .request().post(entity, InputStream.class);
     }
 
     /** */
     public InputStream synthesize(String input, String voice) throws IOException {
         if (clone) {
-            return synthesize2(input, voice);
+            return synthesizeClone(input);
         } else {
-            AudioSpeechQuery audioQuery = new AudioSpeechQuery();
-            audioQuery.input = input;
-            audioQuery.voice = voice;
-            audioQuery.instruct = "female anime voice";
-            Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
-            return target.path("v1/audio/speech")
-                    .request().post(entity, InputStream.class);
+            return synthesizeNormal(input, voice);
         }
     }
 

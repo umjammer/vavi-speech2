@@ -76,7 +76,7 @@ try {
             voiceList.add(voice);
         }
 } catch (Throwable e) {
- // TODO this message is shown, but stacktrace is shown before, inside bytebuddy???
+ // to eliminate stacktrace, set "org.rococoa.proxy.level=OFF" in logging.properties
  logger.log(Logger.Level.WARNING, e + ": this exception may be caused running on x86_64 chip");
 }
         return voiceList;
