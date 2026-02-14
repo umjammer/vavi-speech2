@@ -34,7 +34,7 @@ import static java.lang.System.getLogger;
  * Aivis.
  * <p>
  * system property
- * <li>vavi.speech.aivis.url ... Aivis REST api url, default is "http://localhost:10101/"</li>
+ * <li>{@code vavi.speech.aivis.url} ... Aivis REST api url, default is {@code "http://localhost:10101/}</li>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024-12-14 nsano initial version <br>
