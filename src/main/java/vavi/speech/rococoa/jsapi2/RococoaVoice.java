@@ -76,7 +76,8 @@ try {
             voiceList.add(voice);
         }
 } catch (Throwable e) {
- logger.log(Logger.Level.WARNING, "this exception may be caused running on x86_64 chip", e);
+ // to eliminate stacktrace, set "org.rococoa.proxy.level=OFF" in logging.properties
+ logger.log(Logger.Level.WARNING, e + ": this exception may be caused running on x86_64 chip");
 }
         return voiceList;
     }

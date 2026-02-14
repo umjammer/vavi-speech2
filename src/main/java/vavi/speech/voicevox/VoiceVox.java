@@ -34,7 +34,7 @@ import static java.lang.System.getLogger;
  * VoiceVox.
  * <p>
  * system property
- * <li>vavi.speech.voicevox.url ... VoiceVox REST api url, default is "http://localhost:50021/"</li>
+ * <li>{@code vavi.speech.voicevox.url} ... VoiceVox REST api url, default is {@code http://localhost:50021/}</li>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-01-14 nsano initial version <br>

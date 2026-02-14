@@ -1,24 +1,24 @@
 /*
- * Copyright (c) 2024 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2023 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.speech.aivis;
+package vavi.speech.docomo;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
-
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Scanner;
+import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Voice;
 
-import com.google.common.graph.AbstractValueGraph;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import jakarta.ws.rs.client.Client;
@@ -31,47 +31,42 @@ import static java.lang.System.getLogger;
 
 
 /**
- * Aivis.
- * <p>
- * system property
- * <li>{@code vavi.speech.aivis.url} ... Aivis REST api url, default is {@code "http://localhost:10101/}</li>
+ * DocomoAIAgentAPI.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
- * @version 0.00 2024-12-14 nsano initial version <br>
+ * @version 0.00 2023-01-14 nsano initial version <br>
  */
-public class Aivis implements Closeable {
+public class DocomoAIAgentAPI implements Closeable {
 
-    private static final Logger logger = getLogger(Aivis.class.getName());
+    private static final Logger logger = getLogger(DocomoAIAgentAPI.class.getName());
 
-    /** rest response parser */
+    /** VoiceVox application web api */
+    private static String url = "http://localhost:50021/";
+
+    /** */
     private static final Gson gson = new GsonBuilder().create();
 
-    /** rest target */
-    private final WebTarget target;
-
-    /** rest client */
-    private final Client client;
-
-    /** server url */
-    private static String getUrl() {
-        String url = System.getProperty("vavi.speech.aivis.url", null);
-        if (url == null || !url.startsWith("http:")) {
-            return "http://localhost:10101/";
-        } else {
-            return url;
+    /* */
+    static {
+        String url = System.getProperty("vavi.speech.voicevox.url");
+        if (url != null) {
+            DocomoAIAgentAPI.url = url;
         }
     }
 
     /** */
-    public Aivis() {
-        this(getUrl());
-    }
+    private final WebTarget target;
 
     /** */
-    public Aivis(String url) {
+    private Speaker[] speakers;
+
+    /** */
+    private final Client client;
+
+    /** */
+    public DocomoAIAgentAPI() {
         try {
             client = ClientBuilder.newClient(); // DON'T CLOSE
-logger.log(Level.DEBUG, "url: " + url);
             target = client.target(url);
 
             String version = target.path("version")
@@ -90,7 +85,7 @@ logger.log(Level.DEBUG, "version: " + version);
     /** */
     public static class AudioQuery {
         public static class AccentPhrase {
-            public static class Mora {
+            public static class Mora{
                 String text;
                 String consonant;
                 float consonant_length;
@@ -122,10 +117,10 @@ logger.log(Level.DEBUG, "version: " + version);
             }
         }
         AccentPhrase[] accent_phrases;
-        public float speedScale;
-        public float pitchScale;
+        float speedScale;
+        float pitchScale;
         float intonationScale;
-        public float volumeScale;
+        float volumeScale;
         float prePhonemeLength;
         float postPhonemeLength;
         int outputSamplingRate;
@@ -147,31 +142,19 @@ logger.log(Level.DEBUG, "version: " + version);
         }
         /** @param speed default: 1, range: 0.50 ~ 2.00 */
         public void setSpeed(float speed) {
-            if (0.5 <= speed && speed <= 2.0)
-                speedScale = speed;
-            else
-                speedScale = 1;
+            speedScale = speed;
         }
         /** @param pitch default: 0, range: -0.15 ~ 0.15 */
         public void setPitch(float pitch) {
-            if (-0.15 <= pitch && pitch <= 0.15)
-                pitchScale = pitch;
-            else
-                pitchScale = 0;
+            pitchScale = pitch;
         }
         /** @param intonation range: 0 ~ 2 */
         public void setIntonation(float intonation) {
-            if (0 <= intonation && intonation <= 2)
-                intonationScale = intonation;
-            else
-                intonationScale = 1;
+            intonationScale = intonation;
         }
         /** @param volume default: 1, range: 0.50 ~ 2.00 */
         public void setVolume(float volume) {
-            if (0.5 <= volume && volume <= 2.0)
-                volumeScale = volume;
-            else
-                volumeScale = 1;
+            volumeScale = volume;
         }
     }
 
@@ -195,22 +178,20 @@ logger.log(Level.DEBUG, "version: " + version);
 
     /** */
     public static class Speaker {
-        public String name;
-        public String speaker_uuid;
+        String name;
+        String speaker_uuid;
         public static class Style {
-            public int id;
-            public String name;
-            public String type;
+            int id;
+            String name;
             @Override public String toString() {
                 return "Style{" +
                         "id=" + id +
                         ", name='" + name + '\'' +
-                        ", type='" + type + '\'' +
                         '}';
             }
         }
-        public Style[] styles;
-        public String version;
+        Style[] styles;
+        String version;
         @Override public String toString() {
             return "Speaker{" +
                     "name='" + name + '\'' +
@@ -247,36 +228,48 @@ logger.log(Level.DEBUG, "version: " + version);
         }
     }
 
-    /** flatten voice model */
-    public static class AivisSpeaker {
-        public String name;
-        public int id;
-        public String speaker_uuid;
+    /** */
+    public Voice[] getAllVoices() {
+        //
+        if (speakers == null) {
+            String speakersJson = target
+                    .path("speakers")
+                    .request()
+                    .get(String.class);
 
-        @Override public String toString() {
-            return new StringJoiner(", ", AivisSpeaker.class.getSimpleName() + "[", "]")
-                    .add("name='" + name + "'")
-                    .add("id=" + id)
-                    .add("speaker_uuid='" + speaker_uuid + "'")
-                    .toString();
+            speakers = gson.fromJson(speakersJson, Speaker[].class);
         }
+        SpeechLocale japan = new SpeechLocale(Locale.JAPANESE.toString());
+        return Arrays.stream(speakers).flatMap(speaker -> Arrays.stream(speaker.styles).map(style -> {
+            int[] vd = voiceData.get(speaker.name);
+            if (vd != null) {
+                return new Voice(japan, speaker.name + "(" + style.name + ")", vd[0], vd[1], Voice.VARIANT_DONT_CARE);
+            } else {
+                return new Voice(japan, speaker.name + "(" + style.name + ")", Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE);
+            }
+        })).toArray(Voice[]::new);
     }
 
     /** */
-    public AivisSpeaker[] getAllVoices() {
-        String speakersJson = target
-                .path("speakers")
-                .request()
-                .get(String.class);
-logger.log(Level.TRACE, speakersJson);
-        Speaker[] speakers = gson.fromJson(speakersJson, Speaker[].class);
+    public int getId(Voice voice) {
+        String name = voice.getName().replaceFirst("\\(.+\\)", "");
+        Speaker speaker = Arrays.stream(speakers).filter(s -> s.name.equals(name)).findFirst().get();
+        String style = voice.getName().substring(voice.getName().indexOf("(") + 1, voice.getName().length() - 1);
+        return Arrays.stream(speaker.styles).filter(s -> s.name.equals(style)).findFirst().get().id;
+    }
 
-        return Arrays.stream(speakers).flatMap(speaker -> Arrays.stream(speaker.styles).map(style -> {
-            AivisSpeaker aivisSpeaker = new AivisSpeaker();
-            aivisSpeaker.id = style.id;
-            aivisSpeaker.name = speaker.name + "(" + style.name + ")";
-            aivisSpeaker.speaker_uuid = speaker.speaker_uuid;
-            return aivisSpeaker;
-        })).toArray(AivisSpeaker[]::new);
+    /** to complement lack information of voicevox for jsapi voice */
+    private static final Map<String, int[]> voiceData = new HashMap<>();
+
+    /* cvs: name, gender, age */
+    static {
+        Scanner scanner = new Scanner(DocomoAIAgentAPI.class.getResourceAsStream("voicevox.csv"));
+        while (scanner.hasNextLine()) {
+            String[] parts = scanner.nextLine().split(",");
+            String name = parts[0];
+            int gender = Integer.parseInt(parts[1]);
+            int age = Integer.parseInt(parts[2]);
+            voiceData.put(name, new int[] {gender, age});
+        }
     }
 }

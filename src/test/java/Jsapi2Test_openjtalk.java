@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
-import vavi.speech.gyutan.jsapi2.GyutanSynthesizer;
 import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizer;
 import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizerMode;
 

@@ -34,6 +34,9 @@ import vavi.util.CharNormalizerJa;
 
 /**
  * CoeiroInk.
+ * <p>
+ * system property
+ * <li>{@code vavi.speech.coeiroink.url} ... CoeiroInk REST api url, default is {@code "http://localhost:50032/}</li>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024-04-02 nsano initial version <br>
