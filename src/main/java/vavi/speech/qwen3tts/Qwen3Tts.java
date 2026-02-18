@@ -32,6 +32,7 @@ import static java.lang.System.getLogger;
  * <p>
  * system property:
  * <li>{@code vavi.speech.qwen3tts.url} ... the api server url, default is {@code http://localhost:50090}</li>
+ * <li>{@code vavi.speech.qwen3tts.language} ... speaking language, default is {@code Auto}</li>
  * <p/>
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2026-02-13 nsano initial version <br>
@@ -181,6 +182,8 @@ public class Qwen3Tts implements Closeable {
     /** clone voice */
     private InputStream synthesizeClone(String input) throws IOException {
         AudioVoiceCloneQuery audioQuery = new AudioVoiceCloneQuery();
+        audioQuery.language = System.getProperty("vavi.speech.qwen3tts.language",  "Auto");
+logger.log(Level.TRACE, "language: " + audioQuery.language);
         audioQuery.input = input;
         audioQuery.ref_text = text;
         audioQuery.ref_audio = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
@@ -192,6 +195,8 @@ public class Qwen3Tts implements Closeable {
     /** normal voice */
     private InputStream synthesizeNormal(String input, String voice) throws IOException {
         AudioSpeechQuery audioQuery = new AudioSpeechQuery();
+        audioQuery.language = System.getProperty("vavi.speech.qwen3tts.language",  "Auto");
+logger.log(Level.TRACE, "language: " + audioQuery.language);
         audioQuery.input = input;
         audioQuery.voice = voice;
         audioQuery.instruct = "female anime voice";

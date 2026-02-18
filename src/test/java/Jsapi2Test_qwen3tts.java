@@ -52,6 +52,9 @@ class Jsapi2Test_qwen3tts {
     @Property(name = "qwen3tty.clone")
     String qwen3ttyClone;
 
+    @Property(name = "qwen3tty.language")
+    String qwen3ttyLanguage;
+
     static boolean localServerExists() {
         try {
             new Qwen3Tts();
@@ -80,6 +83,7 @@ Debug.println(Level.WARNING, e.getMessage());
         System.setProperty("vavi.speech.qwen3tts.refAudio", qwen3ttyRefAudio);
         System.setProperty("vavi.speech.qwen3tts.refText", qwen3ttyRefText);
         System.setProperty("vavi.speech.qwen3tts.clone", qwen3ttyClone);
+        System.setProperty("vavi.speech.qwen3tts.language", qwen3ttyLanguage);
 Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttyRefAudio + ", vavi.speech.qwen3tts.clone: " + qwen3ttyClone);
     }
 
