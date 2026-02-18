@@ -25,7 +25,9 @@ import static java.lang.System.getLogger;
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024/03/21 umjammer initial version <br>
+ * @deprecated end of service
  */
+@Deprecated
 public class DocomoVoice extends WrappedVoice<Voice> {
 
     private static final Logger logger = getLogger(DocomoVoice.class.getName());
