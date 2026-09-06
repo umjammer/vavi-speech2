@@ -1,7 +1,7 @@
 [![Release](https://jitpack.io/v/umjammer/vavi-speech2.svg)](https://jitpack.io/#umjammer/vavi-speech2)
 [![Java CI](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-speech2/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-21-b07219)
+![Java](https://img.shields.io/badge/Java-25-b07219)
 
 # vavi-speech2
 
@@ -20,7 +20,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 | Gyutan (Open JTalk in Java) | [Gyutan](https://github.com/umjammer/Gyutan), Library                                                                                                                                             |       ✅        |       -        |     💩      |                  |
 | AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                                 |       ✅        |       -        |     👑      |                  |
 | Google AI Studio            | [Google Gemini API](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#java_1), Library                                                                                                 |       ✅        |       -        |     🚀      |
-| Qwen3-TTS                   | [Openai API](https://developers.openai.com/api/docs/guides/text-to-speech/), Library                                                                                                              |       ✅        |       -        |     💡      | voice cloning!   |
+| Qwen3-TTS                   | [Openai API](https://developers.openai.com/api/docs/guides/text-to-speech/), REST                                                                                                                 |       ✅        |       -        |     💡      | voice cloning!   |
 
 ## Install
 
@@ -33,6 +33,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * place `AquesTalk10.framework` into `~/Library/Frameworks`
  * create symbolic link `AquesTalk10.framework/AquesTalk` as `AquesTalk10.framework/AquesTalk10`
  * write `aquesTalk10DevKey` into `local.properties`
+ * ⚠️ x86_64 only
 
 ### Google Cloud Text To Speech
 
@@ -54,9 +55,9 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 * [download](https://coeiroink.com/) the application
 * run the application before using this library
 
-### DoCoMo AI Agent API (wip)
+### ~~DoCoMo AI Agent API~~ (end of service)
 
- * https://agentcraft.sebastien.ai/
+ * ~~https://agentcraft.sebastien.ai/~~
 
 ### AivisSpeech
 
@@ -88,6 +89,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * `vavi.speech.qwen3tts.clone` ... use clone voice or not, default is `false`.
  * `vavi.speech.qwen3tts.refAudio` ... when using clone voice, set reference audio file path. (only wav file is tested)
  * `vavi.speech.qwen3tts.refText` ... when using clone voice, set reference text. (transcription of the audio above)
+ * `vavi.speech.qwen3tts.language` ... a language for speech, default is `Auto`.
 
 ### user
 
@@ -104,6 +106,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 
  * ~~speech.properties~~
  * engine
+   * https://github.com/Aratako/Irodori-TTS
    * [watson](https://www.ibm.com/watson/jp-ja/developercloud/text-to-speech.html)
    * ~~[open jtalk](http://open-jtalk.sourceforge.net/)~~
      * ~~https://github.com/icn-lab/Gyutan~~ (done)
@@ -122,7 +125,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
      * https://github.com/hecomi/MMD4Mecanim-LipSync-Plugin/blob/master/Assets/LipSync/Core/LipSyncCore.cs
  * VoiceVox editor compatible
    * ~~[CoeiroInk](https://coeiroink.com/)~~ ... ~~api doesn't work~~ ~~api is different from VoiceVox?~~ yes
-     * https://github.com/sevenc-nanashi/coeiroink-v2-bridge 🎯
+     * ~~https://github.com/sevenc-nanashi/coeiroink-v2-bridge~~
      * ~~https://github.com/sinsen9000/MultiSpeech~~ api is old
    * [LMROID](https://lmroidsoftware.wixsite.com/nhoshio)
    * [SHAREVOX](https://www.sharevox.app)
@@ -130,6 +133,8 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * ~~AVSpeechSynthesizer needs [obj-c block](https://github.com/umjammer/rococoa/discussions/23)~~
  * ~~rcp client/server (wip)~~ -> [vavi-speech-rpc](https://github.com/umjammer/vavi-speech-rpc)
  * ~~\[googlecloud] [setting by system property instead of env](https://github.com/umjammer/vavi-speech2?tab=readme-ov-file)~~
+ * integrate qwen3 language (but system pros language doesn't work)
+ * https://github.com/litagin02/Style-Bert-VITS2
 
 ---
 <sub>images by <a href="https://commons.nicovideo.jp/works/nc327182">霊夢</a>, <a href="https://commons.nicovideo.jp/works/nc327184">魔理沙</a>, <a href="https://seiga.nicovideo.jp/seiga/im10865385">ずんだもん</a></sub>
