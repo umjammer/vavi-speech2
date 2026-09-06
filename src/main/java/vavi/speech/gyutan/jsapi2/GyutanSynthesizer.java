@@ -85,11 +85,6 @@ public final class GyutanSynthesizer extends BaseSynthesizer {
 logger.log(Level.DEBUG, "default voice: " + (voice != null ? voice.getName() : ""));
             getSynthesizerProperties().setVoice(voice);
         }
-
-        //
-        long newState = ALLOCATED | RESUMED;
-        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
-        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     /** */
@@ -110,31 +105,21 @@ logger.log(Level.DEBUG, "default voice: " + (voice != null ? voice.getName() : "
 
     @Override
     public boolean handleCancel() {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean handleCancel(int id) {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean handleCancelAll() {
-        return false;
+        return true;
     }
 
     @Override
     public void handleDeallocate() {
-        // Leave some time to let all resources detach
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ignored) {
-        }
-
-        //
-        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
-        getQueueManager().cancelAllItems();
-        getQueueManager().terminate();
     }
 
     @Override
@@ -143,7 +128,7 @@ logger.log(Level.DEBUG, "default voice: " + (voice != null ? voice.getName() : "
 
     @Override
     public boolean handleResume() {
-        return false;
+        return true;
     }
 
     @Override

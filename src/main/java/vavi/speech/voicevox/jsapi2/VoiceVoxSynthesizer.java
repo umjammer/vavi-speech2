@@ -80,33 +80,30 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
         } catch (IllegalStateException e) {
             throw (EngineException) new EngineException().initCause(e.getCause());
         }
-
-        //
-        long newState = ALLOCATED | RESUMED;
-        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
-        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     @Override
     public boolean handleCancel() {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean handleCancel(int id) {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean handleCancelAll() {
-        return false;
+        return true;
     }
 
     @Override
     public void handleDeallocate() {
-        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
-        getQueueManager().cancelAllItems();
-        getQueueManager().terminate();
+        try {
+            client.close();
+        } catch (IOException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
     }
 
     @Override
@@ -115,7 +112,7 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
 
     @Override
     public boolean handleResume() {
-        return false;
+        return true;
     }
 
     @Override
