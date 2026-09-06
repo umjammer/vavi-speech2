@@ -34,7 +34,9 @@ import vavi.speech.voicevox.VoiceVox;
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2024/03/21 umjammer initial version <br>
+ * @deprecated end of service
  */
+@Deprecated
 public final class DocomoSynthesizer extends BaseSynthesizer {
 
     /** Logger for this class. */

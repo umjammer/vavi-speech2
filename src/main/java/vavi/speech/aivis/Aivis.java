@@ -78,7 +78,7 @@ logger.log(Level.DEBUG, "url: " + url);
                     .request().get(String.class);
 logger.log(Level.DEBUG, "version: " + version);
         } catch (Exception e) {
-            throw new IllegalStateException("VoiceVox is not available at " + url, e);
+            throw new IllegalStateException("Aivis is not available at " + url, e);
         }
     }
 

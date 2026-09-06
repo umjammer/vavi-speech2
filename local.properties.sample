@@ -13,3 +13,8 @@ recruit.proofreading.apiKey=AABBCC456
 yahoo.japan.apiKey=abc123
 
 voicevox.url=http://localhost:50021/
+
+qwen3tty.language=Japanese
+qwen3tty.clone=true
+qwen3tty.refAudio=/Users/foo/var/ref.wav
+qwen3tty.refText=これはサンプルボイスです。

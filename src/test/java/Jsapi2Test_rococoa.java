@@ -80,7 +80,8 @@ class Jsapi2Test_rococoa {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        String voiceName = "O-Ren";
+Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).forEach(System.out::println);
+        String voiceName = "Kyoko";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
 Debug.println(voice.getName());
         // to specify exact age doesn't work.
