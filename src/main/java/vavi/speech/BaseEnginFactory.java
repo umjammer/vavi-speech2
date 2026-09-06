@@ -116,7 +116,9 @@ public abstract class BaseEnginFactory<V> {
     /** */
     protected abstract SynthesizerMode createSynthesizerMode(DomainLocale<V> domainLocale, List<WrappedVoice<V>> voices);
 
-    /** */
+    /**
+     * @return null: require is not synthesizer or {@code synthesizerModes} is empty
+     */
     protected EngineList createEngineListForSynthesizer(EngineMode require) {
         // Must be a synthesizer.
         if (require != null && !(require instanceof SynthesizerMode)) {
