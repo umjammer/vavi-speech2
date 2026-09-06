@@ -96,43 +96,27 @@ logger.log(Level.DEBUG, "vavi.speech.googlecloud.credential: " + System.getPrope
         } catch (IOException e) {
             throw (EngineException) new EngineException("real speech engine creation failed").initCause(e);
         }
-
-        //
-        long newState = ALLOCATED | RESUMED;
-        newState |= (getQueueManager().isQueueEmpty() ? QUEUE_EMPTY : QUEUE_NOT_EMPTY);
-        setEngineState(CLEAR_ALL_STATE, newState);
     }
 
     @Override
     public boolean handleCancel() {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean handleCancel(int id) {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean handleCancelAll() {
-        return false;
+        return true;
     }
 
     @Override
     public void handleDeallocate() {
-        // Leave some time to let all resources detach
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ignored) {
-        }
-
         client.shutdownNow();
         client.close();
-
-        //
-        setEngineState(CLEAR_ALL_STATE, DEALLOCATED);
-        getQueueManager().cancelAllItems();
-        getQueueManager().terminate();
     }
 
     @Override
@@ -141,7 +125,7 @@ logger.log(Level.DEBUG, "vavi.speech.googlecloud.credential: " + System.getPrope
 
     @Override
     public boolean handleResume() {
-        return false;
+        return true;
     }
 
     @Override

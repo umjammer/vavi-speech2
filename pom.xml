@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.24</version>
+  <version>0.0.25</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -22,7 +22,7 @@
 
   <properties>
     <jsapi2.groupId>com.github.umjammer.jsapi2</jsapi2.groupId> <!-- org.jvoicexml / com.github.umjammer.jsapi2 -->
-    <jsapi2.version>0.6.11</jsapi2.version>
+    <jsapi2.version>0.6.12</jsapi2.version>
 
     <jersey.version>3.1.10</jersey.version>
   </properties>
