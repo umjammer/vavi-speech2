@@ -132,6 +132,7 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
             }
             return segment;
         } catch (NoSuchElementException e) {
+logger.log(Level.TRACE, e.getMessage(), e);
             throw (SpeakableException) new SpeakableException().initCause(e);
         }
     }
