@@ -4,6 +4,8 @@
  * Programmed by Naohide Sano
  */
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
@@ -15,7 +17,10 @@ import javax.speech.synthesis.Voice;
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizer;
 import vavi.speech.googlecloud.jsapi2.GoogleCloudTextToSpeechSynthesizerMode;
 import vavi.util.Debug;
+import vavi.util.properties.annotation.Property;
+import vavi.util.properties.annotation.PropsEntity;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
@@ -32,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
 @EnabledIfEnvironmentVariable(named = "GOOGLE_APPLICATION_CREDENTIALS", matches = ".*")
+@PropsEntity(url = "file:local.properties")
 class Jsapi2Test_google {
 
     static {
@@ -41,18 +47,28 @@ class Jsapi2Test_google {
 Debug.println("vavi.speech.googlecloud.credential: " + System.getProperty("vavi.speech.googlecloud.credential"));
     }
 
-    /**
-     * @param args 0: text
-     */
-    public static void main(String[] args) throws Exception {
-        Jsapi2Test_google app = new Jsapi2Test_google();
-        String text = args[0];
-        app.speak(text);
+    static boolean localPropertiesExists() {
+        return Files.exists(Paths.get("local.properties"));
+    }
+
+    @Property(name = "google.text")
+    String text = "ゆっくりしていってね";
+
+    @Property(name = "google.voice")
+    String voiceName = "ja-JP-Wavenet-B";
+
+    @Property(name = "google.volume")
+    int volume = 3;
+
+    @BeforeEach
+    void setup() throws Exception {
+        if (localPropertiesExists()) {
+            PropsEntity.Util.bind(this);
+        }
     }
 
     @Test
     void test01() throws Exception {
-        String text = "ゆっくりしていってね";
         speak(text);
     }
 
@@ -68,11 +84,9 @@ Debug.println("vavi.speech.googlecloud.credential: " + System.getProperty("vavi.
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
 //GoogleCloudTextToSpeechVoice.factory.getAllNativeVoices().stream().filter(v -> v.getLanguageCodes(0).contains("ja")).forEach(System.out::println);
-//        String voiceName = "en-US-Wavenet-A";
-        String voiceName = "ja-JP-Wavenet-B";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
-        synthesizer.getSynthesizerProperties().setVolume(3);
+        synthesizer.getSynthesizerProperties().setVolume(volume);
 
         for (String line : text.split("。")) {
             System.out.println(line);
@@ -81,5 +95,14 @@ Debug.println("vavi.speech.googlecloud.credential: " + System.getProperty("vavi.
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
+    }
+
+    /**
+     * @param args 0: text
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_google app = new Jsapi2Test_google();
+        String text = args[0];
+        app.speak(text);
     }
 }

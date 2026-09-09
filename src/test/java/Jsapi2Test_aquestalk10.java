@@ -35,17 +35,28 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/09/21 umjammer initial version <br>
  */
-@PropsEntity(url = "file:local.properties")
 @EnabledIfSystemProperty(named = "os.arch", matches = "x86_64") // not works on arm64
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+@PropsEntity(url = "file:local.properties")
 class Jsapi2Test_aquestalk10 {
 
     static boolean localPropertiesExists() {
         return Files.exists(Paths.get("local.properties"));
     }
 
-    @Property(name = "text")
-    String text = "src/test/resources/test.txt";
+    // "良い例　：コ’ンカイ+わ/この+ゲーム+を/ジッキョー+した’い+と/オモイ+ま’す。";
+    @Property(name = "aquestalk10.text")
+    String text = "ゆっくりしていってね。" +
+            "コ’ンカイわこのゲームをジッキョーした’いとオモイま’す。";
+
+    @Property(name = "aquestalk10.voice")
+    String voiceName = "F1";
+
+    @Property(name = "aquestalk10.file")
+    String file = "src/test/resources/test.txt";
+
+    @Property(name = "aquestalk10.volume")
+    int volume = 2;
 
     @BeforeEach
     void setup() throws Exception {
@@ -54,27 +65,15 @@ class Jsapi2Test_aquestalk10 {
         }
     }
 
-    /**
-     * @param args 0: text
-     */
-    public static void main(String[] args) throws Exception {
-        Jsapi2Test_aquestalk10 app = new Jsapi2Test_aquestalk10();
-        String text = args[0];
-        app.speak(text);
-    }
-
     @Test
     void test01() throws Exception {
-        String text = "ゆっくりしていってね。" +
-        "コ’ンカイわこのゲームをジッキョーした’いとオモイま’す。";
-//        + "良い例　：コ’ンカイ+わ/この+ゲーム+を/ジッキョー+した’い+と/オモイ+ま’す。";
         speak(text);
     }
 
     @Test
     @EnabledIf("localPropertiesExists")
     void test02() throws Exception {
-        Path path = Paths.get(text);
+        Path path = Paths.get(file);
         String text = String.join("\n", Files.readAllLines(path));
         speak(text);
     }
@@ -90,10 +89,9 @@ class Jsapi2Test_aquestalk10 {
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        String voiceName = "F1";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
-        synthesizer.getSynthesizerProperties().setVolume(2);
+        synthesizer.getSynthesizerProperties().setVolume(volume);
 
 Debug.println("split " + text.split("[。\n]").length);
         for (String line : text.split("[。\n]")) {
@@ -103,5 +101,14 @@ Debug.println("split " + text.split("[。\n]").length);
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
+    }
+
+    /**
+     * @param args 0: text
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_aquestalk10 app = new Jsapi2Test_aquestalk10();
+        String text = args[0];
+        app.speak(text);
     }
 }

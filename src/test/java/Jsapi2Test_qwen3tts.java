@@ -65,14 +65,14 @@ Debug.println(Level.WARNING, e.getMessage());
         }
     }
 
-    /**
-     * @param args command line arguments.
-     */
-    public static void main(String[] args) throws Exception {
-        Jsapi2Test_qwen3tts app = new Jsapi2Test_qwen3tts();
-        String text = args[0];
-        app.speak(text);
-    }
+    @Property(name = "qwen3tt.txt")
+    String text = "この湖こんなに広かったかしら？　霧で見通しが悪くて困ったわ。もしかして私って方向音痴？";
+
+    @Property(name = "qwen3tt.voice")
+    String voiceName = "Vivian";
+
+    @Property(name = "qwen3tt.volume")
+    int volume = 100;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -89,7 +89,6 @@ Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttyRefAudio + ", vavi.speech.qwe
 
     @Test
     void test01() throws Exception {
-        String text = "この湖こんなに広かったかしら？　霧で見通しが悪くて困ったわ。もしかして私って方向音痴？";
         speak(text);
     }
 
@@ -104,10 +103,9 @@ Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttyRefAudio + ", vavi.speech.qwe
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        String voiceName = "Vivian";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
-        synthesizer.getSynthesizerProperties().setVolume(100);
+        synthesizer.getSynthesizerProperties().setVolume(volume);
 
         for (String line : text.split("。")) {
             System.out.println(line);
@@ -116,5 +114,14 @@ Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttyRefAudio + ", vavi.speech.qwe
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
+    }
+
+    /**
+     * @param args command line arguments.
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_qwen3tts app = new Jsapi2Test_qwen3tts();
+        String text = args[0];
+        app.speak(text);
     }
 }

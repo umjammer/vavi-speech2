@@ -4,6 +4,8 @@
  * Programmed by Naohide Sano
  */
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import javax.speech.Engine;
 import javax.speech.EngineManager;
@@ -11,12 +13,15 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizer;
 import vavi.speech.openjtalk.jsapi2.OpenJTalkSynthesizerMode;
+import vavi.util.properties.annotation.Property;
+import vavi.util.properties.annotation.PropsEntity;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -41,20 +46,31 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  */
 @Disabled("because installing jtalk is dull")
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+@PropsEntity(url = "file:local.properties")
 class Jsapi2Test_openjtalk {
 
-    /**
-     * @param args 0: text
-     */
-    public static void main(String[] args) throws Exception {
-        Jsapi2Test_openjtalk app = new Jsapi2Test_openjtalk();
-        String text = args[0];
-        app.speak(text);
+    static boolean localPropertiesExists() {
+        return Files.exists(Paths.get("local.properties"));
+    }
+
+    @Property(name = "openjtalk .txt")
+    String text = "ゆっくりしていってね";
+
+    @Property(name = "openjtalk .voice")
+    String voiceName = "mei_happy";
+
+    @Property(name = "openjtalk .volume")
+    int volume = 3;
+
+    @BeforeEach
+    void setup() throws Exception {
+        if (localPropertiesExists()) {
+            PropsEntity.Util.bind(this);
+        }
     }
 
     @Test
     void test01() throws Exception {
-        String text = "ゆっくりしていってね";
         speak(text);
     }
 
@@ -70,10 +86,9 @@ class Jsapi2Test_openjtalk {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
 //Arrays.stream(SynthesizerMode.class.cast(synthesizer.getEngineMode()).getVoices()).forEach(System.err::println);
-        String voiceName = "mei_happy";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
-        synthesizer.getSynthesizerProperties().setVolume(3);
+        synthesizer.getSynthesizerProperties().setVolume(volume);
 
         for (String line : text.split("。")) {
             System.out.println(line);
@@ -82,5 +97,14 @@ class Jsapi2Test_openjtalk {
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
+    }
+
+    /**
+     * @param args 0: text
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_openjtalk app = new Jsapi2Test_openjtalk();
+        String text = args[0];
+        app.speak(text);
     }
 }

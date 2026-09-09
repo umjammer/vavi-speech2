@@ -5,6 +5,7 @@
  */
 
 import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
@@ -22,10 +23,13 @@ import javax.speech.synthesis.Voice;
 import vavi.speech.rococoa.jsapi2.RococoaSynthesizer;
 import vavi.speech.rococoa.jsapi2.RococoaSynthesizerMode;
 import vavi.util.Debug;
+import vavi.util.properties.annotation.Property;
+import vavi.util.properties.annotation.PropsEntity;
 import vavix.rococoa.avfoundation.AVSpeechSynthesisVoice;
 import vavix.rococoa.avfoundation.AVSpeechSynthesizer;
 import vavix.rococoa.avfoundation.AVSpeechUtterance;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,26 +50,36 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @EnabledOnOs(OS.MAC)
 @DisabledIfSystemProperty(named = "os.arch", matches = "x86_64") // currently rococoa doesn't work on x86_64
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
+@PropsEntity(url = "file:local.properties")
 class Jsapi2Test_rococoa {
 
     static {
         System.setProperty("javax.speech.SpeechLocale.comparisonStrictness", "LENIENT");
     }
 
-    /**
-     * @param args 0: text
-     */
-    public static void main(String[] args) throws Exception {
-        Jsapi2Test_rococoa app = new Jsapi2Test_rococoa();
-        String text = args[0];
-        app.speak(text);
+    static boolean localPropertiesExists() {
+        return Files.exists(Paths.get("local.properties"));
+    }
+
+    @Property(name = "rococoa.txt")
+    String text = "ゆっくりしていってね";
+
+    @Property(name = "rococoa.voice")
+    String voiceName = "Kyoko";
+
+    @Property(name = "rococoa.volume")
+    int volume = 20;
+
+    @BeforeEach
+    void setup() throws Exception {
+        if (localPropertiesExists()) {
+            PropsEntity.Util.bind(this);
+        }
     }
 
     @Test
     @DisplayName("spi")
-    @DisabledIfSystemProperty(named = "os.arch", matches = "x86_64")
     void test01() throws Exception {
-        String text = "ゆっくりしていってね";
         speak(text);
     }
 
@@ -81,12 +95,11 @@ class Jsapi2Test_rococoa {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
 Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).forEach(System.out::println);
-        String voiceName = "Kyoko";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
 Debug.println(voice.getName());
         // to specify exact age doesn't work.
         synthesizer.getSynthesizerProperties().setVoice(new Voice(voice.getSpeechLocale(), voice.getName(), voice.getGender(), Voice.AGE_DONT_CARE, Voice.VARIANT_DONT_CARE));
-        synthesizer.getSynthesizerProperties().setVolume(20); // 0 ~ 100
+        synthesizer.getSynthesizerProperties().setVolume(volume); // 0 ~ 100
 
         for (String line : text.split("。")) {
             System.out.println(line);
@@ -130,5 +143,14 @@ Debug.println("voice: " + voice);
         synthesizer.speakUtterance(utterance);
 
         cdl.await();
+    }
+
+    /**
+     * @param args 0: text
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_rococoa app = new Jsapi2Test_rococoa();
+        String text = args[0];
+        app.speak(text);
     }
 }
