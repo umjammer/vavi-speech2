@@ -68,6 +68,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 
 * [get](https://aistudio.google.com/apikey) api key
 * set environment variable `"GOOGLE_API_KEY"` the api key
+* 💰️this is not free
 
 ### Qwen3-TTS
 

@@ -21,7 +21,9 @@ import vavi.util.properties.annotation.PropsEntity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -35,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 25/06/08 umjammer initial version <br>
  */
+@EnabledIfSystemProperty(named = "vavi.test", matches = "ide") // this test costs money, so user agreement is needed to run
 @EnabledIfEnvironmentVariable(named = "GOOGLE_API_KEY", matches = ".*")
 @PropsEntity(url = "file:local.properties")
 class Jsapi2Test_googlegenai {
