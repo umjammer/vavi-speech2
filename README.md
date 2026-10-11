@@ -21,7 +21,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 | AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                                 |       ✅        |       -        |     👑      |                  |
 | Google AI Studio            | [Google Gemini API](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#java_1), Library                                                                                                 |       ✅        |       -        |     🚀      |
 | Qwen3-TTS                   | [Openai API](https://developers.openai.com/api/docs/guides/text-to-speech/), REST                                                                                                                 |       ✅        |       -        |     💡      | voice cloning!   |
-| VoiceStudio                 | VoiceStudio.app (Openai API compatible), REST                                                                                                                                                       |       ✅        |       -        |     💡      | voice cloning!   |
+| VoiceStudio                 | [VoiceStudio](https://voicestudio.sh/) (Openai API compatible), REST                                                                                                                              |       ✅        |       -        |     💡      | voice cloning!   |
 
 ## Install
 
