@@ -21,6 +21,7 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 | AivisSpeech                 | [Aivis Project](https://aivis-project.com/), REST                                                                                                                                                 |       ✅        |       -        |     👑      |                  |
 | Google AI Studio            | [Google Gemini API](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#java_1), Library                                                                                                 |       ✅        |       -        |     🚀      |
 | Qwen3-TTS                   | [Openai API](https://developers.openai.com/api/docs/guides/text-to-speech/), REST                                                                                                                 |       ✅        |       -        |     💡      | voice cloning!   |
+| VoiceStudio                 | VoiceStudio.app (Openai API compatible), REST                                                                                                                                                       |       ✅        |       -        |     💡      | voice cloning!   |
 
 ## Install
 
@@ -76,6 +77,12 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
 * run the server before using this library, don't forget to adjust port no.
 * default url is `http://localhost:50090`. this is modifiable by the system property `vavi.speech.qwen3tts.url`
 
+### VoiceStudio
+
+* install VoiceStudio.app and run it before using this library
+* default url is `http://127.0.0.1:3900` (the app's backend). this is modifiable by the system property `vavi.speech.voicestudio.url`
+* voice profiles created in the app (cloned voices) are listed as voices
+
 ## Usage
 
 ### system property
@@ -91,6 +98,14 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * `vavi.speech.qwen3tts.refAudio` ... when using clone voice, set reference audio file path. (only wav file is tested)
  * `vavi.speech.qwen3tts.refText` ... when using clone voice, set reference text. (transcription of the audio above)
  * `vavi.speech.qwen3tts.language` ... a language for speech, default is `Auto`.
+
+### system property (voicestudio specific)
+
+ * `vavi.speech.voicestudio.url` ... the VoiceStudio api server url, default is `http://127.0.0.1:3900`.
+ * `vavi.speech.voicestudio.clone` ... clone voice by the reference audio below or not, default is `false`. (when `false`, the selected voice (profile) is used)
+ * `vavi.speech.voicestudio.refAudio` ... when using clone voice, set reference audio file path. (wav, mp3)
+ * `vavi.speech.voicestudio.refText` ... when using clone voice, set reference text. (transcription of the audio above)
+ * `vavi.speech.voicestudio.language` ... a language for speech (ISO 639-1, e.g. `ja`), default is auto detection.
 
 ### user
 
