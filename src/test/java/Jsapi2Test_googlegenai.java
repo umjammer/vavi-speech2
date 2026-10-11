@@ -5,6 +5,7 @@
  */
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import javax.speech.Engine;
@@ -20,7 +21,9 @@ import vavi.util.properties.annotation.PropsEntity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -34,8 +37,9 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 25/06/08 umjammer initial version <br>
  */
-@PropsEntity(url = "file:local.properties")
+@EnabledIfSystemProperty(named = "vavi.test", matches = "ide") // this test costs money, so user agreement is needed to run
 @EnabledIfEnvironmentVariable(named = "GOOGLE_API_KEY", matches = ".*")
+@PropsEntity(url = "file:local.properties")
 class Jsapi2Test_googlegenai {
 
     static {
@@ -50,6 +54,15 @@ class Jsapi2Test_googlegenai {
     @Property(name = "googlegenai.txt")
     String text = "Say cheerfully: ゆっくりしていってね";
 
+    @Property(name = "google.voice")
+    String voiceName = "Kore";
+
+    @Property(name = "google.file")
+    String file;
+
+    @Property(name = "google.volume")
+    int volume = 3;
+
     @BeforeEach
     void setup() throws Exception {
         if (localPropertiesExists()) {
@@ -59,7 +72,8 @@ class Jsapi2Test_googlegenai {
 
     @Test
     void test01() throws Exception {
-//text = new String(Jsapi2Test_googlegenai.class.getResourceAsStream("speech.txt").readAllBytes());
+        if (file != null)
+            text = new String(Files.readAllBytes(Path.of(file)));
         speak();
     }
 
@@ -78,10 +92,9 @@ class Jsapi2Test_googlegenai {
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
 //GoogleGenAITTSVoice.factory.getAllNativeVoices().forEach(System.out::println);
-        String voiceName = "Kore";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
-        synthesizer.getSynthesizerProperties().setVolume(3);
+        synthesizer.getSynthesizerProperties().setVolume(volume);
 
         for (String line : text.split("。")) {
             System.out.println(line);

@@ -43,17 +43,17 @@ class Jsapi2Test_qwen3tts {
         return Files.exists(Paths.get("local.properties"));
     }
 
-    @Property(name = "qwen3tty.refAudio")
-    String qwen3ttyRefAudio;
+    @Property(name = "qwen3tts.refAudio")
+    String qwen3ttsRefAudio;
 
-    @Property(name = "qwen3tty.refText")
-    String qwen3ttyRefText;
+    @Property(name = "qwen3tts.refText")
+    String qwen3ttsRefText;
 
-    @Property(name = "qwen3tty.clone")
-    String qwen3ttyClone;
+    @Property(name = "qwen3tts.clone")
+    String qwen3ttsClone;
 
-    @Property(name = "qwen3tty.language")
-    String qwen3ttyLanguage;
+    @Property(name = "qwen3tts.language")
+    String qwen3ttsLanguage;
 
     static boolean localServerExists() {
         try {
@@ -65,14 +65,14 @@ Debug.println(Level.WARNING, e.getMessage());
         }
     }
 
-    /**
-     * @param args command line arguments.
-     */
-    public static void main(String[] args) throws Exception {
-        Jsapi2Test_qwen3tts app = new Jsapi2Test_qwen3tts();
-        String text = args[0];
-        app.speak(text);
-    }
+    @Property(name = "qwen3tts.txt")
+    String text = "この湖こんなに広かったかしら？　霧で見通しが悪くて困ったわ。もしかして私って方向音痴？";
+
+    @Property(name = "qwen3tts.voice")
+    String voiceName = "Vivian";
+
+    @Property(name = "qwen3tts.volume")
+    int volume = 100;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -80,16 +80,15 @@ Debug.println(Level.WARNING, e.getMessage());
             PropsEntity.Util.bind(this);
         }
 
-        System.setProperty("vavi.speech.qwen3tts.refAudio", qwen3ttyRefAudio);
-        System.setProperty("vavi.speech.qwen3tts.refText", qwen3ttyRefText);
-        System.setProperty("vavi.speech.qwen3tts.clone", qwen3ttyClone);
-        System.setProperty("vavi.speech.qwen3tts.language", qwen3ttyLanguage);
-Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttyRefAudio + ", vavi.speech.qwen3tts.clone: " + qwen3ttyClone);
+        System.setProperty("vavi.speech.qwen3tts.refAudio", qwen3ttsRefAudio);
+        System.setProperty("vavi.speech.qwen3tts.refText", qwen3ttsRefText);
+        System.setProperty("vavi.speech.qwen3tts.clone", qwen3ttsClone);
+        System.setProperty("vavi.speech.qwen3tts.language", qwen3ttsLanguage);
+Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttsRefAudio + ", vavi.speech.qwen3tts.clone: " + qwen3ttsClone);
     }
 
     @Test
     void test01() throws Exception {
-        String text = "この湖こんなに広かったかしら？　霧で見通しが悪くて困ったわ。もしかして私って方向音痴？";
         speak(text);
     }
 
@@ -104,10 +103,9 @@ Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttyRefAudio + ", vavi.speech.qwe
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        String voiceName = "Vivian";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
-        synthesizer.getSynthesizerProperties().setVolume(100);
+        synthesizer.getSynthesizerProperties().setVolume(volume);
 
         for (String line : text.split("。")) {
             System.out.println(line);
@@ -116,5 +114,14 @@ Debug.print("vavi.speech.qwen3tts.ref: " + qwen3ttyRefAudio + ", vavi.speech.qwe
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
+    }
+
+    /**
+     * @param args command line arguments.
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_qwen3tts app = new Jsapi2Test_qwen3tts();
+        String text = args[0];
+        app.speak(text);
     }
 }

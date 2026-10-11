@@ -18,7 +18,6 @@ import javax.speech.synthesis.Voice;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.inject.spi.ErrorDetail;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -117,7 +116,7 @@ public class DocomoAIAgentAPI implements Closeable {
     public static class GenericResult {
         public String code;
         public String message;
-        public List<ErrorDetail> details;
+        public List<Map<String, Object>> details;
     }
 
     static class WebUserRegistrationResponse extends GenericResult {}

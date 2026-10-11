@@ -25,7 +25,7 @@ import javax.speech.synthesis.Voice;
 import org.jvoicexml.jsapi2.BaseAudioSegment;
 import org.jvoicexml.jsapi2.BaseEngineProperties;
 import org.jvoicexml.jsapi2.synthesis.BaseSynthesizer;
-import vavi.beans.InstanciationBinder;
+import vavi.beans.InstantiationBinder;
 import vavi.speech.Phonemizer;
 import vavi.speech.aquestalk10.jna.AquesTalk10.AQTK_VOICE;
 import vavi.speech.aquestalk10.jna.AquesTalk10Wrapper;
@@ -46,7 +46,7 @@ public final class AquesTalk10Synthesizer extends BaseSynthesizer {
     private static final Logger logger = System.getLogger(AquesTalk10Synthesizer.class.getName());
 
     /** kanji -> kana */
-    @Property(binder = InstanciationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
+    @Property(binder = InstantiationBinder.class, value = "vavi.speech.phoneme.KuromojiJaPhonemer")
     private Phonemizer phonemizer;
 
     /** engine */

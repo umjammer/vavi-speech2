@@ -4,6 +4,8 @@
  * Programmed by Naohide Sano
  */
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Level;
 import javax.speech.Engine;
@@ -16,7 +18,10 @@ import vavi.speech.aivis.Aivis;
 import vavi.speech.aivis.jsapi2.AivisSynthesizer;
 import vavi.speech.aivis.jsapi2.AivisSynthesizerMode;
 import vavi.util.Debug;
+import vavi.util.properties.annotation.Property;
+import vavi.util.properties.annotation.PropsEntity;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
@@ -30,7 +35,12 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * @version 0.00 2024/12/14 umjammer initial version <br>
  */
 @EnabledIf("localServerExists") // make sure Aivis.app is running
+@PropsEntity(url = "file:local.properties")
 class Jsapi2Test_aivis {
+
+    static boolean localPropertiesExists() {
+        return Files.exists(Paths.get("local.properties"));
+    }
 
     static boolean localServerExists() {
         try (var dummy = new Aivis()) {
@@ -41,18 +51,24 @@ Debug.println(Level.WARNING, e.getMessage());
         }
     }
 
-    /**
-     * @param args command line arguments.
-     */
-    public static void main(String[] args) throws Exception {
-        Jsapi2Test_aivis app = new Jsapi2Test_aivis();
-        String text = args[0];
-        app.speak(text);
+    @Property(name = "aivis.text")
+    String text = "成功の鍵は、タイミングと少しの運。不運だけは確実に訪れる。";
+
+    @Property(name = "aivis.voice")
+    String voiceName = "Anneli(ノーマル)";
+
+    @Property(name = "aivis.volume")
+    int volume = 3;
+
+    @BeforeEach
+    void setup() throws Exception {
+        if (localPropertiesExists()) {
+            PropsEntity.Util.bind(this);
+        }
     }
 
     @Test
     void test01() throws Exception {
-        String text = "成功の鍵は、タイミングと少しの運。不運だけは確実に訪れる。";
         speak(text);
     }
 
@@ -67,12 +83,11 @@ Debug.println(Level.WARNING, e.getMessage());
         synthesizer.resume();
         synthesizer.waitEngineState(Synthesizer.RESUMED);
 
-        String voiceName = "Anneli(ノーマル)";
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
-        synthesizer.getSynthesizerProperties().setSpeakingRate(100); // 50 ~ 100 ~ 200
-        synthesizer.getSynthesizerProperties().setPitch(16); // 1 ~ 16 ~ 31
+        synthesizer.getSynthesizerProperties().setSpeakingRate(100); // 50 ~ 100 ~ 200 TODO not spec
+        synthesizer.getSynthesizerProperties().setPitch(16); // 1 ~ 16 ~ 31 TODO not spec
         synthesizer.getSynthesizerProperties().setVoice(voice);
-        synthesizer.getSynthesizerProperties().setVolume(3);
+        synthesizer.getSynthesizerProperties().setVolume(volume);
 
         for (String line : text.split("。")) {
             System.out.println(line);
@@ -81,5 +96,14 @@ Debug.println(Level.WARNING, e.getMessage());
 
         synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         synthesizer.deallocate();
+    }
+
+    /**
+     * @param args command line arguments.
+     */
+    public static void main(String[] args) throws Exception {
+        Jsapi2Test_aivis app = new Jsapi2Test_aivis();
+        String text = args[0];
+        app.speak(text);
     }
 }
