@@ -74,6 +74,9 @@ Debug.println(Level.WARNING, e.getMessage());
     @Property(name = "voicestudio.volume")
     int volume = 100;
 
+    @Property(name = "voicestudio.speed")
+    int speed = 100;
+
     @BeforeEach
     void setUp() throws IOException {
         if (localPropertiesExists()) {
@@ -106,6 +109,7 @@ Debug.print("vavi.speech.voicestudio.ref: " + voiceStudioRefAudio + ", vavi.spee
         Voice voice = Arrays.stream(((SynthesizerMode) synthesizer.getEngineMode()).getVoices()).filter(v -> v.getName().equals(voiceName)).findFirst().get();
         synthesizer.getSynthesizerProperties().setVoice(voice);
         synthesizer.getSynthesizerProperties().setVolume(volume);
+        synthesizer.getSynthesizerProperties().setSpeakingRate(speed); // 25 ~ 100 ~ 400 TODO not spec
 
         for (String line : text.split("。")) {
             System.out.println(line);

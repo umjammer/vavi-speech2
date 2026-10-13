@@ -120,7 +120,8 @@ logger.log(Level.DEBUG, "default voice: " + voice.getName());
             // TODO adapt parameters
             @SuppressWarnings("unchecked")
             String voiceId = ((WrappedVoice<VoiceStudio.Voice>) props.getVoice()).getNativeVoice().voice_id;
-            InputStream wave = client.synthesize(item, voiceId);
+logger.log(Level.DEBUG, "speed: %3.1f".formatted(props.getSpeakingRate() / 100f));
+            InputStream wave = client.synthesize(item, voiceId, props.getSpeakingRate() / 100f);
             AudioManager manager = getAudioManager();
             String locator = manager.getMediaLocator();
             // you should pass bytes to BaseAudioSegment as AudioInputStream or causes crackling!
