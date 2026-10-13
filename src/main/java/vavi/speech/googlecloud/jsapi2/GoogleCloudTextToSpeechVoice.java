@@ -6,6 +6,7 @@
 
 package vavi.speech.googlecloud.jsapi2;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
@@ -15,9 +16,12 @@ import java.util.Locale;
 import javax.speech.SpeechLocale;
 import javax.speech.synthesis.Voice;
 
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.texttospeech.v1.ListVoicesRequest;
 import com.google.cloud.texttospeech.v1.ListVoicesResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+import com.google.cloud.texttospeech.v1.TextToSpeechSettings;
 import vavi.speech.WrappedVoice;
 
 import static java.lang.System.getLogger;
@@ -54,7 +58,18 @@ public class GoogleCloudTextToSpeechVoice extends WrappedVoice<com.google.cloud.
     /** @throws IllegalStateException credentials are not set */
     @Override
     public List<com.google.cloud.texttospeech.v1.Voice> getAllNativeVoices() {
-        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
+        TextToSpeechSettings settings;
+        try {
+            String serviceAccountKeyPath = System.getProperty("vavi.speech.googlecloud.credential");
+            if (serviceAccountKeyPath == null) throw new IllegalStateException("system property \"vavi.speech.googlecloud.credential\" is not set.");
+            GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(serviceAccountKeyPath));
+            settings = TextToSpeechSettings.newBuilder()
+                    .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                    .build();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create(settings)) {
 
             ListVoicesRequest request = ListVoicesRequest.getDefaultInstance();
 
