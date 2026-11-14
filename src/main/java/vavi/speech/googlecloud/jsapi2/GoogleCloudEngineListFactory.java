@@ -49,8 +49,8 @@ public class GoogleCloudEngineListFactory extends BaseEnginFactory<com.google.cl
         try {
             return GoogleCloudTextToSpeechVoice.factory.getAllVoices();
         } catch (Throwable t) {
-logger.log(Level.INFO, t.getMessage() + " env: " + System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
-logger.log(Level.TRACE, t.getMessage() + " env: " + System.getenv("GOOGLE_APPLICATION_CREDENTIALS"), t);
+logger.log(Level.INFO, t.getMessage());
+logger.log(Level.TRACE, t.getMessage(), t);
             return Collections.emptyList();
         }
     }

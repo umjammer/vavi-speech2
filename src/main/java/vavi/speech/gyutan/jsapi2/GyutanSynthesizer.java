@@ -89,18 +89,22 @@ logger.log(Level.DEBUG, "default voice: " + (voice != null ? voice.getName() : "
 
     /** */
     private static Path toNativeVoice(Voice voice) {
-        Scanner s = new Scanner(GyutanEngineListFactory.class.getResourceAsStream("/htsvoice.csv"));
-        String defalutName = null;
-        while (s.hasNextLine()) {
-            String[] parts = s.nextLine().split(",");
-            if (defalutName == null) {
-                defalutName = parts[0];
+        try {
+            Scanner s = new Scanner(GyutanEngineListFactory.class.getResourceAsStream("/htsvoice.csv"));
+            String defalutName = null;
+            while (s.hasNextLine()) {
+                String[] parts = s.nextLine().split(",");
+                if (defalutName == null) {
+                    defalutName = parts[0];
+                }
+                if (voice.getName().equals(parts[1])) {
+                    return Paths.get(System.getProperty("htsvoice.dir"), parts[0]);
+                }
             }
-            if (voice.getName().equals(parts[1])) {
-                return Paths.get(System.getProperty("htsvoice.dir"), parts[0]);
-            }
+            return Paths.get(System.getProperty("htsvoice.dir"), defalutName);
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("system property htsvoice.dir is not set");
         }
-        return Paths.get(System.getProperty("htsvoice.dir"), defalutName);
     }
 
     @Override

@@ -167,25 +167,27 @@ public class VoiceStudio implements Closeable {
     }
 
     /** clone voice by a reference audio, POST /generate */
-    private InputStream synthesizeClone(String input) throws IOException {
+    private InputStream synthesizeClone(String input, float speed) throws IOException {
         Path path = Path.of(refAudio);
         if (!Files.exists(path)) throw new IOException("reference audio not found: " + refAudio);
         Multipart multipart = new Multipart()
                 .field("text", input)
                 .field("language", getLanguage())
                 .field("ref_text", refText.isEmpty() ? null : refText)
+                .field("speed", String.valueOf(0.25 <= speed && speed <= 4.0 ? speed : 1))
                 .file("ref_audio", path);
-logger.log(Level.TRACE, "clone: " + input + ", ref: " + path);
+logger.log(Level.TRACE, "clone: " + input + ", ref: " + path + ", speed: " + speed);
         return target.path("generate")
                 .request().post(multipart.build(), InputStream.class);
     }
 
     /** voice by id (profile voices are cloned voices also), POST /v1/audio/speech */
-    private InputStream synthesizeNormal(String input, String voice) throws IOException {
+    private InputStream synthesizeNormal(String input, String voice, float speed) throws IOException {
         AudioSpeechQuery audioQuery = new AudioSpeechQuery();
         audioQuery.language = getLanguage();
         audioQuery.input = input;
         audioQuery.voice = voice;
+        audioQuery.setSpeed(speed);
 logger.log(Level.TRACE, audioQuery);
         Entity<String> entity = Entity.entity(gson.toJson(audioQuery), MediaType.APPLICATION_JSON);
         return target.path("v1/audio/speech")
@@ -197,10 +199,19 @@ logger.log(Level.TRACE, audioQuery);
      * @return wave stream
      */
     public InputStream synthesize(String input, String voice) throws IOException {
+        return synthesize(input, voice, 1);
+    }
+
+    /**
+     * @param voice voice id
+     * @param speed default: 1, range: 0.25 ~ 4.00
+     * @return wave stream
+     */
+    public InputStream synthesize(String input, String voice, float speed) throws IOException {
         if (clone) {
-            return synthesizeClone(input);
+            return synthesizeClone(input, speed);
         } else {
-            return synthesizeNormal(input, voice);
+            return synthesizeNormal(input, voice, speed);
         }
     }
 

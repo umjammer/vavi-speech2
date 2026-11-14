@@ -113,10 +113,17 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
   * [w/ chatGPT](https://github.com/umjammer/vavi-speech-sandbox/)
   * [RPC](https://github.com/umjammer/vavi-speech-rpc/)
 
+### \[ACP] facial expression timeline
+
+  * voice strings → ACP → facial expression timeline
+  * animation by facial expression timeline + lip-sync 
+  * [demo](src/test/java/vavi/speech/view/yukkuri/YukkuriDemo.java)
+
 ## Reference
 
  * [jsr113](https://github.com/JVoiceXML/jsapi)
    * [vavi patched](https://github.com/umjammer/jsapi) (volume enabled)
+ * https://huggingface.co/datasets/Elite35P-Server/EliteVoiceProject
 
 ## TODO
 
@@ -136,9 +143,9 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
        * RekishikaTest
    * https://github.com/espeak-ng/espeak-ng
    * https://github.com/festvox/flite
- * text analytics + nicotalk character emotion (nicotalk branch)
-   * wave lipsync
-     * https://github.com/hecomi/MMD4Mecanim-LipSync-Plugin/blob/master/Assets/LipSync/Core/LipSyncCore.cs
+ * ~~text analytics + nicotalk character emotion (nicotalk branch)~~
+   * ~~wave lipsync~~
+     * ~~https://github.com/hecomi/MMD4Mecanim-LipSync-Plugin/blob/master/Assets/LipSync/Core/LipSyncCore.cs~~
  * VoiceVox editor compatible
    * ~~[CoeiroInk](https://coeiroink.com/)~~ ... ~~api doesn't work~~ ~~api is different from VoiceVox?~~ yes
      * ~~https://github.com/sevenc-nanashi/coeiroink-v2-bridge~~
@@ -149,8 +156,9 @@ Text to Speech and Speech to Text (JSAPI2) engines for Java
  * ~~AVSpeechSynthesizer needs [obj-c block](https://github.com/umjammer/rococoa/discussions/23)~~
  * ~~rcp client/server (wip)~~ -> [vavi-speech-rpc](https://github.com/umjammer/vavi-speech-rpc)
  * ~~\[googlecloud] [setting by system property instead of env](https://github.com/umjammer/vavi-speech2?tab=readme-ov-file)~~
- * integrate qwen3 language (but system pros language doesn't work)
+ * integrate qwen3 language (but system props language doesn't work)
  * https://github.com/litagin02/Style-Bert-VITS2
 
 ---
+
 <sub>images by <a href="https://commons.nicovideo.jp/works/nc327182">霊夢</a>, <a href="https://commons.nicovideo.jp/works/nc327184">魔理沙</a>, <a href="https://seiga.nicovideo.jp/seiga/im10865385">ずんだもん</a></sub>

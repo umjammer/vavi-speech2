@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-speech2</artifactId>
-  <version>0.0.27</version>
+  <version>0.0.28</version>
 
   <name>vavi-speech2</name>
   <description/>
@@ -60,7 +60,7 @@
             <!-- don't touch: this works well on github actions -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.2.5</version>
+            <version>3.6.0</version>
             <configuration>
               <reuseForks>false</reuseForks>
               <trimStackTrace>false</trimStackTrace>
@@ -158,7 +158,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.12.1</version>
+        <version>3.16.0</version>
         <configuration>
           <release>25</release>
         </configuration>
@@ -178,7 +178,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>26.90.0</version>
+        <version>26.93.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -215,12 +215,23 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-speech</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+<dependency>
+  <groupId>com.google.guava</groupId>
+  <artifactId>guava</artifactId>
+  <version>33.8.0-jre</version>
+</dependency>
 
     <dependency>
       <groupId>com.google.genai</groupId>
       <artifactId>google-genai</artifactId>
-      <version>1.76.0</version>
+      <version>2.3.0</version>
       <exclusions>
         <exclusion>
           <groupId>com.fasterxml.jackson.core</groupId>
@@ -235,18 +246,18 @@
 <dependency>
   <groupId>com.fasterxml.jackson.core</groupId>
   <artifactId>jackson-databind</artifactId>
-  <version>2.22.3</version>
+  <version>2.23.0</version>
 </dependency>
 <dependency>
   <groupId>com.fasterxml.jackson.core</groupId>
   <artifactId>jackson-core</artifactId>
-  <version>2.22.3</version>
+  <version>2.23.0</version>
 </dependency>
 
     <dependency>
       <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.24</version>
+      <version>1.1.25</version>
     </dependency>
 
     <dependency>
@@ -262,8 +273,48 @@
           <groupId>com.github.umjammer.FreeTTS</groupId>
           <artifactId>freetts-jsapi10</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.opentelemetry</groupId>
+          <artifactId>opentelemetry-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>net.minidev</groupId>
+          <artifactId>json-smart</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.ow2.asm</groupId>
+          <artifactId>asm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
+<dependency>
+  <groupId>org.json</groupId>
+  <artifactId>json</artifactId>
+  <version>20260814</version>
+</dependency>
+<dependency>
+  <groupId>io.opentelemetry</groupId>
+  <artifactId>opentelemetry-api</artifactId>
+  <version>1.68.0</version>
+</dependency>
+<dependency>
+  <groupId>net.minidev</groupId>
+  <artifactId>json-smart</artifactId>
+  <version>2.6.1</version>
+</dependency>
+<dependency>
+  <groupId>org.ow2.asm</groupId>
+  <artifactId>asm</artifactId>
+  <version>9.11.1</version>
+</dependency>
 
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
@@ -291,6 +342,18 @@
           <artifactId>vavi-commons</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.agentclientprotocol</groupId>
+      <artifactId>acp-core</artifactId>
+      <version>0.81.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.agentclientprotocol</groupId>
+      <artifactId>acp-json-jackson2</artifactId>
+      <version>0.81.0</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
