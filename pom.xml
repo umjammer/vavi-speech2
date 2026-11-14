@@ -294,6 +294,18 @@
     </dependency>
 
     <dependency>
+      <groupId>com.agentclientprotocol</groupId>
+      <artifactId>acp-core</artifactId>
+      <version>0.81.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.agentclientprotocol</groupId>
+      <artifactId>acp-json-jackson2</artifactId>
+      <version>0.81.0</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
